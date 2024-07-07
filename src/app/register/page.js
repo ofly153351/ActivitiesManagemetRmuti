@@ -1,10 +1,11 @@
 import React from 'react'
-import Headnav from '../Headnav'
+import Nav from '../Components/Headnav/Nav'
+
 
 const page = () => {
   return (
    <div>
-      <Headnav> </Headnav>
+      <Nav />
       <div>register------------------</div>
    </div>
   )

@@ -1,9 +1,10 @@
-import Headnav from "./Headnav";
+import Nav from "./Components/Headnav/Nav";
+
 
 export default function Home() {
   return (
-    <div>
-      <Headnav></Headnav>
-    </div>
+    <>
+        <Nav />
+    </>
   );
 }
