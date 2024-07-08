@@ -13,13 +13,12 @@ const page = () => {
         <div className="basis-2/5 bg-[#d1d5db] rounded-2xl flex justify-center items-center	flex-col gap-6 border border-black">
           <div className="text-5xl font-bold ">LOGIN</div>
 
-
           <div className="input flex flex-col w-fit static">
             <label
               for="input"
               class="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
             >
-              Email:
+              อีเมล:
             </label>
             <input
               id="email"
@@ -35,7 +34,7 @@ const page = () => {
               for="input"
               class="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
             >
-              Password:
+              รหัสผ่าน:
             </label>
             <input
               id="password"
@@ -46,8 +45,13 @@ const page = () => {
             />
           </div>
 
-          <button className="bg-[#0067B3] text-[#ffffff] rounded-2xl px-3 py-1 text-2xl">
-            Submit
+          <button
+            class="cursor-pointer transition-all bg-blue-500 text-white px-6 py-2 rounded-lg
+border-blue-600
+border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
+active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
+          >
+            Login
           </button>
         </div>
       </div>

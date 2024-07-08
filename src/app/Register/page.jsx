@@ -11,24 +11,24 @@ const page = () => {
           <Leftlogin />
         </div>
         <div className="basis-2/5 bg-[#d1d5db] rounded-2xl flex justify-center items-center	flex-col gap-1 border border-black">
-          <div className="text-5xl font-bold my-3">Register</div>
+          <div className="text-5xl font-bold my-3">REGISTER</div>
           <div className="flex gap-1 ">
             <div className="input flex flex-col w-fit static">
               <label
                 htmlFor="select"
                 className="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
               >
-                Title:
+                คำนำหน้า:
               </label>
               <select
-                id="select"
+                id="title"
                 name="select"
                 className="border-blue-500 input px-[10px] py-[13px] text-md bg-[#e8e8e8] border-2 rounded-[5px] w-[100px] focus:outline-none"
               >
                 <option value="">-</option>
-                <option value="option1">Mr.</option>
-                <option value="option2">Ms.</option>
-                <option value="option2">Mrs.</option>
+                <option value="option1">นาย</option>
+                <option value="option2">นาง</option>
+                <option value="option2">นางสาว</option>
               </select>
             </div>
 
@@ -37,10 +37,10 @@ const page = () => {
                 for="input"
                 class="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
               >
-                FirstName:
+                ชื่อ:
               </label>
               <input
-                id="phone"
+                id="fname"
                 type="text"
                 placeholder=""
                 name="input"
@@ -52,10 +52,10 @@ const page = () => {
                 for="input"
                 class="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
               >
-                LastName:
+                นามสกุล:
               </label>
               <input
-                id="phone"
+                id="lname"
                 type="text"
                 placeholder=""
                 name="input"
@@ -63,13 +63,12 @@ const page = () => {
               />
             </div>
           </div>
-
           <div className="input flex flex-col w-fit static">
             <label
               for="input"
               class="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
             >
-              Phone:
+              เบอร์:
             </label>
             <input
               id="phone"
@@ -84,7 +83,7 @@ const page = () => {
               for="input"
               class="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
             >
-              StdID:
+              รหัสนักศึกษา:
             </label>
             <input
               id="stdid"
@@ -99,7 +98,7 @@ const page = () => {
               for="input"
               class="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
             >
-              Email:
+              อีเมล:
             </label>
             <input
               id="email"
@@ -114,7 +113,7 @@ const page = () => {
               for="input"
               class="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
             >
-              Password:
+              รหัสผ่าน:
             </label>
             <input
               id="password"
@@ -129,7 +128,7 @@ const page = () => {
               for="input"
               class="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
             >
-              Confirm Password:
+              ยืนยันรหัสผ่าน:
             </label>
             <input
               id="password"
@@ -139,7 +138,6 @@ const page = () => {
               class="border-blue-500 input px-[10px] py-[11px] text-md bg-[#e8e8e8] border-2 rounded-[5px] w-[400px] focus:outline-none placeholder:text-black/25"
             />
           </div>
-
           <div className="flex gap-1 ">
             <div className="input flex flex-col w-fit static">
               <label
@@ -149,14 +147,14 @@ const page = () => {
                 คณะ:
               </label>
               <select
-                id="select"
+                id="faculty"
                 name="select"
                 className="border-blue-500 input px-[10px] py-[13px] text-md bg-[#e8e8e8] border-2 rounded-[5px] w-[200px] focus:outline-none"
               >
                 <option value="">-</option>
-                <option value="option1">Mr.</option>
-                <option value="option2">Ms.</option>
-                <option value="option2">Mrs.</option>
+                <option value="option1">M</option>
+                <option value="option2">M</option>
+                <option value="option2">M</option>
               </select>
             </div>
             <div className="input flex flex-col w-fit static">
@@ -167,7 +165,7 @@ const page = () => {
                 สาขา:
               </label>
               <select
-                id="select"
+                id="field"
                 name="select"
                 className="border-blue-500 input px-[10px] py-[13px] text-md bg-[#e8e8e8] border-2 rounded-[5px] w-[200px] focus:outline-none"
               >
@@ -179,8 +177,13 @@ const page = () => {
             </div>
           </div>
 
-          <button className="bg-[#0067B3] text-[#ffffff] rounded-2xl px-3 py-1 my-3 text-2xl">
-            Submit
+          <button
+            class="cursor-pointer transition-all bg-blue-500 text-white px-6 py-2 rounded-lg
+border-blue-600
+border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
+active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
+          >
+            Register
           </button>
         </div>
       </div>
