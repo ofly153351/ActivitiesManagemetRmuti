@@ -2,6 +2,7 @@
 import Nav from '../Components/Headnav/Nav'
 import React, { useState } from 'react';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import Footter from '../Components/Footter/Footter';
 
 function Page() {
     const activity = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -49,7 +50,8 @@ function Page() {
                                     </div>
                                     <div className='px-4 py-2'>
                                         <span>รายระเอียดกิจกรรม
-                                            <button onClick={() => handleDetails(index)} className='rounded-full hover:bg-blue-100'>
+                                            <button onClick={() => handleDetails(index)}
+                                                className='rounded-full hover:bg-blue-100'>
                                                 <KeyboardArrowRightIcon fontSize='medium' />
                                             </button>
                                         </span>
@@ -71,6 +73,7 @@ function Page() {
                     ))}
                 </div>
             </div>
+            <Footter />
         </>
     );
 }
