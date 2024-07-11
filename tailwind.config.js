@@ -7,6 +7,15 @@ module.exports = {
   ],
   theme: {
     extend: {
+      transitionProperty:{
+        'width-left' : 'width-left',
+      },
+      transitionTimingFunction : {
+        'ease' : 'ease',
+      },
+      transitionDuration :{
+        '300' : '300',
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -14,5 +23,6 @@ module.exports = {
       },
     },
   },
+  variant:{},
   plugins: [],
 };

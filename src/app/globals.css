@@ -31,3 +31,16 @@ body {
     text-wrap: balance;
   }
 } */
+
+.underline-transition::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 0.3s ease;
+}
+
+.underline-transition:hover::after {
+  width: 100%;
+}

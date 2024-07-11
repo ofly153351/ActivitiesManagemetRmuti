@@ -31,20 +31,26 @@ function Nav() {
                     ) : pathName === '/Home' ? (
                         <>
                             <div className="mr-20 flex gap-10" >
-                                <div className="flex justify-center items-center gap-4">
-                                    <span>
-                                        dwakdhwuah
-                                    </span>
+                                <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] hover:font-semibold">
+                                    <Link href="/">
+                                        <span className="" >
+                                            dwakdhwuah
+                                        </span>
+                                    </Link>
                                 </div>
-                                <div className="flex justify-center items-center gap-4">
-                                    <span>
-                                        dwakdhwuah
-                                    </span>
+                                <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] hover:font-semibold">
+                                    <Link href='/' >
+                                        <span className="" >
+                                            dwakdhwuah
+                                        </span>
+                                    </Link>
                                 </div>
-                                <div className="flex justify-center items-center gap-4">
-                                    <span>
-                                        dwakdhwuah
-                                    </span>
+                                <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] hover:font-semibold">
+                                    <Link href='/' >
+                                        <span className="" >
+                                            dwakdhwuah
+                                        </span>
+                                    </Link>
                                 </div>
                             </div>
                             <div className="flex justify-center items-center gap-4">
