@@ -6,7 +6,7 @@ const page = () => {
   return (
     <div>
       <Nav />
-      <div className="flex flex-row mx-3 my-10 gap-3 min-h-[700px]">
+      <div className="flex flex-row mx-3 gap-3 min-h-[700px]">
         <div className="basis-3/5 rounded-2xl flex justify-center items-center">
           <Leftlogin />
         </div>
