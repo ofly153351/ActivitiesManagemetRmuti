@@ -1,190 +1,83 @@
-import React from "react";
+'use client'
+import React, { useState } from "react";
 import Nav from "../Components/Headnav/Nav";
-import Leftlogin from "../Components/Headnav/Leftlogin";
-
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 const page = () => {
+
+  const [gender, setGender] = useState('');
+
+  const handleChange = (event) => {
+    setGender(event.target.value);
+  }
+
   return (
+
     <div>
       <Nav />
-      <div className="flex flex-row mx-3 gap-3 min-h-[700px]">
-        <div className="basis-3/5 rounded-2xl flex justify-center items-center">
-          <Leftlogin />
-        </div>
-        <div className="basis-2/5 bg-[#d1d5db] rounded-2xl flex justify-center items-center	flex-col gap-1 border border-black">
-          <div className="text-5xl font-bold my-3">REGISTER</div>
-          <div className="flex gap-1 ">
-            <div className="input flex flex-col w-fit static">
-              <label
-                htmlFor="select"
-                className="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
-              >
-                คำนำหน้า:
-              </label>
-              <select
-                id="title"
-                name="select"
-                className="border-blue-500 input px-[10px] py-[13px] text-md bg-[#e8e8e8] border-2 rounded-[5px] w-[100px] focus:outline-none"
-              >
-                <option value="">-</option>
-                <option value="option1">นาย</option>
-                <option value="option2">นาง</option>
-                <option value="option2">นางสาว</option>
-              </select>
+      <div className="flex justify-center items-center">
+        <div className="mt-40 bg-slate-100 w-[480px] h-[500px] shadow-2xl rounded-xl ">
+          <div className="flex justify-center items-center">
+            <img className="ml-4 p-2 w-[120px]" src="https://www.studentloan.or.th/th/system/files/files/knowledgemedia/%E0%B8%81%E0%B8%A2%E0%B8%A8-01.png" />
+            <span className=" font-mono text-[35px] font-bold text-gray-700 text-shadow-xl">
+              Sign Up
+            </span>
+          </div>
+          <form action="">
+            <div className="items-center  m-2" >
+              <div className=" flex justify-center items-center m-2">
+                <div className="">
+                  <FormControl sx={{ marginRight: 1, minWidth: 100 }} size="small">
+                    <InputLabel id="demo-select-small-label" sx={{ fontSize: '0.900rem' }}>คำนำหน้า</InputLabel>
+                    <Select
+                      labelId="demo-select-small-label"
+                      id="demo-select-small"
+                      value={gender}
+                      label="คำนำหน้า"
+                      onChange={handleChange}
+                      sx={{ fontSize: '0.900rem' }}
+                    >
+                      <MenuItem value='Mister'>นาย</MenuItem>
+                      <MenuItem value="Missus}">นาง</MenuItem>
+                      <MenuItem value="Miss">นางสาว</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+                <div className="flex gap-2" >
+                  <div className="w-[150px] h-10 ">
+                    <input placeholder="ชื่อ" className="p-2 border-[1px] border-gray-300 w-full h-full focus:outline-blue-500 bg-transparent rounded-md focus:shadow-xl duration duration-100 
+                     placeholder-gray-550 hover:border-[1px] hover:border-blue-600" type="text" />
+                  </div>
+                  <div className="w-[150px] h-10 ">
+                    <input placeholder="นามกสุล" className="p-2 border-[1px] border-gray-300 w-full h-full focus:outline-blue-500 bg-transparent rounded-md focus:shadow-xl duration duration-100 hover:border-[1px] hover:border-blue-600
+                     placeholder-gray-550 " type="text" />
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col items-center mx-6 h-10 gap-2 ">
+                <div className="w-full ">
+                  <input className="p-2 border-[1px] border-gray-300 w-full h-full focus:outline-blue-500 bg-transparent rounded-md placeholder-gray-550 focus:shadow-xl duration duration-100 hover:border-[1px] hover:border-blue-600 " type="text" placeholder="รหัสนักศึกษา" />
+                </div>
+                <div className="w-full">
+                  <input className="p-2 border-[1px] border-gray-300 w-full h-full focus:outline-blue-500 bg-transparent rounded-md placeholder-gray-550 focus:shadow-xl duration duration-100 hover:border-[1px] hover:border-blue-600 " type="Email" placeholder="Email" />
+                </div>
+                <div className="w-full">
+                  <input className="p-2 border-[1px] border-gray-300 w-full h-full focus:outline-blue-500 bg-transparent rounded-md placeholder-gray-550 focus:shadow-xl duration duration-100 hover:border-[1px] hover:border-blue-600 " type="password" placeholder="รหัสผ่าน" />
+                </div>
+                <div className="w-full">
+                  <input className="p-2 border-[1px] border-gray-300 w-full h-full focus:outline-blue-500 bg-transparent rounded-md placeholder-gray-550 focus:shadow-xl duration duration-100 hover:border-[1px] hover:border-blue-600 " type="password" placeholder="ยืนยันรหัสผ่าน" />
+                </div>
+                <div className="p-4">
+                  <button className="px-6 py-4 border-[1px] bg-[#0067B3]  text-white font-mono font-semibold
+                  rounded-lg shadow-xl hover:bg-blue-600 duration duration-300 " type="submit">
+                    Sign Up!
+                  </button>
+                </div>
+              </div>
             </div>
-
-            <div className="input flex flex-col w-fit static">
-              <label
-                for="input"
-                class="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
-              >
-                ชื่อ:
-              </label>
-              <input
-                id="fname"
-                type="text"
-                placeholder=""
-                name="input"
-                class="border-blue-500 input px-[10px] py-[11px] text-md bg-[#e8e8e8] border-2 rounded-[5px] w-[150px] focus:outline-none placeholder:text-black/25"
-              />
-            </div>
-            <div className="input flex flex-col w-fit static">
-              <label
-                for="input"
-                class="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
-              >
-                นามสกุล:
-              </label>
-              <input
-                id="lname"
-                type="text"
-                placeholder=""
-                name="input"
-                class="border-blue-500 input px-[10px] py-[11px] text-md bg-[#e8e8e8] border-2 rounded-[5px] w-[150px] focus:outline-none placeholder:text-black/25"
-              />
-            </div>
-          </div>
-          <div className="input flex flex-col w-fit static">
-            <label
-              for="input"
-              class="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
-            >
-              เบอร์:
-            </label>
-            <input
-              id="phone"
-              type="text"
-              placeholder=""
-              name="input"
-              class="border-blue-500 input px-[10px] py-[11px] text-md bg-[#e8e8e8] border-2 rounded-[5px] w-[400px] focus:outline-none placeholder:text-black/25"
-            />
-          </div>
-          <div className="input flex flex-col w-fit static">
-            <label
-              for="input"
-              class="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
-            >
-              รหัสนักศึกษา:
-            </label>
-            <input
-              id="stdid"
-              type="text"
-              placeholder=""
-              name="input"
-              class="border-blue-500 input px-[10px] py-[11px] text-md bg-[#e8e8e8] border-2 rounded-[5px] w-[400px] focus:outline-none placeholder:text-black/25"
-            />
-          </div>
-          <div className="input flex flex-col w-fit static">
-            <label
-              for="input"
-              class="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
-            >
-              อีเมล:
-            </label>
-            <input
-              id="email"
-              type="email"
-              placeholder=""
-              name="input"
-              class="border-blue-500 input px-[10px] py-[11px] text-md bg-[#e8e8e8] border-2 rounded-[5px] w-[400px] focus:outline-none placeholder:text-black/25"
-            />
-          </div>
-          <div className="input flex flex-col w-fit static">
-            <label
-              for="input"
-              class="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
-            >
-              รหัสผ่าน:
-            </label>
-            <input
-              id="password"
-              type="password"
-              placeholder=""
-              name="input"
-              class="border-blue-500 input px-[10px] py-[11px] text-md bg-[#e8e8e8] border-2 rounded-[5px] w-[400px] focus:outline-none placeholder:text-black/25"
-            />
-          </div>
-          <div className="input flex flex-col w-fit static">
-            <label
-              for="input"
-              class="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
-            >
-              ยืนยันรหัสผ่าน:
-            </label>
-            <input
-              id="password"
-              type="password"
-              placeholder=""
-              name="input"
-              class="border-blue-500 input px-[10px] py-[11px] text-md bg-[#e8e8e8] border-2 rounded-[5px] w-[400px] focus:outline-none placeholder:text-black/25"
-            />
-          </div>
-          <div className="flex gap-1 ">
-            <div className="input flex flex-col w-fit static">
-              <label
-                htmlFor="select"
-                className="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
-              >
-                คณะ:
-              </label>
-              <select
-                id="faculty"
-                name="select"
-                className="border-blue-500 input px-[10px] py-[13px] text-md bg-[#e8e8e8] border-2 rounded-[5px] w-[200px] focus:outline-none"
-              >
-                <option value="">-</option>
-                <option value="option1">M</option>
-                <option value="option2">M</option>
-                <option value="option2">M</option>
-              </select>
-            </div>
-            <div className="input flex flex-col w-fit static">
-              <label
-                htmlFor="select"
-                className="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
-              >
-                สาขา:
-              </label>
-              <select
-                id="field"
-                name="select"
-                className="border-blue-500 input px-[10px] py-[13px] text-md bg-[#e8e8e8] border-2 rounded-[5px] w-[200px] focus:outline-none"
-              >
-                <option value="">-</option>
-                <option value="option1">Mr.</option>
-                <option value="option2">Ms.</option>
-                <option value="option2">Mrs.</option>
-              </select>
-            </div>
-          </div>
-
-          <button
-            class="cursor-pointer transition-all bg-blue-500 text-white px-6 py-2 rounded-lg
-border-blue-600
-border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
-active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
-          >
-            Register
-          </button>
+          </form>
         </div>
       </div>
     </div>
@@ -192,3 +85,5 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
 };
 
 export default page;
+
+

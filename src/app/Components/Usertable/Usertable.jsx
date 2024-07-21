@@ -6,10 +6,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 function Usertable() {
     let person = {
-        id : 65172310303-5,
-        firstName : 'peerapat',
-        lastname : 'klintan',
-        hour : '80/100',
+        id: 65172310303 - 5,
+        firstName: 'peerapat',
+        lastname: 'klintan',
+        hour: '80/100',
     }
     console.log(person.firstName);
     return (
@@ -52,9 +52,9 @@ function Usertable() {
                                     80/100
                                 </td>
                                 <td className=' items-center gap-5'>
-                                    <Link className='px-2 ' href="/Admin/View"><VisibilityIcon/></Link>
-                                    <Link className='px-2' href='/Admin/Edit' ><EditIcon/></Link>
-                                    <button className='px-2' ><DeleteIcon/></button>
+                                    <Link className='px-2 py-2 rounded-full hover:bg-blue-50 transition duration-500' href="/Admin/View"><VisibilityIcon /></Link>
+                                    <Link className='px-2 py-2 rounded-full hover:bg-blue-50 transition duration-500' href='/Admin/Edit' ><EditIcon /></Link>
+                                    <button className='px-2 py-2 rounded-full hover:bg-blue-50 transition duration-500' ><DeleteIcon /></button>
                                 </td>
                             </tr>
                         </tbody>

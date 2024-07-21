@@ -1,62 +1,77 @@
-import React from "react";
+'use client'
+import React, { useState } from "react";
 import Nav from "../Components/Headnav/Nav";
-import Leftlogin from "../Components/Headnav/Leftlogin";
-
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Link from "next/link";
+// import Leftlogin from "../Components/Headnav/Leftlogin";
 
 function page() {
+
+
   return (
-    <div>
-    <Nav />
-    <div className="flex flex-row mx-3  gap-3 min-h-[700px]">
-      <div className="basis-3/5 rounded-2xl flex justify-center items-center">
-        <Leftlogin />
-      </div>
-      <div className="basis-2/5 bg-[#d1d5db] rounded-2xl flex justify-center items-center	flex-col gap-6 border border-black">
-        <div className="text-5xl font-bold ">LOGIN</div>
+    <div className="">
+      <Nav />
+      <div className="flex justify-center items-center w-screen h-screen">
+        <div className="">
+          <div className="flex mt-16 bg-blue-300 w-[960px] h-[500px] rounded-[12px] shadow-2xl">
+            <div className="left flex justify-center items-center w-[480px]">
+              <img className="p-6" src="https://www.studentloan.or.th/th/system/files/files/knowledgemedia/%E0%B8%81%E0%B8%A2%E0%B8%A8-01.png" />
+            </div>
+            <div className="right bg-slate-100 rounded-r-[12px] shadow-2xl w-[480px] gap-7 ">
+              <form className="p-4 h-full flex flex-col justify-center items-center relative">
+                <div className="text-[35px] text-center font-mono font-bold py-7 text-gray-700">
+                  Sign In!
+                </div>
+                <div className="flex justify-center items-center gap-7">
+                  <Box
+                    sx={{
+                      '& > :not(style)': { m: 1, width: '25ch' },
+                    }}
+                  >
+                    <TextField
+                      id="outlined-basic"
+                      label="Email"
+                      placeholder="Email Address"
+                      variant="outlined"
+                      type="email"
+                    />
+                  </Box>
+                </div>
+                <div className="w-fit">
+                  <div className="flex flex-col items-center">
+                    <Box
+                      sx={{
+                        '& > :not(style)': { m: 1, width: '25ch' },
+                      }}
+                    >
+                      <TextField
+                        id="outlined-basic"
+                        label="Password"
+                        variant="outlined"
+                        type="password"
+                      />
+                    </Box>
+                  </div>
+                </div>
 
-        <div className="input flex flex-col w-fit static">
-          <label
-            htmlFor="input"
-            className="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
-          >
-            อีเมล:
-          </label>
-          <input
-            id="email"
-            type="email"
-            placeholder=""
-            name="input"
-            className="border-blue-500 input px-[10px] py-[11px] text-md bg-[#e8e8e8] border-2 rounded-[5px] w-[400px] focus:outline-none placeholder:text-black/25"
-          />
+                <div className="flex justify-center items-center mt-5">
+                  <button
+                    className="py-2 px-6 bg-blue-500 rounded-md text-white hover:bg-blue-800 transition duration-300"
+                    type="submit"
+                  >
+                    Sign In
+                  </button>
+                </div>
+                <div className="absolute bottom-4 right-4 text-gray-700 hover:text-blue-500">
+                  <Link href='/'>ลืมรหัสผ่าน ?</Link>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-
-        <div className="input flex flex-col w-fit static">
-          <label
-            htmlFor="input"
-            className="text-blue-500 text-xs font-semibold relative top-2 ml-[7px] px-[3px] bg-[#e8e8e8] w-fit"
-          >
-            รหัสผ่าน:
-          </label>
-          <input
-            id="password"
-            type="password"
-            placeholder=""
-            name="input"
-            className="border-blue-500 input px-[10px] py-[11px] text-md bg-[#e8e8e8] border-2 rounded-[5px] w-[400px] focus:outline-none placeholder:text-black/25"
-          />
-        </div>
-
-        <button
-          className="cursor-pointer transition-all bg-blue-500 text-white px-6 py-2 rounded-lg
-border-blue-600
-border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
-active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
-        >
-          Login
-        </button>
       </div>
     </div>
-  </div>
   )
 }
 

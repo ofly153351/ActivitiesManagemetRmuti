@@ -21,12 +21,12 @@ function Nav() {
                     {pathName === '/Login' ? (
                         <div>
                             <Link href='/Register' className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-bold 
-                        hover:bg-gray-200 hover:text-black"><span className="drop-shadow-2xl " >Sign Up</span></Link>
+                        hover:bg-gray-200 hover:text-black transition duration-300"><span className="drop-shadow-2xl " >Sign Up</span></Link>
                         </div>
                     ) : pathName === '/Register' ? (
                         <div>
                             <Link href='/Login' className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-bold 
-                            hover:bg-gray-200 hover:text-black"><span className="drop-shadow-2xl" >Sign In</span></Link>
+                            hover:bg-gray-200 hover:text-black transition duration-300"><span className="drop-shadow-2xl" >Sign In</span></Link>
                         </div>
                     ) : pathName === '/Home' ? (
                         <>
@@ -81,21 +81,24 @@ function Nav() {
                     ) : pathName === '/Admin' ? (
                         <>
                             <div className="mr-20 flex gap-10" >
-                                <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] hover:font-semibold">
+                                <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] 
+                                hover:font-semibold transition duration-300 hover:transform hover:-translate-y-1">
                                     <Link href="/">
                                         <span className="" >
                                             แสดงรายชื่อนักศึกษาทั้งหมด
                                         </span>
                                     </Link>
                                 </div>
-                                <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] hover:font-semibold">
+                                <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] hover:font-semibold 
+                                transition duration-300 hover:transform hover:-translate-y-1">
                                     <Link href='/' >
                                         <span className="" >
                                             แสดงกิจกรรมทั้งหมด
                                         </span>
                                     </Link>
                                 </div>
-                                <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] hover:font-semibold">
+                                <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] 
+                                hover:font-semibold transition duration-300 hover:transform hover:-translate-y-1">
                                     <Link href='/' >
                                         <span className="" >
                                             เพิ่มกิจกรรม
@@ -111,16 +114,16 @@ function Nav() {
                                     </button>
                                 </div>
                                 <div className="flex flex-col">
-                                    <div className={`  absolute w-24 bg-[#2980B9] right-8 top-[65px] rounded-md shadow-2xl
+                                    <div className={`  absolute w-24 bg-[#2980B9] right-8 top-[65px] rounded-md shadow-2xl 
                                     ${isMenuhidden ? '' : 'hidden'}`}>
                                         <div className="flex flex-col gap-2 text-center ">
                                             <span className="text-white hover:text-black hover:bg-stone-100 ease-in-out duration-300 rounded-md ">
                                                 <Link href='/' >info</Link>
                                             </span>
-                                            <span className="text-white hover:text-black hover:bg-stone-100 ease-in-out duration-300 rounded-sm" >
+                                            <span className="text-white hover:text-black hover:bg-stone-100 ease-in-out duration-300 rounded-sm transition" >
                                                 <Link href='/' >activity</Link>
                                             </span>
-                                            <span className="text-white hover:text-black hover:bg-stone-100 ease-in-out duration-300 rounded-md">
+                                            <span className="text-white hover:text-black hover:bg-stone-100 ease-in-out duration-300 rounded-md transition">
                                                 <Link href='/' className="" >Logout</Link>
                                             </span>
                                         </div>

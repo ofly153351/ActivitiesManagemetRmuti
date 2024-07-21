@@ -5,9 +5,9 @@ function page() {
     return (
         <>
             <Nav />
-            <div>
+            <>
                 <Usertable />
-            </div>
+            </>
         </>
     )
 }

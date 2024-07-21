@@ -1,3 +1,4 @@
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -7,22 +8,8 @@ module.exports = {
   ],
   theme: {
     extend: {
-      transitionProperty:{
-        'width-left' : 'width-left',
-      },
-      transitionTimingFunction : {
-        'ease' : 'ease',
-      },
-      transitionDuration :{
-        '300' : '300',
-      },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
     },
   },
-  variant:{},
+  variant: {},
   plugins: [],
 };
