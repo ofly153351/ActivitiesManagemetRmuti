@@ -6,6 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import { useForm } from "react-hook-form";
+import axios from 'axios'
 
 const Page = () => {
   const { register, handleSubmit, setValue, formState: { errors }, watch } = useForm();
@@ -17,14 +18,26 @@ const Page = () => {
     }); // Register 'nameTitle' field manually
   }, [register]);
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const res = await axios.post('http://localhost:8000/register', {
+        ...data,
+        nameTitle: gender
+      });
+      if (res.status === 201) {
+        alert("SignUp Successfully")
+      }
+    } catch (error) {
+      console.error('Error during registration:', error);
+      alert('Registration failed');
+    }
   }
 
   const handleChange = (event) => {
     setGender(event.target.value);
     setValue('nameTitle', event.target.value); // Set value for 'nameTitle'
   }
+
 
   return (
     <div>
