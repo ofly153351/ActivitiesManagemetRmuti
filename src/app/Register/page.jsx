@@ -8,9 +8,11 @@ import InputLabel from '@mui/material/InputLabel';
 import { useForm } from "react-hook-form";
 import axios from 'axios'
 
-const Page = () => {
+function Page() {
   const { register, handleSubmit, setValue, formState: { errors }, watch } = useForm();
   const [gender, setGender] = useState('');
+
+
 
   useEffect(() => {
     register('nameTitle', {
@@ -20,16 +22,23 @@ const Page = () => {
 
   const onSubmit = async (data) => {
     try {
-      const res = await axios.post('http://localhost:8000/register', {
+      const payload = {
         ...data,
-        nameTitle: gender
-      });
+        TitleName: data.nameTitle,
+        User_ID: data.userID
+      };
+      console.log(payload);
+      const res = await axios.post('http://localhost:8000/register', payload);
       if (res.status === 201) {
         alert("SignUp Successfully")
       }
     } catch (error) {
       console.error('Error during registration:', error);
-      alert('Registration failed');
+      if (error.response && error.response.status === 409) {
+        alert("มีข้อมูลนี้ในระบบแล้ว")
+      }
+      // alert('Registration failed');
+      console.log(data);
     }
   }
 
@@ -77,7 +86,13 @@ const Page = () => {
                   <div>
                     <div className="w-[150px] h-10">
                       <input
-                        {...register("firstName", { required: "กรุณาใส่ชื่อ" })}
+                        {...register("firstName", {
+                          required: "กรุณาใส่ชื่อ",
+                          pattern: {
+                            value: /^[ก-๙]+$/,
+                            message: "กรอกชื่อเป็นภาษาไทย"
+                          }
+                        })}
                         placeholder="ชื่อ"
                         className="p-2 border-[1px] border-gray-300 w-full h-full focus:outline-blue-500 bg-transparent rounded-md focus:shadow-xl duration duration-100 placeholder-gray-550 hover:border-[1px] hover:border-blue-600"
                         type="text"
@@ -85,14 +100,22 @@ const Page = () => {
                     </div>
                     {errors.firstName && <div className="text-red-500 mt-1 text-xs">{errors.firstName.message}</div>}
                   </div>
-                  <div className="w-[150px] h-10">
-                    <input
-                      {...register("lastName", { required: "กรุณาใส่นามสกุล" })}
-                      placeholder="นามสกุล"
-                      className="p-2 border-[1px] border-gray-300 w-full h-full focus:outline-blue-500 bg-transparent rounded-md focus:shadow-xl duration duration-100 hover:border-[1px] hover:border-blue-600 placeholder-gray-550"
-                      type="text"
-                    />
-                    {errors.lastName && <div className="text-red-500 mt-1 text-xs">{errors.lastName.message}</div>}
+                  <div>
+                    <div className="w-[150px] h-10">
+                      <input
+                        {...register("lastName", {
+                          required: "กรุณาใส่นามสกุล",
+                          pattern: {
+                            value: /^[ก-๙]+$/,
+                            message: "กรอกนามสกุลเป็นภาษาไทย"
+                          }
+                        })}
+                        placeholder="นามสกุล"
+                        className="p-2 border-[1px] border-gray-300 w-full h-full focus:outline-blue-500 bg-transparent rounded-md focus:shadow-xl duration duration-100 hover:border-[1px] hover:border-blue-600 placeholder-gray-550"
+                        type="text"
+                      />
+                    </div>
+                      {errors.lastName && <div className="text-red-500 mt-1 text-xs">{errors.lastName.message}</div>}
                   </div>
                 </div>
               </div>
@@ -100,7 +123,13 @@ const Page = () => {
                 <div className="w-full" >
                   <div>
                     <input
-                      {...register("userID", { required: "กรุณาใส่รหัสนักศึกษา" })}
+                      {...register("userID", {
+                        required: "กรุณาใส่รหัสนักศึกษา",
+                        pattern: {
+                          value: /^\d{11}-\d$/,
+                          message: "รูปแบบรหัสนักศึกษาไม่ถูกต้อง ต้องมีตัวเลข 12 ตัวและเครื่องหมายขีด (-) ก่อนตัวสุดท้าย"
+                        }
+                      })}
                       className="p-2 border-[1px] border-gray-300 w-full h-full focus:outline-blue-500 bg-transparent rounded-md placeholder-gray-550 focus:shadow-xl duration duration-100 hover:border-[1px] hover:border-blue-600"
                       type="text"
                       placeholder="รหัสนักศึกษา"
