@@ -27,7 +27,7 @@ function Page() {
         TitleName: data.nameTitle,
         User_ID: data.userID
       };
-      console.log(payload);
+      // console.log(payload);
       const res = await axios.post('http://localhost:8000/register', payload);
       if (res.status === 201) {
         alert("SignUp Successfully")
