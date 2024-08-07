@@ -7,11 +7,12 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import { useForm } from "react-hook-form";
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 function Page() {
   const { register, handleSubmit, setValue, formState: { errors }, watch } = useForm();
   const [gender, setGender] = useState('');
-
+  const router = useRouter()
 
 
   useEffect(() => {
@@ -23,25 +24,50 @@ function Page() {
   const onSubmit = async (data) => {
     try {
       const payload = {
-        ...data,
-        TitleName: data.nameTitle,
-        User_ID: data.userID
+        user: {
+          email: data.email,
+          password: data.password
+        },
+        information: {
+          title_name: data.nameTitle,
+          first_name: data.firstName,
+          last_name: data.lastName,
+          phone: data.phone
+        }
       };
       // console.log(payload);
       const res = await axios.post('http://localhost:8000/register', payload);
-      if (res.status === 201) {
-        alert("SignUp Successfully")
+      if (res.status === 200) {
+        alert("SignUp Successfully");
+        console.log("SignUp Successfully");
+        router.push('/Login')
       }
     } catch (error) {
       console.error('Error during registration:', error);
-      if (error.response && error.response.status === 409) {
-        alert("มีข้อมูลนี้ในระบบแล้ว")
-      }
-      // alert('Registration failed');
-      console.log(data);
-    }
-  }
 
+      if (error.response && error.response.data) {
+        const errorData = error.response.data;
+
+        // ตรวจสอบว่ามี errors และเป็น object
+        if (errorData.errors && typeof errorData.errors === 'object') {
+          const errorMessages = errorData.errors;
+          for (const key in errorMessages) {
+            if (errorMessages.hasOwnProperty(key)) {
+              alert(`Error: ${errorMessages[key]}`);
+            }
+          }
+        } else if (errorData.error) {
+          // กรณีมีข้อความ error เดียว
+          alert(`Error: ${errorData.error}`);
+        } else {
+          alert('An unknown error occurred. Please try again.');
+        }
+      } else {
+        alert('An unknown error occurred. Please try again.');
+      }
+    }
+  };
+  
   const handleChange = (event) => {
     setGender(event.target.value);
     setValue('nameTitle', event.target.value); // Set value for 'nameTitle'
@@ -56,7 +82,7 @@ function Page() {
           <div className="flex justify-center items-center">
             <img className="ml-4 p-2 w-[120px]" src="https://www.studentloan.or.th/th/system/files/files/knowledgemedia/%E0%B8%81%E0%B8%A2%E0%B8%A8-01.png" />
             <span className="font-mono text-[35px] font-bold text-gray-700 text-shadow-xl">
-              Sign Up
+              สมัครสมาชิก
             </span>
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -115,7 +141,7 @@ function Page() {
                         type="text"
                       />
                     </div>
-                      {errors.lastName && <div className="text-red-500 mt-1 text-xs">{errors.lastName.message}</div>}
+                    {errors.lastName && <div className="text-red-500 mt-1 text-xs">{errors.lastName.message}</div>}
                   </div>
                 </div>
               </div>
@@ -123,19 +149,19 @@ function Page() {
                 <div className="w-full" >
                   <div>
                     <input
-                      {...register("userID", {
-                        required: "กรุณาใส่รหัสนักศึกษา",
+                      {...register("phone", {
+                        required: "กรุณากรอกเบอร์โทร",
                         pattern: {
-                          value: /^\d{11}-\d$/,
-                          message: "รูปแบบรหัสนักศึกษาไม่ถูกต้อง ต้องมีตัวเลข 12 ตัวและเครื่องหมายขีด (-) ก่อนตัวสุดท้าย"
+                          value: /^\d{10}$/,
+                          message: "เบอร์โทรต้องมี 10 ตัว"
                         }
                       })}
                       className="p-2 border-[1px] border-gray-300 w-full h-full focus:outline-blue-500 bg-transparent rounded-md placeholder-gray-550 focus:shadow-xl duration duration-100 hover:border-[1px] hover:border-blue-600"
                       type="text"
-                      placeholder="รหัสนักศึกษา"
+                      placeholder="เบอร์โทร"
                     />
                   </div>
-                  {errors.userID && <div className="text-red-500 text-xs mt-1">{errors.userID.message}</div>}
+                  {errors.phone && <div className="text-red-500 text-xs mt-1">{errors.phone.message}</div>}
                 </div>
                 <div className="w-full" >
                   <div className="">
@@ -187,7 +213,7 @@ function Page() {
                 </div>
                 <div className="p-4">
                   <button className="px-6 py-4 border-[1px] bg-[#0067B3] text-white font-mono font-semibold rounded-lg shadow-xl hover:bg-blue-600 duration duration-300" type="submit">
-                    Sign Up!
+                    ลงทะเบียน
                   </button>
                 </div>
               </div>

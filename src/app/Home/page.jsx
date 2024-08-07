@@ -1,14 +1,14 @@
 'use client'
 import Nav from '../Components/Headnav/Nav'
 import React, { useState } from 'react';
-import Footter from '../Components/Footter/Footter';
 import SearchIcon from '@mui/icons-material/Search';
 import Activity from '../Components/Activity/Activity';
+
 
 function Page() {
     const [selected, setSelected] = useState('highTolow');
     const [searchQuery, setSearchQuery] = useState(''); // เพิ่ม state สำหรับคำค้นหา
-
+    
     const handleChange = (event) => {
         setSelected(event.target.value);
     };
@@ -17,7 +17,7 @@ function Page() {
         <>
             <Nav />
             <div className='flex'>
-                <div className='w-screen h-screen ml-40 border-l-2 border-[#0067B3] border-l-2xl'>
+                <div className='w-full  m-20 '>
                     <div className="px-10 py-16 mt-20">
                         <span className='font-sans text-[45px]'>กิจกรรมที่สามารถลงทะเบียนได้</span>
                     </div>
@@ -45,7 +45,7 @@ function Page() {
                     <Activity searchQuery={searchQuery} /> {/* ส่ง searchQuery ไปยัง Activity */}
                 </div>
             </div>
-            <Footter />
+            {/* <Footter /> */}
         </>
     );
 }

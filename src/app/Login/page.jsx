@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import React from "react";
 import Nav from "../Components/Headnav/Nav";
 import Box from '@mui/material/Box';
@@ -11,28 +11,33 @@ import { useRouter } from "next/navigation";
 function Page() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const router = useRouter();
+
   const onSubmit = async (data) => {
     try {
       const payload = {
         email: data.email,
         password: data.password
       };
-
-      const res = await axios.post('http://localhost:8000/login', payload);
+      
+      console.log('Payload being sent:', payload); // เพิ่มการบันทึกข้อมูล payload
+  
+      const res = await axios.post('http://localhost:8000/login', payload, {
+        withCredentials: true
+      });
+      
       if (res.status === 200) {
-        alert("SignIn Successfully")
-        router.push('/Home')
+        alert("SignIn Successfully");
+        router.push('/Home');
       }
     } catch (error) {
       console.error('Error during sign in:', error);
-      if (error.response) {
+      if (error.response && error.response.data && error.response.data.message) {
         alert(`Sign In Failed: ${error.response.data.message}`);
       } else {
         alert('Sign In Failed: An unexpected error occurred');
       }
     }
   };
-
   return (
     <div>
       <Nav />
@@ -45,7 +50,7 @@ function Page() {
             <div className="right bg-slate-100 rounded-r-[12px] shadow-2xl w-[480px] gap-7 ">
               <form className="p-4 h-full flex flex-col justify-center items-center relative" onSubmit={handleSubmit(onSubmit)}>
                 <div className="text-[35px] text-center font-mono font-bold py-7 text-gray-700">
-                  Sign In!
+                  เข้าสู่ระบบ
                 </div>
                 <div>
                   <div className="flex justify-center items-center gap-7">
@@ -89,7 +94,7 @@ function Page() {
                     className="py-2 px-6 bg-blue-500 rounded-md text-white hover:bg-blue-800 transition duration-300"
                     type="submit"
                   >
-                    Sign In
+                    เข้าสู่ระบบ
                   </button>
                 </div>
                 <div className="absolute bottom-4 right-4 text-gray-700 hover:text-blue-500">

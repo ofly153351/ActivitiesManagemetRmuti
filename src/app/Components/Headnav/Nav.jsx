@@ -1,141 +1,130 @@
 'use client'
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import React, { useState } from 'react'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import Profilemanu from './Profilemanu';
+import Cookies from 'js-cookie';
+import { jwtDecode } from "jwt-decode";
 
 function Nav() {
-
     const pathName = usePathname() || " ";
-    const [isMenuhidden, setIsMenuhidden] = useState(false);
-    // console.log(pathName);
-    const IconMenu = () => {
-        setIsMenuhidden(!isMenuhidden);
-    };
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const token = Cookies.get('access_token');
+        if (token) {
+            try {
+                const decodedJwt = jwtDecode(token);
+                setUser(decodedJwt);
+            } catch (error) {
+                console.error('Error decoding JWT:', error);
+                setUser(null);
+            }
+        } else {
+            setUser(null);
+        }
+    }, []);
 
     return (
-        <>
-            <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-between items-center fixed z-10">
-                <span className="ml-[50px] font-bold text-2xl ">LOGO</span>
-                <div className="gap-5 flex mr-[50px]">
-                    {pathName === '/Login' ? (
+        <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-between items-center fixed z-10">
+            <span className="ml-[50px] font-bold text-2xl">LOGO</span>
+            <div className="gap-5 flex mr-[50px]">
+                {pathName === '/Login' ? (
+                    <>
                         <div>
                             <Link href='/Register' className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-bold 
-                        hover:bg-gray-200 hover:text-black transition duration-300"><span className="drop-shadow-2xl " >Sign Up</span></Link>
+                            hover:bg-gray-200 hover:text-black transition duration-100">
+                                <span className="drop-shadow-2xl">ลงทะเบียน</span>
+                            </Link>
                         </div>
-                    ) : pathName === '/Register' ? (
+                        <div>
+                            <Link href='/Home' className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-bold 
+                            hover:bg-gray-200 hover:text-black transition duration-100">
+                                <span className="drop-shadow-2xl">รายชื่อกิจกรรม</span>
+                            </Link>
+                        </div>
+
+                    </>
+
+                ) : pathName === '/Register' ? (
+                    <>
                         <div>
                             <Link href='/Login' className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-bold 
-                            hover:bg-gray-200 hover:text-black transition duration-300"><span className="drop-shadow-2xl" >Sign In</span></Link>
+                            hover:bg-gray-200 hover:text-black transition duration-100">
+                                <span className="drop-shadow-2xl">เข้าสู่ระบบ</span>
+                            </Link>
                         </div>
-                    ) : pathName === '/Home' ? (
-                        <>
-                            <div className="mr-20 flex gap-10" >
-                                <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] hover:font-semibold">
-                                    <Link href="/">
-                                        <span className="" >
-                                            ขอเพิ่มกิจกรรมนอกสถานที่
-                                        </span>
-                                    </Link>
-                                </div>
-                                <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] hover:font-semibold">
-                                    <Link href='/' >
-                                        <span className="" >
-                                            dwakdhwuah
-                                        </span>
-                                    </Link>
-                                </div>
-                                <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] hover:font-semibold">
-                                    <Link href='/' >
-                                        <span className="" >
-                                            dwakdhwuah
-                                        </span>
-                                    </Link>
-                                </div>
+                        <div>
+                            <Link href='/Home' className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-bold 
+                            hover:bg-gray-200 hover:text-black transition duration-100">
+                                <span className="drop-shadow-2xl">รายชื่อกิจกรรม</span>
+                            </Link>
+                        </div>
+                    </>
+                ) : pathName === '/Home' && user?.role === 'user' ? (
+                    <>
+                        <div className="mr-20 flex gap-10">
+                            <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] hover:font-semibold">
+                                <Link href="/">
+                                    <span>ขอเพิ่มกิจกรรมนอกสถานที่ </span>
+                                </Link>
                             </div>
-                            <div className="flex justify-center items-center gap-4">
-                                <span>Email : *****@rmuti.ac.th</span>
-                                <div>
-                                    <button className="rounded-full focus:ring focus:border-slate-500" onClick={IconMenu} >
-                                        <AccountCircleIcon fontSize="large" />
-                                    </button>
-                                </div>
-                                <div className="flex flex-col">
-                                    <div className={`  absolute w-24 bg-[#2980B9] right-8 top-[65px] rounded-md shadow-2xl
-                                    ${isMenuhidden ? '' : 'hidden'}`}>
-                                        <div className="flex flex-col gap-2 text-center ">
-                                            <span className="text-white hover:text-black hover:bg-stone-100 ease-in-out duration-300 rounded-md ">
-                                                <Link href='/' >info</Link>
-                                            </span>
-                                            <span className="text-white hover:text-black hover:bg-stone-100 ease-in-out duration-300 rounded-sm" >
-                                                <Link href='/' >activity</Link>
-                                            </span>
-                                            <span className="text-white hover:text-black hover:bg-stone-100 ease-in-out duration-300 rounded-md">
-                                                <Link href='/' className="" >Logout</Link>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] hover:font-semibold">
+                                <Link href="/">
+                                    <span>dwakdhwuah</span>
+                                </Link>
                             </div>
-                        </>
-                    ) : pathName === '/Admin' ? (
-                        <>
-                            <div className="mr-20 flex gap-10" >
-                                <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] 
+                            <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] hover:font-semibold">
+                                <Link href="/">
+                                    <span>dwakdhwuah</span>
+                                </Link>
+                            </div>
+                        </div>
+                        <Profilemanu /> {/* ส่ง user เป็น prop ให้กับ Profilemanu */}
+                    </>
+                ) : pathName === '/Home' && user == null ? (
+                    <>
+                        <div>
+                            <Link href='/Register' className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-bold 
+                            hover:bg-gray-200 hover:text-black transition duration-300">
+                                <span className="drop-shadow-2xl">ลงทะเบียน</span>
+                            </Link>
+                        </div>
+                        <div>
+                            <Link href='/Login' className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-bold 
+                            hover:bg-gray-200 hover:text-black transition duration-300">
+                                <span className="drop-shadow-2xl">เข้าสู่ระบบ</span>
+                            </Link>
+                        </div>
+                    </>
+                ) : pathName === '/Admin' ? (
+                    <>
+                        <div className="mr-20 flex gap-10">
+                            <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3]
                                 hover:font-semibold transition duration-300 hover:transform hover:-translate-y-1">
-                                    <Link href="/">
-                                        <span className="" >
-                                            แสดงรายชื่อนักศึกษาทั้งหมด
-                                        </span>
-                                    </Link>
-                                </div>
-                                <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] hover:font-semibold 
+                                <Link href="/">
+                                    <span>แสดงรายชื่อนักศึกษาทั้งหมด</span>
+                                </Link>
+                            </div>
+                            <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] hover:font-semibold
                                 transition duration-300 hover:transform hover:-translate-y-1">
-                                    <Link href='/' >
-                                        <span className="" >
-                                            แสดงกิจกรรมทั้งหมด
-                                        </span>
-                                    </Link>
-                                </div>
-                                <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] 
+                                <Link href="/">
+                                    <span>แสดงกิจกรรมทั้งหมด</span>
+                                </Link>
+                            </div>
+                            <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3]
                                 hover:font-semibold transition duration-300 hover:transform hover:-translate-y-1">
-                                    <Link href='/' >
-                                        <span className="" >
-                                            เพิ่มกิจกรรม
-                                        </span>
-                                    </Link>
-                                </div>
+                                <Link href="/">
+                                    <span>เพิ่มกิจกรรม</span>
+                                </Link>
                             </div>
-                            <div className="flex justify-center items-center gap-4">
-                                <span>Email : *****@rmuti.ac.th</span>
-                                <div>
-                                    <button className="rounded-full focus:ring focus:border-slate-500" onClick={IconMenu} >
-                                        <AccountCircleIcon fontSize="large" />
-                                    </button>
-                                </div>
-                                <div className="flex flex-col">
-                                    <div className={`  absolute w-24 bg-[#2980B9] right-8 top-[65px] rounded-md shadow-2xl 
-                                    ${isMenuhidden ? '' : 'hidden'}`}>
-                                        <div className="flex flex-col gap-2 text-center ">
-                                            <span className="text-white hover:text-black hover:bg-stone-100 ease-in-out duration-300 rounded-md ">
-                                                <Link href='/' >info</Link>
-                                            </span>
-                                            <span className="text-white hover:text-black hover:bg-stone-100 ease-in-out duration-300 rounded-sm transition" >
-                                                <Link href='/' >activity</Link>
-                                            </span>
-                                            <span className="text-white hover:text-black hover:bg-stone-100 ease-in-out duration-300 rounded-md transition">
-                                                <Link href='/' className="" >Logout</Link>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </>
-                    ) : null}
-                </div>
+                        </div>
+                        <Profilemanu /> {/* ส่ง user เป็น prop ให้กับ Profilemanu */}
+                    </>
+                ) : null}
             </div>
-        </>
-    )
+        </div>
+    );
 }
 
-export default Nav
+export default Nav;

@@ -11,7 +11,7 @@ function Usertable() {
         lastname: 'klintan',
         hour: '80/100',
     }
-    console.log(person.firstName);
+    // console.log(person.firstName);
     return (
         <div className='flex w-screen h-screen'>
             <div className="mx-40 py-16 mt-20 ">
