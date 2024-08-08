@@ -1,3 +1,4 @@
+const { Kanit } = require('next/font/google');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -8,7 +9,10 @@ module.exports = {
   ],
   theme: {
     extend: {
-    },
+      fontFamily: {
+        'kanit': ['Kanit', 'sans-serif'],
+      },
+    }
   },
   variant: {},
   plugins: [],

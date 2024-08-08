@@ -19,7 +19,7 @@ function Page() {
             <div className='flex'>
                 <div className='w-full  m-20 '>
                     <div className="px-10 py-16 mt-20">
-                        <span className='font-sans text-[45px]'>กิจกรรมที่สามารถลงทะเบียนได้</span>
+                        <span className='font-kanit text-[45px]'>กิจกรรมที่สามารถลงทะเบียนได้</span>
                     </div>
                     <div className='border-b-2 p-4 mx-4'>
                         <form className="flex justify-end items-center mr-[60px] gap-3">
@@ -33,12 +33,12 @@ function Page() {
                                     id="search-form"
                                     onChange={(e) => setSearchQuery(e.target.value)} // จัดการการเปลี่ยนแปลงคำค้นหา
                                     placeholder='ค้าหาชื่อกิจกรรม'
-                                    className='w-[400px] border-[1px] p-1.5  rounded-br-2xl rounded-tr-2xl' />
+                                    className='w-[400px] border-[1px] p-1.5 font-kanit rounded-br-2xl rounded-tr-2xl' />
                             </div>
-                            <label className='font-inter text-[20px]'>เรียงตาม : </label>
+                            <label className='font-kanit text-[20px]'>เรียงตาม : </label>
                             <select value={selected} onChange={handleChange} className="p-2 rounded-lg text-sm w-[160px] bg-gray-50 border border-gray-300">
-                                <option value="highTolow">หน่วยกิต มาก - น้อย</option>
-                                <option value="lowTohigh">หน่วยกิต น้อย - มาก</option>
+                                <option className='font-kanit' value="highTolow">หน่วยกิต มาก - น้อย</option>
+                                <option className='font-kanit' value="lowTohigh">หน่วยกิต น้อย - มาก</option>
                             </select>
                         </form>
                     </div>

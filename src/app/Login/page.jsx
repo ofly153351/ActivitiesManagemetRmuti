@@ -16,9 +16,8 @@ function Page() {
     try {
       const payload = {
         email: data.email,
-        password: data.password
+        password: data.password,
       };
-      
       console.log('Payload being sent:', payload); // เพิ่มการบันทึกข้อมูล payload
   
       const res = await axios.post('http://localhost:8000/login', payload, {
@@ -49,7 +48,7 @@ function Page() {
             </div>
             <div className="right bg-slate-100 rounded-r-[12px] shadow-2xl w-[480px] gap-7 ">
               <form className="p-4 h-full flex flex-col justify-center items-center relative" onSubmit={handleSubmit(onSubmit)}>
-                <div className="text-[35px] text-center font-mono font-bold py-7 text-gray-700">
+                <div className="text-[35px] text-center font-kanit py-7 text-gray-700">
                   เข้าสู่ระบบ
                 </div>
                 <div>

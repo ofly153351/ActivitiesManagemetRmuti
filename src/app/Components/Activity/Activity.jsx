@@ -29,22 +29,23 @@ function Activity({ searchQuery }) {
                     <div className='flex justify-between'>
                         <div>
                             <div>
-                                <span className='font-bold text-2xl'>
+                                <span className=' text-2xl font-kanit'>
                                     ชื่อ: {activity.name}
                                 </span>
                             </div>
-                            <div className='px-4 py-2'>
+                            <div className='px-4 py-2 font-kanit'>
                                 <span>
                                     สถานที่: {activity.location}
                                 </span>
                             </div>
-                            <div className='px-4 py-2'>
-                                <span>รายระเอียดกิจกรรม
-                                    <button onClick={() => handleDetails(index)}
-                                        className='rounded-full hover:bg-blue-100'>
+                            <div className='px-4 py-2 font-kanit'>
+                                <span className='font-kanit pr-2' >รายระเอียดกิจกรรม</span>
+                                <button onClick={() => handleDetails(index)}
+                                    className='rounded-full hover:bg-blue-100'>
+                                    <div className='rotate-90' >
                                         <KeyboardArrowRightIcon fontSize='medium' />
-                                    </button>
-                                </span>
+                                    </div>
+                                </button>
                             </div>
                         </div>
                         <div className='items-center'>

@@ -68,67 +68,51 @@ function Profilemanu() {
 
     return (
         <div className="flex justify-center items-center gap-1">
-            {user ? (
-                user.role === 'user' ? (
-                    <>
-                        <span className="w-fit text-gray-500 hover:underline">{user.email} ({user.role})</span>
-                        <div className='relative'>
-                            <div className='rounded-full flex items-center justify-center p-0'>
-                                <Button
-                                    id="basic-button"
-                                    aria-controls={open ? 'basic-menu' : undefined}
-                                    aria-haspopup="true"
-                                    aria-expanded={open ? 'true' : undefined}
-                                    onClick={handleClick}
-                                    style={{ borderRadius: '100px' }}
-                                >
-                                    <AccountCircleIcon fontSize="large" />
-                                </Button>
-                            </div>
-                            <Menu
-                                id="basic-menu"
-                                anchorEl={anchorEl}
-                                open={open}
-                                onClose={handleClose}
-                                MenuListProps={{
-                                    'aria-labelledby': 'basic-button',
-                                }}
-                            >
+            <div className='relative'>
+                <div className='rounded-full flex items-center justify-center p-0'>
+                    <Button
+                        id="basic-button"
+                        aria-controls={open ? 'basic-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClick}
+                        style={{ borderRadius: '100px' }}
+                    >
+                        <AccountCircleIcon fontSize="large" />
+                    </Button>
+                </div>
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                    }}
+                >
+                    {user ? (
+                        user.role === 'admin' ? (
+                            <>
+                                <MenuItem onClick={() => handleMenuItemClick('/Admin')}>Admin</MenuItem>
                                 <MenuItem onClick={() => handleMenuItemClick('/profile')}>ประวัติส่วนตัว</MenuItem>
                                 <MenuItem onClick={() => handleMenuItemClick('/account')}>My account</MenuItem>
                                 <MenuItem onClick={() => handleMenuItemClick('/logout')}>Logout</MenuItem>
-                            </Menu>
-                        </div>
-                    </>
-                ) : null
-            ) : (
-                <div className='relative'>
-                    <div className='rounded-full flex items-center justify-center p-0'>
-                        <Button
-                            id="basic-button"
-                            aria-controls={open ? 'basic-menu' : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={open ? 'true' : undefined}
-                            onClick={handleClick}
-                            style={{ borderRadius: '100px' }}
-                        >
-                            <AccountCircleIcon fontSize="large" />
-                        </Button>
-                    </div>
-                    <Menu
-                        id="basic-menu"
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        MenuListProps={{
-                            'aria-labelledby': 'basic-button',
-                        }}
-                    >
-                        <MenuItem onClick={() => handleMenuItemClick('/Register')}>สมัครสมาชิก</MenuItem>
-                        <MenuItem onClick={() => handleMenuItemClick('/Login')}>เข้าสู่ระบบ</MenuItem>
-                    </Menu>
-                </div>
-            )}
+                            </>
+                        ) : user.role === 'user' ? (
+                            <>
+                                <MenuItem onClick={() => handleMenuItemClick('/profile')}>ประวัติส่วนตัว</MenuItem>
+                                <MenuItem onClick={() => handleMenuItemClick('/account')}>My account</MenuItem>
+                                <MenuItem onClick={() => handleMenuItemClick('/logout')}>Logout</MenuItem>
+                            </>
+                        ) : null
+                    ) : (
+                        <>
+                            <MenuItem onClick={() => handleMenuItemClick('/Register')}>สมัครสมาชิก</MenuItem>
+                            <MenuItem onClick={() => handleMenuItemClick('/Login')}>เข้าสู่ระบบ</MenuItem>
+                        </>
+                    )}
+                </Menu>
+            </div>
         </div>
     );
 }
