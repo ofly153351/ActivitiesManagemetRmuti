@@ -39,6 +39,11 @@ function Activity({ searchQuery }) {
                                 </span>
                             </div>
                             <div className='px-4 py-2 font-kanit'>
+                                <span>
+                                    หน่วยกิต: 
+                                </span>
+                            </div>
+                            <div className='px-4 py-2 font-kanit'>
                                 <span className='font-kanit pr-2' >รายระเอียดกิจกรรม</span>
                                 <button onClick={() => handleDetails(index)}
                                     className='rounded-full hover:bg-blue-100'>

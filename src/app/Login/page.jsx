@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 function Page() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   const onSubmit = async (data) => {
     try {
@@ -19,21 +20,26 @@ function Page() {
         password: data.password,
       };
       console.log('Payload being sent:', payload); // เพิ่มการบันทึกข้อมูล payload
-  
       const res = await axios.post('http://localhost:8000/login', payload, {
         withCredentials: true
       });
-      
+
       if (res.status === 200) {
-        alert("SignIn Successfully");
         router.push('/Home');
       }
     } catch (error) {
-      console.error('Error during sign in:', error);
-      if (error.response && error.response.data && error.response.data.message) {
-        alert(`Sign In Failed: ${error.response.data.message}`);
+      // console.error('Error during sign in:', error);
+      if (error.response) {
+        // ตรวจสอบสถานะ HTTP ของข้อผิดพลาด
+        if (error.response.status === 401) {
+          console.log("Invalid credentials - 401 Unauthorized");
+        }
+      }
+
+      if (error.response && error.response.data && error.response.data.error) {
+        setErrorMessage(error.response.data.error);
       } else {
-        alert('Sign In Failed: An unexpected error occurred');
+        setErrorMessage('Sign In Failed: An unexpected error occurred');
       }
     }
   };
@@ -86,7 +92,8 @@ function Page() {
                       />
                     </Box>
                   </div>
-                  {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+                  <div></div>
+                  {errors.password && <p className="pt-2 text-red-500">{errors.password.message}</p>}
                 </div>
                 <div className="flex justify-center items-center mt-5">
                   <button
@@ -96,6 +103,7 @@ function Page() {
                     เข้าสู่ระบบ
                   </button>
                 </div>
+                {errorMessage && <p className="error-message pt-2 text-red-500 ">{errorMessage}</p>}
                 <div className="absolute bottom-4 right-4 text-gray-700 hover:text-blue-500">
                   <Link href='/'>ลืมรหัสผ่าน ?</Link>
                 </div>

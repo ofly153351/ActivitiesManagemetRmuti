@@ -29,22 +29,6 @@ function Profilemanu() {
         }
     }, []); // Dependency array is empty, so this effect runs once on mount
 
-    useEffect(() => {
-        // Check for token updates if needed, e.g., after logging out
-        const token = Cookies.get('access_token');
-        if (token) {
-            try {
-                const decodedJwt = jwtDecode(token);
-                setUser(decodedJwt);
-            } catch (error) {
-                console.error('Error decoding JWT:', error);
-                setUser(null);
-            }
-        } else {
-            setUser(null);
-        }
-    }, [Cookies.get('access_token')]); // Dependency on token changes
-
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
         setOpen(true);
@@ -67,8 +51,12 @@ function Profilemanu() {
     };
 
     return (
-        <div className="flex justify-center items-center gap-1">
-            <div className='relative'>
+        <div className="flex items-center gap-2">
+            <div className='relative flex justity-center items-center '>
+                {/* Add the user's name here */}
+                {user && (
+                    <span className=" text-gray-500  text-md font-kanit hover:underline ">{user.email}</span>
+                )}
                 <div className='rounded-full flex items-center justify-center p-0'>
                     <Button
                         id="basic-button"

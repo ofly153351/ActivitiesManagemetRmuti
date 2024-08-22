@@ -3,8 +3,7 @@ import jwt from 'jsonwebtoken'
 
 export function middleware(request) {
     // ดึงค่า access_token จาก cookies
-    const accessToken = request.cookies.get('access_token')
-    const unauthorizedUrl = new URL('/Unauthorized', request.url).href;
+    const accessToken = request.cookies.get('access_token');
     const homeUrl = new URL('/Home', request.url).href;
 
     let role = null
@@ -12,10 +11,10 @@ export function middleware(request) {
         try {
             // แยกค่า payload จาก JWT
             const decoded = jwt.decode(accessToken.value)
-
+            console.log(decoded);
             // ตรวจสอบ role จาก payload
             role = decoded?.role
-            console.log('Role:', role)
+            console.log('Role:', role )
         } catch (error) {
             console.error('Error decoding JWT:', error)
         }

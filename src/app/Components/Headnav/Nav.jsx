@@ -13,7 +13,6 @@ function Nav() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-
     useEffect(() => {
         const token = Cookies.get('access_token');
 
@@ -42,99 +41,109 @@ function Nav() {
         );
     }
 
+    const commonLinks = [
+        { href: '/Home', label: 'รายชื่อกิจกรรม' }
+    ];
+
+    const authLinks = [
+        { href: '/Register', label: 'ลงทะเบียน' },
+        { href: '/Login', label: 'เข้าสู่ระบบ' }
+    ];
+
+    const userLinks = [
+        { href: '/', label: 'ขอเพิ่มกิจกรรมนอกสถานที่' },
+        { href: '/', label: 'dwakdhwuah' },
+        { href: '/', label: 'dwakdhwuah' }
+    ];
+
+    const adminLinks = [
+        { href: '/Admin/Userlist', label: 'แสดงรายชื่อนักศึกษาทั้งหมด' },
+        { href: '/Admin/Eventlist', label: 'แสดงกิจกรรมทั้งหมด' },
+        { href: '/', label: 'เพิ่มกิจกรรม' }
+    ];
 
     return (
         <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-between items-center fixed z-10">
             <span className="ml-[50px] font-kanit text-2xl">LOGO</span>
             <div className="gap-5 flex mr-[50px]">
-                {pathName === '/Login' ? (
+                {pathName === '/Login' && (
                     <>
-                        <div>
-                            <Link href='/Register' className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit 
-                            hover:bg-gray-200 hover:text-black transition duration-100">
-                                <span className="drop-shadow-2xl">ลงทะเบียน</span>
-                            </Link>
-                        </div>
-                        <div>
-                            <Link href='/Home' className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit 
-                            hover:bg-gray-200 hover:text-black transition duration-100">
-                                <span className="drop-shadow-2xl">รายชื่อกิจกรรม</span>
-                            </Link>
-                        </div>
+                        {authLinks.map((link, index) => (
+                            <div key={index}>
+                                <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100">
+                                    <span className="drop-shadow-2xl">{link.label}</span>
+                                </Link>
+                            </div>
+                        ))}
+                        {commonLinks.map((link, index) => (
+                            <div key={index}>
+                                <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100">
+                                    <span className="drop-shadow-2xl">{link.label}</span>
+                                </Link>
+                            </div>
+                        ))}
                     </>
-                ) : pathName === '/Register' ? (
+                )}
+                {pathName === '/Register' && (
                     <>
-                        <div>
-                            <Link href='/Login' className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit 
-                            hover:bg-gray-200 hover:text-black transition duration-100">
-                                <span className="drop-shadow-2xl">เข้าสู่ระบบ</span>
-                            </Link>
-                        </div>
-                        <div>
-                            <Link href='/Home' className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit 
-                            hover:bg-gray-200 hover:text-black transition duration-100">
-                                <span className="drop-shadow-2xl">รายชื่อกิจกรรม</span>
-                            </Link>
-                        </div>
+                        {authLinks.map((link, index) => (
+                            <div key={index}>
+                                <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100">
+                                    <span className="drop-shadow-2xl">{link.label}</span>
+                                </Link>
+                            </div>
+                        ))}
+                        {commonLinks.map((link, index) => (
+                            <div key={index}>
+                                <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100">
+                                    <span className="drop-shadow-2xl">{link.label}</span>
+                                </Link>
+                            </div>
+                        ))}
                     </>
-                ) : pathName === '/Home' && user?.role === 'user' ? (
-                    <>
-                        <div className="mr-20 flex gap-10">
-                            <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] font-kanit">
-                                <Link href="/">
-                                    <span>ขอเพิ่มกิจกรรมนอกสถานที่</span>
+                )}
+                {pathName === '/Home' && user?.role === 'user' && (
+                    <div className="mr-20 flex gap-10">
+                        {userLinks.map((link, index) => (
+                            <div key={index} className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] font-kanit">
+                                <Link href={link.href}>
+                                    <span>{link.label}</span>
                                 </Link>
                             </div>
-                            <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] font-kanit">
-                                <Link href="/">
-                                    <span>dwakdhwuah</span>
-                                </Link>
-                            </div>
-                            <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] font-kanit">
-                                <Link href="/">
-                                    <span>dwakdhwuah</span>
-                                </Link>
-                            </div>
-                        </div>
-                        <Profilemanu user={user} /> {/* ส่ง user เป็น prop ให้กับ Profilemanu */}
-                    </>
-                ) : pathName === '/Home' && user == null ? (
-                    <>
-                        <div>
-                            <Link href='/Register' className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit 
-                            hover:bg-gray-200 hover:text-black transition duration-300">
-                                <span className="drop-shadow-2xl">ลงทะเบียน</span>
-                            </Link>
-                        </div>
-                        <div>
-                            <Link href='/Login' className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit 
-                            hover:bg-gray-200 hover:text-black transition duration-300">
-                                <span className="drop-shadow-2xl">เข้าสู่ระบบ</span>
-                            </Link>
-                        </div>
-                    </>
-                ) : pathName === '/Home' && user?.role === 'admin' ? (
-                    <>
-                        <div className="mr-20 flex gap-10">
-                            <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] font-kanit transition duration-300 hover:transform hover:-translate-y-1">
-                                <Link href="/">
-                                    <span>แสดงรายชื่อนักศึกษาทั้งหมด</span>
-                                </Link>
-                            </div>
-                            <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] font-kanit transition duration-300 hover:transform hover:-translate-y-1">
-                                <Link href="/">
-                                    <span>แสดงกิจกรรมทั้งหมด</span>
-                                </Link>
-                            </div>
-                            <div className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] font-kanit transition duration-300 hover:transform hover:-translate-y-1">
-                                <Link href="/">
-                                    <span>เพิ่มกิจกรรม</span>
-                                </Link>
-                            </div>
-                        </div>
+                        ))}
                         <Profilemanu user={user} />
+                    </div>
+                )}
+                {pathName === '/Home' && user == null && (
+                    <>
+                        {authLinks.map((link, index) => (
+                            <div key={index}>
+                                <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-300">
+                                    <span className="drop-shadow-2xl">{link.label}</span>
+                                </Link>
+                            </div>
+                        ))}
+                        {commonLinks.map((link, index) => (
+                            <div key={index}>
+                                <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-300">
+                                    <span className="drop-shadow-2xl">{link.label}</span>
+                                </Link>
+                            </div>
+                        ))}
                     </>
-                ) : null}
+                )}
+                {user?.role === 'admin' && (
+                    <div className="mr-20 flex gap-10">
+                        {adminLinks.map((link, index) => (
+                            <div key={index} className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] font-kanit transition duration-300 hover:transform hover:-translate-y-1">
+                                <Link href={link.href}>
+                                    <span>{link.label}</span>
+                                </Link>
+                            </div>
+                        ))}
+                        <Profilemanu user={user} />
+                    </div>
+                )}
             </div>
         </div>
     );

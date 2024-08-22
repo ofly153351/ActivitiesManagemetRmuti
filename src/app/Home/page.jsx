@@ -1,17 +1,45 @@
 'use client'
 import Nav from '../Components/Headnav/Nav'
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import Activity from '../Components/Activity/Activity';
-
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 function Page() {
     const [selected, setSelected] = useState('highTolow');
     const [searchQuery, setSearchQuery] = useState(''); // เพิ่ม state สำหรับคำค้นหา
-    
+    // const [loading, setLoading] = useState(true);
+
     const handleChange = (event) => {
         setSelected(event.target.value);
     };
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             // แทนที่ URL ของ API ของคุณที่นี่
+    //             await axios.get('/api/activities');
+    //         } catch (error) {
+    //             console.error('Error fetching data:', error);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, []);
+
+
+    // if (loading) {
+    //     return (
+    //         <div className="w-screen  bg-white border-b-2 border-[#0067B3] shadow-md flex justify-center px-10 items-center fixed z-10">
+    //             <Box sx={{ display: 'flex' }}>
+    //                 <CircularProgress />
+    //             </Box>
+    //         </div>
+    //     );
+    // }
 
     return (
         <>
