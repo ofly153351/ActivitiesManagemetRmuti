@@ -1,5 +1,7 @@
+// Activity.js
 import React, { useState } from 'react';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { filterActivities, handleDetails } from '../Utils/handler';
 
 function Activity({ searchQuery }) {
     const activities = [
@@ -14,13 +16,7 @@ function Activity({ searchQuery }) {
     ];
     const [selectedDetail, setSelectedDetail] = useState(null);
 
-    const handleDetails = (index) => {
-        setSelectedDetail(selectedDetail === index ? null : index);
-    };
-
-    const filteredActivities = activities.filter(activity =>
-        activity.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredActivities = filterActivities(activities, searchQuery);
 
     return (
         <div>
@@ -29,7 +25,7 @@ function Activity({ searchQuery }) {
                     <div className='flex justify-between'>
                         <div>
                             <div>
-                                <span className=' text-2xl font-kanit'>
+                                <span className='text-2xl font-kanit'>
                                     ชื่อ: {activity.name}
                                 </span>
                             </div>
@@ -44,10 +40,11 @@ function Activity({ searchQuery }) {
                                 </span>
                             </div>
                             <div className='px-4 py-2 font-kanit'>
-                                <span className='font-kanit pr-2' >รายระเอียดกิจกรรม</span>
-                                <button onClick={() => handleDetails(index)}
+                                <span className='font-kanit pr-2'>รายละเอียดกิจกรรม</span>
+                                {/* เพิ่มพารามิเตอร์ที่จำเป็นในการเรียกใช้ฟังก์ชัน handleDetails */}
+                                <button onClick={() => handleDetails(index, selectedDetail, setSelectedDetail)}
                                     className='rounded-full hover:bg-blue-100'>
-                                    <div className='rotate-90' >
+                                    <div className='rotate-90'>
                                         <KeyboardArrowRightIcon fontSize='medium' />
                                     </div>
                                 </button>
@@ -64,7 +61,10 @@ function Activity({ searchQuery }) {
                             <div className='px-4 py-2 border-2 h-32 w-[1000px]'>
                                 <p>รายละเอียดกิจกรรมเพิ่มเติมสำหรับ {activity.name}</p>
                             </div>
-                            <button type="button" className='p-3 bg-blue-500 rounded-2xl text-white shadow-xl hover:bg-blue-700'>ลงทเบียนกิจกรรม</button>
+                            {/* การเรียกใช้ handleDetails ในปุ่มนี้ถูกต้องแล้ว */}
+                            <button onClick={() => handleDetails(index, selectedDetail, setSelectedDetail)} 
+                            type="button" className='p-3 bg-blue-500 rounded-2xl text-white shadow-xl
+                             hover:bg-blue-700 font-kanit '>ลงทะเบียนกิจกรรม</button>
                         </div>
                     )}
                 </div>

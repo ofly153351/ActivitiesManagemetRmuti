@@ -4,9 +4,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Profilemanu from './Profilemanu';
 import Cookies from 'js-cookie';
-import { jwtDecode } from 'jwt-decode'; // ใช้ jwtDecode แทน jwtDecode
+// import { jwtDecode } from 'jwt-decode'; // ใช้ jwtDecode แทน jwtDecode
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import { jwtDecodeToken } from '../Utils/function'
 
 function Nav() {
     const pathName = usePathname() || " ";
@@ -15,20 +16,15 @@ function Nav() {
 
     useEffect(() => {
         const token = Cookies.get('access_token');
-
+        console.log(token);
         if (token) {
-            try {
-                const decodedJwt = jwtDecode(token);
-                setUser(decodedJwt);
-                console.log('Decoded JWT:', decodedJwt);
-            } catch (error) {
-                console.error('Error decoding JWT:', error);
-                setUser(null);
-            }
+            const jwtDecoded = jwtDecodeToken(token);
+            setUser(jwtDecoded);
+            console.log(jwtDecoded);
+            setLoading(false);
         } else {
-            setUser(null);
+            setLoading(true)
         }
-        setLoading(false); // เปลี่ยนเป็น false หลังจากโหลดเสร็จ
     }, []); // ควรใช้ [] เป็น dependencies เพื่อให้ useEffect ทำงานเพียงครั้งเดียว
 
     if (loading) {
@@ -45,15 +41,23 @@ function Nav() {
         { href: '/Home', label: 'รายชื่อกิจกรรม' }
     ];
 
-    const authLinks = [
-        { href: '/Register', label: 'ลงทะเบียน' },
+    const loginPath = [
+        { href: '/Register', label: 'ลงทะเบียน' }
+    ]
+
+    const registerPath = [
+        // { href: '/Register', label: 'ลงทะเบียน' },
         { href: '/Login', label: 'เข้าสู่ระบบ' }
     ];
 
+    const authLinks = [
+        { href: '/Register', label: 'ลงทะเบียน' }
+    ]
+
     const userLinks = [
         { href: '/', label: 'ขอเพิ่มกิจกรรมนอกสถานที่' },
-        { href: '/', label: 'dwakdhwuah' },
-        { href: '/', label: 'dwakdhwuah' }
+        { href: '/', label: '-' },
+        { href: '/', label: '-' }
     ];
 
     const adminLinks = [
@@ -64,11 +68,14 @@ function Nav() {
 
     return (
         <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-between items-center fixed z-10">
-            <span className="ml-[50px] font-kanit text-2xl">LOGO</span>
+            <Link href="/Home" >
+                <span className="ml-[50px] font-kanit text-2xl">LOGO</span>
+
+            </Link>
             <div className="gap-5 flex mr-[50px]">
                 {pathName === '/Login' && (
                     <>
-                        {authLinks.map((link, index) => (
+                        {loginPath.map((link, index) => (
                             <div key={index}>
                                 <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100">
                                     <span className="drop-shadow-2xl">{link.label}</span>
@@ -86,7 +93,7 @@ function Nav() {
                 )}
                 {pathName === '/Register' && (
                     <>
-                        {authLinks.map((link, index) => (
+                        {registerPath.map((link, index) => (
                             <div key={index}>
                                 <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100">
                                     <span className="drop-shadow-2xl">{link.label}</span>
@@ -116,14 +123,15 @@ function Nav() {
                 )}
                 {pathName === '/Home' && user == null && (
                     <>
-                        {authLinks.map((link, index) => (
+
+                        {commonLinks.map((link, index) => (
                             <div key={index}>
                                 <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-300">
                                     <span className="drop-shadow-2xl">{link.label}</span>
                                 </Link>
                             </div>
                         ))}
-                        {commonLinks.map((link, index) => (
+                        {authLinks.map((link, index) => (
                             <div key={index}>
                                 <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-300">
                                     <span className="drop-shadow-2xl">{link.label}</span>

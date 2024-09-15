@@ -1,13 +1,15 @@
 'use client'
 import React, { useEffect, useState } from "react";
-import Nav from "../Components/Headnav/Nav";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import { useForm } from "react-hook-form";
-import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { registerUser } from '../../Utils/api';
+import { handleApiError } from '../../Utils/errorhandler';
+import Nav from "../../Components/Nav";
+import Link from 'next/link'
 
 function Page() {
   const { register, handleSubmit, setValue, formState: { errors }, watch } = useForm();
@@ -18,59 +20,39 @@ function Page() {
   useEffect(() => {
     register('nameTitle', {
       required: "กรุณาใส่คำนำหน้า",
-    }); // Register 'nameTitle' field manually
+    });
   }, [register]);
 
   const onSubmit = async (data) => {
+    const payload = {
+      user: {
+        email: data.email,
+        password: data.password
+      },
+      information: {
+        title_name: data.nameTitle,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        phone: data.phone
+      }
+    };
+
     try {
-      const payload = {
-        user: {
-          email: data.email,
-          password: data.password
-        },
-        information: {
-          title_name: data.nameTitle,
-          first_name: data.firstName,
-          last_name: data.lastName,
-          phone: data.phone
-        }
-      };
-      // console.log(payload);
-      const res = await axios.post('http://localhost:8000/register', payload);
+      // เรียกใช้ฟังก์ชัน registerUser จาก utils/api.js
+      const res = await registerUser(payload);
       if (res.status === 200) {
         alert("SignUp Successfully");
-        console.log("SignUp Successfully");
-        router.push('/Login')
+        router.push('/Login');
       }
     } catch (error) {
-      console.error('Error during registration:', error);
-
-      if (error.response && error.response.data) {
-        const errorData = error.response.data;
-
-        // ตรวจสอบว่ามี errors และเป็น object
-        if (errorData.errors && typeof errorData.errors === 'object') {
-          const errorMessages = errorData.errors;
-          for (const key in errorMessages) {
-            if (errorMessages.hasOwnProperty(key)) {
-              alert(`Error: ${errorMessages[key]}`);
-            }
-          }
-        } else if (errorData.error) {
-          // กรณีมีข้อความ error เดียว
-          alert(`Error: ${errorData.error}`);
-        } else {
-          alert('An unknown error occurred. Please try again.');
-        }
-      } else {
-        alert('An unknown error occurred. Please try again.');
-      }
+      // เรียกใช้ฟังก์ชัน handleApiError จาก utils/errorHandler.js
+      handleApiError(error);
     }
   };
-  
+
   const handleChange = (event) => {
     setGender(event.target.value);
-    setValue('nameTitle', event.target.value); // Set value for 'nameTitle'
+    setValue('nameTitle', event.target.value);
   }
 
 
@@ -78,10 +60,10 @@ function Page() {
     <div>
       <Nav />
       <div className="flex justify-center items-center ">
-        <div className="mt-40 bg-slate-100 w-[480px]  h-[600px] shadow-2xl rounded-xl">
+        <div className="mt-24 bg-slate-100 w-[480px]  h-[500px] shadow-2xl rounded-xl">
           <div className="flex justify-center items-center">
             <img className="ml-4 p-2 w-[120px]" src="https://www.studentloan.or.th/th/system/files/files/knowledgemedia/%E0%B8%81%E0%B8%A2%E0%B8%A8-01.png" />
-            <span className="font-mono text-[35px] font-bold text-gray-700 text-shadow-xl">
+            <span className="font-kanit text-[35px]  text-gray-700 text-shadow-xl">
               สมัครสมาชิก
             </span>
           </div>
@@ -212,9 +194,15 @@ function Page() {
                   {errors.confirmPassword && <div className="text-red-500 text-xs mt-1">{errors.confirmPassword.message}</div>}
                 </div>
                 <div className="p-4">
-                  <button className="px-6 py-4 border-[1px] bg-[#0067B3] text-white font-mono font-semibold rounded-lg shadow-xl hover:bg-blue-600 duration duration-300" type="submit">
+                  <button className="px-6 py-4 border-[1px] bg-[#0067B3] text-white font-kanit  rounded-lg shadow-xl hover:bg-blue-600 duration duration-300" type="submit">
                     ลงทะเบียน
                   </button>
+                </div>
+                <div className=" w-full flex justify-end items-center" >
+                  <p>
+                    มีบัญชีอยู่แล้ว? 
+                    <Link href='/Login' className="hover:text-blue-500"> เข้าสู่ระบบที่นี่</Link>
+                  </p>
                 </div>
               </div>
             </div>

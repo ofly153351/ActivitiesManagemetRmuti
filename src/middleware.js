@@ -11,10 +11,10 @@ export function middleware(request) {
         try {
             // แยกค่า payload จาก JWT
             const decoded = jwt.decode(accessToken.value)
-            console.log(decoded);
+            // console.log(decoded);
             // ตรวจสอบ role จาก payload
             role = decoded?.role
-            console.log('Role:', role )
+            // console.log('Role:', role )
         } catch (error) {
             console.error('Error decoding JWT:', error)
         }
@@ -23,7 +23,7 @@ export function middleware(request) {
     }
 
     if (request.nextUrl.pathname.startsWith('/Admin')) {
-        if (role !== 'admin') {
+        if (role !== 'admin' || role === null ) {
             console.log('User role is not admin or no token found, redirecting to unauthorized');
             return NextResponse.redirect(homeUrl);
         }
@@ -34,5 +34,5 @@ export function middleware(request) {
 }
 
 export const config = {
-    matcher: ['/Home' , '/Admin'],
+    matcher: ['/Home' , '/Admin' , '/Admin/Userlist'],
 }

@@ -1,10 +1,8 @@
 'use client'
-import Nav from '../Components/Headnav/Nav'
-import React, { useState,useEffect } from 'react';
+import Nav from '../../Components/Nav'
+import React, { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import Activity from '../Components/Activity/Activity';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import Activity from '../../Components/Activity';
 
 function Page() {
     const [selected, setSelected] = useState('highTolow');
@@ -51,8 +49,8 @@ function Page() {
                     </div>
                     <div className='border-b-2 p-4 mx-4'>
                         <form className="flex justify-end items-center mr-[60px] gap-3">
-                            <div className='flex     ' >
-                                <button className="border-b-[1px] border-l-[1px] border-t-[1px] w-10 rounded-tl-2xl rounded-bl-2xl hover:bg-gray-100">
+                            <div className='flex' >
+                                <button className="border-b-[1px] border-l-[1px] border-t-[1px] w-10 rounded-tl-lg rounded-bl-lg hover:bg-gray-100">
                                     <SearchIcon fontSize='' />
                                 </button>
                                 <input
@@ -61,7 +59,7 @@ function Page() {
                                     id="search-form"
                                     onChange={(e) => setSearchQuery(e.target.value)} // จัดการการเปลี่ยนแปลงคำค้นหา
                                     placeholder='ค้าหาชื่อกิจกรรม'
-                                    className='w-[400px] border-[1px] p-1.5 font-kanit rounded-br-2xl rounded-tr-2xl' />
+                                    className='w-[400px] border-[1px] p-1.5 font-kanit rounded-br-lg rounded-tr-lg' />
                             </div>
                             <label className='font-kanit text-[20px]'>เรียงตาม : </label>
                             <select value={selected} onChange={handleChange} className="p-2 rounded-lg text-sm w-[160px] bg-gray-50 border border-gray-300">

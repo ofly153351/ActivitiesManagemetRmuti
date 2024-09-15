@@ -1,10 +1,10 @@
 import React from 'react'
-import Nav from '@/app/Components/Headnav/Nav'
-import Usertable from '@/app/Components/Usertable/Usertable'
+import Nav from '@/app/Components/Nav'
+import Usertable from '@/app/Components/Usertable'
 
 function page() {
     return (
-        <div className='bg-slate-50' >
+        <div className='bg-slate-500 h-screen' >
             <Nav />
             <>
                 <Usertable />
