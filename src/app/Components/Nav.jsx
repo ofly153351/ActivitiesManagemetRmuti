@@ -23,7 +23,7 @@ function Nav() {
             console.log(jwtDecoded);
             setLoading(false);
         } else {
-            setLoading(true)
+            setLoading(false)
         }
     }, []); // ควรใช้ [] เป็น dependencies เพื่อให้ useEffect ทำงานเพียงครั้งเดียว
 
