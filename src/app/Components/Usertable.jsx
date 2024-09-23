@@ -1,42 +1,30 @@
 'use client'
-import React, { useState } from 'react'
-import Link from 'next/link'
+import React, { useState } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
-import CloseIcon from '@mui/icons-material/Close';
-import { filterUser } from '../Utils/handler'
-
+import { filterUser } from '../Utils/handler';
+import ViewPopup from './viewPopup';
+import EditPopup from './editPopup';
 
 function Usertable() {
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [selectedEditUser, setSelectedEditUser] = useState(null)
     const itemsPerPage = 5;
 
     const persons = [
-        {
-            id: "65172310303-5",
-            firstName: 'peerapat',
-            lastname: 'kla',
-            hour: '80/100',
-        },
-        {
-            id: "65172310303-2",
-            firstName: 'kla',
-            lastname: 'klintan',
-            hour: '12/100',
-        },
+        { id: "65172310303-5", firstName: 'Peerapat', lastname: 'Kla', hour: '80/100' },
+        { id: "65172310303-2", firstName: 'Kla', lastname: 'Klintan', hour: '12/100' },
         // (Additional person objects here)
     ];
 
-    const filteredPersons = filterUser(persons , searchQuery);
-
+    const filteredPersons = filterUser(persons, searchQuery);
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredPersons.slice(indexOfFirstItem, indexOfLastItem);
-
     const totalPages = Math.ceil(filteredPersons.length / itemsPerPage);
 
     const handleClick = (pageNumber) => {
@@ -47,8 +35,20 @@ function Usertable() {
         setSelectedUser(person);
     };
 
-    const closeModal = () => {
+    const handleEdit = (person) => {
+        setSelectedEditUser(person);
+
+        // เปลี่ยนแปลงเพื่อลดจำนวน state
+    };
+
+    const handleDelete = (id) => {
+        // ลบผู้ใช้จาก `persons` ตาม ID
+        // อาจจะต้องใช้ setPersons() เพื่ออัปเดต state ของรายการ
+    };
+
+    const handleClose = () => {
         setSelectedUser(null);
+        setSelectedEditUser(null)
     };
 
     return (
@@ -72,32 +72,37 @@ function Usertable() {
                     <table className='w-full text-sm bg-white'>
                         <thead className="text-xs text-gray-700 uppercase bg-gray-100">
                             <tr className='text-center text-sm'>
-                                <th scope="col" className="px-6 font-kanit py-4">รหัสนักศึกษา</th>
-                                <th scope="col" className="px-6 font-kanit py-4">ชื่อ</th>
-                                <th scope="col" className="px-6 font-kanit py-4">นามสกุล</th>
-                                <th scope="col" className="px-6 font-kanit py-4">ชั่วโมงกิจกรรม</th>
-                                <th scope="col" className="px-6 font-kanit py-4">การจัดการ</th>
+                                <th className="px-6 py-4">รหัสนักศึกษา</th>
+                                <th className="px-6 py-4">ชื่อ</th>
+                                <th className="px-6 py-4">นามสกุล</th>
+                                <th className="px-6 py-4">ชั่วโมงกิจกรรม</th>
+                                <th className="px-6 py-4">การจัดการ</th>
                             </tr>
                         </thead>
                         <tbody className='text-center'>
                             {currentItems.map((person) => (
                                 <tr key={person.id} className="bg-white border-b dark:border-gray-200 hover:bg-gray-50">
-                                    <th scope="row" className="px-6 font-kanit py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {person.id}
-                                    </th>
+                                    <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{person.id}</th>
                                     <td className="px-6 py-4">{person.firstName}</td>
                                     <td className="px-6 py-4">{person.lastname}</td>
                                     <td className="px-6 py-4">{person.hour}</td>
                                     <td className='flex justify-center gap-3 py-4'>
-                                        <button className='px-2 py-2 rounded-full hover:bg-blue-50 transition duration-500' onClick={() => handleView(person)} aria-label="View"><VisibilityIcon style={{ color: "green" }} /></button>
-                                        <Link className='px-2 py-2 rounded-full hover:bg-blue-50 transition duration-500' href='/Admin/Edit' aria-label="Edit"><EditIcon style={{ color: "#FFC300" }} /></Link>
-                                        <button className='px-2 py-2 rounded-full hover:bg-blue-50 transition duration-500' aria-label="Delete"><DeleteIcon style={{ color: "red" }} /></button>
+                                        <button className='px-2 py-2 rounded-full hover:bg-blue-50 transition duration-500' onClick={() => handleView(person)} aria-label="View">
+                                            <VisibilityIcon style={{ color: "green" }} />
+                                        </button>
+                                        <button className='px-2 py-2 rounded-full hover:bg-blue-50 transition duration-500' onClick={() => handleEdit(person)} aria-label="Edit">
+                                            <EditIcon style={{ color: "#FFC300" }} />
+                                        </button>
+                                        <button className='px-2 py-2 rounded-full hover:bg-blue-50 transition duration-500' onClick={() => handleDelete(person.id)} aria-label="Delete">
+                                            <DeleteIcon style={{ color: "red" }} />
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
+                {/* //pageination */}
                 <div className='flex justify-center mt-4'>
                     {Array.from({ length: totalPages }, (_, index) => (
                         <button
@@ -110,33 +115,18 @@ function Usertable() {
                     ))}
                 </div>
             </div>
-
             {selectedUser && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full transform transition-all duration-300 scale-100">
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-2xl font-kanit text-gray-700">ข้อมูลนักศึกษา</h2>
-                            <button onClick={closeModal} aria-label="Close">
-                                <CloseIcon className="text-gray-600 hover:text-gray-800 transition duration-300" />
-                            </button>
-                        </div>
-                        <div className="mb-4">
-                            <p><strong>รหัสนักศึกษา:</strong> {selectedUser.id}</p>
-                            <p><strong>ชื่อ:</strong> {selectedUser.firstName}</p>
-                            <p><strong>นามสกุล:</strong> {selectedUser.lastname}</p>
-                            <p><strong>ชั่วโมงกิจกรรม:</strong> {selectedUser.hour}</p>
-                        </div>
-                        <button
-                            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
-                            onClick={closeModal}
-                        >
-                            ปิด
-                        </button>
-                    </div>
-                </div>
+                <>
+                    <ViewPopup selectedUser={selectedUser} closeModal={handleClose} />
+                </>
+            )}
+            {selectedEditUser && (
+                <>
+                    <EditPopup selectedEditUser={selectedEditUser} closeModal={handleClose} />
+                </>
             )}
         </div>
-    )
+    );
 }
 
 export default Usertable;

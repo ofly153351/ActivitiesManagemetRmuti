@@ -4,11 +4,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Profilemanu from './Profilemanu';
 import Cookies from 'js-cookie';
-// import { jwtDecode } from 'jwt-decode'; // ใช้ jwtDecode แทน jwtDecode
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { jwtDecodeToken } from '../Utils/function'
-
+import Sidebar from './sidebar';
 function Nav() {
     const pathName = usePathname() || " ";
     const [user, setUser] = useState(null);
@@ -16,11 +15,11 @@ function Nav() {
 
     useEffect(() => {
         const token = Cookies.get('access_token');
-        console.log(token);
+        // console.log(token);
         if (token) {
             const jwtDecoded = jwtDecodeToken(token);
             setUser(jwtDecoded);
-            console.log(jwtDecoded);
+            // console.log(jwtDecoded);
             setLoading(false);
         } else {
             setLoading(false)
@@ -68,13 +67,22 @@ function Nav() {
 
     return (
         <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-between items-center fixed z-10">
-            <Link href="/Home" >
-                <span className="ml-[50px] font-kanit text-2xl">LOGO</span>
+            {user?.role === 'admin' ? (
+                <div className='flex justify-center items-center ml-2' >
+                    <Link href="/Home" >
+                        <img className='w-20 h-20' src="https://www.studentloan.or.th/sites/default/files/styles/medium/public/images/knowledgemedia/%E0%B8%81%E0%B8%A2%E0%B8%A8-01_0.png?itok=H5QWXx37" alt="" srcset="" />
+                    </Link>
+                    <Sidebar />
+                </div>
+            ) : (
+                <Link href="/Home" >
+                    <span className="ml-[50px] font-kanit text-2xl">LOGO</span>
+                </Link>
+            )}
 
-            </Link>
             <div className="gap-5 flex mr-[50px]">
                 {pathName === '/Login' && (
-                    <>
+                    <div>
                         {loginPath.map((link, index) => (
                             <div key={index}>
                                 <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100">
@@ -89,10 +97,10 @@ function Nav() {
                                 </Link>
                             </div>
                         ))}
-                    </>
+                    </div>
                 )}
                 {pathName === '/Register' && (
-                    <>
+                    <div>
                         {registerPath.map((link, index) => (
                             <div key={index}>
                                 <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100">
@@ -107,7 +115,7 @@ function Nav() {
                                 </Link>
                             </div>
                         ))}
-                    </>
+                    </div>
                 )}
                 {pathName === '/Home' && user?.role === 'user' && (
                     <div className="mr-20 flex gap-10">
@@ -122,7 +130,7 @@ function Nav() {
                     </div>
                 )}
                 {pathName === '/Home' && user == null && (
-                    <>
+                    <div>
 
                         {commonLinks.map((link, index) => (
                             <div key={index}>
@@ -138,7 +146,7 @@ function Nav() {
                                 </Link>
                             </div>
                         ))}
-                    </>
+                    </div>
                 )}
                 {user?.role === 'admin' && (
                     <div className="mr-20 flex gap-10">

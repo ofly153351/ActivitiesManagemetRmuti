@@ -4,12 +4,15 @@ import Usertable from '@/app/Components/Usertable'
 
 function page() {
     return (
-        <div className='bg-slate-500 h-screen' >
-            <Nav />
-            <>
-                <Usertable />
-            </>
-        </div>
+        <>
+            <div className='bg-slate-500 h-screen' >
+                <Nav />
+                <>
+                    <Usertable />
+                </>
+            </div>
+        </>
+
     )
 }
 

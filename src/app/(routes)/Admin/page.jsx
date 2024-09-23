@@ -1,14 +1,14 @@
-import React from 'react';
-import Nav from '../../Components/Nav';
-
+'use client'
+import * as React from 'react';
+import Nav from '@/app/Components/Nav';
 function Page() {
+
     return (
         <>
-            <Nav />
+        <Nav />
             <div className='bg-slate-50 w-full h-screen flex justify-center items-center p-10 '>
                 <p className='p-10 border-red-500 border-[5px]' >
-                    Show Dashboard
-                    แต่ยังไม่มี
+                    Show Dashboard แต่ยังไม่มี
                 </p >
             </div>
         </>

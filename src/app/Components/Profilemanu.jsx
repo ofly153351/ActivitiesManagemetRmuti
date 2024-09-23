@@ -80,24 +80,24 @@ function Profilemanu() {
                 >
                     {user ? (
                         user.role === 'admin' ? (
-                            <>
+                            <div>
                                 <MenuItem onClick={() => handleMenuItemClick('/Admin')}>Admin</MenuItem>
                                 <MenuItem onClick={() => handleMenuItemClick('/profile')}>ประวัติส่วนตัว</MenuItem>
                                 <MenuItem onClick={() => handleMenuItemClick('/account')}>My account</MenuItem>
                                 <MenuItem onClick={() => handleMenuItemClick('/logout')}>Logout</MenuItem>
-                            </>
+                            </div>
                         ) : user.role === 'user' ? (
-                            <>
+                            <div>
                                 <MenuItem onClick={() => handleMenuItemClick('/profile')}>ประวัติส่วนตัว</MenuItem>
                                 <MenuItem onClick={() => handleMenuItemClick('/account')}>My account</MenuItem>
                                 <MenuItem onClick={() => handleMenuItemClick('/logout')}>Logout</MenuItem>
-                            </>
+                            </div>
                         ) : null
                     ) : (
-                        <>
+                        <div>
                             <MenuItem onClick={() => handleMenuItemClick('/Register')}>สมัครสมาชิก</MenuItem>
                             <MenuItem onClick={() => handleMenuItemClick('/Login')}>เข้าสู่ระบบ</MenuItem>
-                        </>
+                        </div>
                     )}
                 </Menu>
             </div>
