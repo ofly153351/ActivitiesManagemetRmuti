@@ -7,103 +7,122 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/app/Utils/api";
-import { handleApiError } from "@/app/Utils/errorhandler";
 import Cookies from "js-cookie";
-
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check'; // Import the CheckIcon
 
 function Page() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const router = useRouter();
   const [errorMessage, setErrorMessage] = React.useState('');
+  const [successMessage, setSuccessMessage] = React.useState('');
 
   const onSubmit = async (data) => {
     const payload = {
-        email: data.email,
-        password: data.password,
+      email: data.email,
+      password: data.password,
     }
     try {
-        const res = await loginUser(payload);
-        const token = Cookies.get('access_token'); // ตรวจสอบค่านี้
-        console.log('Token:', token);
-        alert('Login Success!');
-        router.push('/Home');
+      const res = await loginUser(payload);
+      const token = Cookies.get('access_token'); // ตรวจสอบค่านี้
+      if (res && token) {
+        setSuccessMessage('Login successful!');
+        setTimeout(() => {
+          router.push('/Home');
+        }, 800); // Redirect after a short delay to show success message
+      }
     } catch (error) {
-        handleApiError(error);
+      setErrorMessage('Login failed. Please check your Email or Password');
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 5000);
     }
-}
+  }
 
-    return (
-      <div>
-        <Nav />
-        <div className="flex justify-center items-center w-screen h-screen">
-          <div>
-            <div className="flex mt-16 bg-blue-300 w-[960px] h-[500px] rounded-[12px] shadow-2xl">
-              <div className="left flex justify-center items-center w-[480px]">
-                <p>LOGO</p>
-                {/* <img className="p-6" src="https://www.studentloan.or.th/th/system/files/files/knowledgemedia/%E0%B8%81%E0%B8%A2%E0%B8%A8-01.png" alt="Sign In" /> */}
-              </div>
-              <div className="right bg-slate-100 rounded-r-[12px] shadow-2xl w-[480px] gap-7 ">
-                <form className="p-4 h-full flex flex-col justify-center items-center relative" onSubmit={handleSubmit(onSubmit)}>
-                  <div className="text-[35px] text-center font-kanit py-7 text-gray-700">
-                    เข้าสู่ระบบ
-                  </div>
-                  <div>
-                    <div className="flex justify-center items-center gap-7">
-                      <Box
-                        sx={{
-                          '& > :not(style)': { m: 1, width: '25ch' },
-                        }}
-                      >
-                        <TextField
-                          id="outlined-basic"
-                          label="Email"
-                          placeholder="Email Address"
-                          variant="outlined"
-                          type="email"
-                          {...register('email', { required: 'Email is required' })}
-                        />
-                      </Box>
-                    </div>
-                    {errors.email && <p className="text-red-500">{errors.email.message}</p>}
-                  </div>
-                  <div className="w-fit">
-                    <div className="flex flex-col items-center">
-                      <Box
-                        sx={{
-                          '& > :not(style)': { m: 1, width: '25ch' },
-                        }}
-                      >
-                        <TextField
-                          id="outlined-basic"
-                          label="Password"
-                          variant="outlined"
-                          type="password"
-                          {...register('password', { required: 'Password is required' })}
-                        />
-                      </Box>
-                    </div>
-                    <div></div>
-                    {errors.password && <p className="pt-2 text-red-500">{errors.password.message}</p>}
-                  </div>
-                  <div className="flex justify-center items-center mt-5">
-                    <button
-                      className="py-2 px-6 bg-blue-500 rounded-md text-white hover:bg-blue-800 transition duration-300"
-                      type="submit"
+  return (
+    <div>
+      <Nav />
+      <div className="flex justify-center items-center w-screen h-full mt-20">
+        <div>
+          <div className="flex bg-blue-300 w-[960px] h-[500px] rounded-[12px] shadow-2xl">
+            <div className="left flex justify-center items-center w-[480px]">
+              <p>LOGO</p>
+              {/* <img className="p-6" src="https://www.studentloan.or.th/th/system/files/files/knowledgemedia/%E0%B8%81%E0%B8%A2%E0%B8%A8-01.png" alt="Sign In" /> */}
+            </div>
+            <div className="right bg-slate-100 rounded-r-[12px] shadow-2xl w-[480px] gap-7 ">
+              <form className="p-4 h-full flex flex-col justify-center items-center relative" onSubmit={handleSubmit(onSubmit)}>
+                <div className="text-[35px] text-center font-kanit py-7 text-gray-700">
+                  เข้าสู่ระบบ
+                </div>
+                <div>
+                  <div className="flex justify-center items-center gap-7">
+                    <Box
+                      sx={{
+                        '& > :not(style)': { m: 1, width: '25ch' },
+                      }}
                     >
-                      เข้าสู่ระบบ
-                    </button>
+                      <TextField
+                        id="outlined-basic"
+                        label="Email"
+                        placeholder="Email Address"
+                        variant="outlined"
+                        type="email"
+                        {...register('email', { required: 'Email is required' })}
+                      />
+                    </Box>
                   </div>
-                  {errorMessage && <p className="error-message pt-2 text-red-500 ">{errorMessage}</p>}
-                  <div className="absolute bottom-4 right-4 text-gray-700 hover:text-blue-500">
-                    <Link href='/'>ลืมรหัสผ่าน ?</Link>
+                  {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+                </div>
+                <div className="w-fit">
+                  <div className="flex flex-col items-center">
+                    <Box
+                      sx={{
+                        '& > :not(style)': { m: 1, width: '25ch' },
+                      }}
+                    >
+                      <TextField
+                        id="outlined-basic"
+                        label="Password"
+                        variant="outlined"
+                        type="password"
+                        {...register('password', { required: 'Password is required' })}
+                      />
+                    </Box>
                   </div>
-                </form>
-              </div>
+                  {errors.password && <p className="pt-2 text-red-500">{errors.password.message}</p>}
+                </div>
+                <div className="flex justify-center items-center mt-5">
+                  <button
+                    className="py-2 px-6 bg-blue-500 rounded-md text-white hover:bg-blue-800 transition duration-300"
+                    type="submit"
+                  >
+                    เข้าสู่ระบบ
+                  </button>
+                </div>
+
+                {/* Success or error alert message */}
+                {successMessage && (
+                    <Alert icon={<CheckIcon fontSize="inherit" />} severity="success" className="mt-4">
+                      {successMessage}
+                    </Alert>
+                )}
+
+                {errorMessage && (
+                  <Alert severity="error" className="mt-4">
+                    {errorMessage}
+                  </Alert>
+                )}
+
+                <div className="absolute bottom-4 right-4 text-gray-700 hover:text-blue-500">
+                  <Link href='/'>ลืมรหัสผ่าน ?</Link>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
-  export default Page;
+export default Page;

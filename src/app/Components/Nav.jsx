@@ -8,10 +8,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { jwtDecodeToken } from '../Utils/function'
 import Sidebar from './sidebar';
+import LogoDevIcon from '@mui/icons-material/LogoDev';
 function Nav() {
     const pathName = usePathname() || " ";
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+
 
     useEffect(() => {
         const token = Cookies.get('access_token');
@@ -35,6 +37,7 @@ function Nav() {
             </div>
         );
     }
+
 
     const commonLinks = [
         { href: '/Home', label: 'รายชื่อกิจกรรม' }
@@ -66,23 +69,34 @@ function Nav() {
     ];
 
     return (
-        <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-between items-center fixed z-10">
+        <div className="sticky w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-between items-center z-10">
             {user?.role === 'admin' ? (
-                <div className='flex justify-center items-center ml-2' >
-                    <Link href="/Home" >
-                        <img className='w-20 h-20' src="https://www.studentloan.or.th/sites/default/files/styles/medium/public/images/knowledgemedia/%E0%B8%81%E0%B8%A2%E0%B8%A8-01_0.png?itok=H5QWXx37" alt="" srcset="" />
-                    </Link>
-                    <Sidebar />
+                <div className='flex justify-between items-center ml-20 w-screen' >
+                    <div className='flex justify-between items-center w-full'>
+                        <div className='flex justify-center items-center ' >
+                            <Link href="/Home" className='hover:bg-stone-50' >
+                                <LogoDevIcon style={{
+                                    fontSize: "50px",
+                                    color: "#0067B3" // แก้จาก colors เป็น color
+                                }} />
+                            </Link>
+                        </div>
+                    </div>
+                    <div className='flex' >
+                            <div className="w-64">
+                                <Profilemanu user={user} />
+                            </div>
+                            <Sidebar />
+                        </div>
                 </div>
             ) : (
                 <Link href="/Home" >
                     <span className="ml-[50px] font-kanit text-2xl">LOGO</span>
                 </Link>
             )}
-
-            <div className="gap-5 flex mr-[50px]">
+            <div className="gap-2 flex mr-[50px] ">
                 {pathName === '/Login' && (
-                    <div>
+                    <div className='flex gap-5'>
                         {loginPath.map((link, index) => (
                             <div key={index}>
                                 <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100">
@@ -100,7 +114,7 @@ function Nav() {
                     </div>
                 )}
                 {pathName === '/Register' && (
-                    <div>
+                    <div className='flex gap-5' >
                         {registerPath.map((link, index) => (
                             <div key={index}>
                                 <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100">
@@ -109,7 +123,7 @@ function Nav() {
                             </div>
                         ))}
                         {commonLinks.map((link, index) => (
-                            <div key={index}>
+                            <div key={link.href}> {/* ใช้ href เป็น key */}
                                 <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100">
                                     <span className="drop-shadow-2xl">{link.label}</span>
                                 </Link>
@@ -130,36 +144,31 @@ function Nav() {
                     </div>
                 )}
                 {pathName === '/Home' && user == null && (
-                    <div>
-
+                    <div className='flex gap-5' >
                         {commonLinks.map((link, index) => (
                             <div key={index}>
-                                <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-300">
+                                <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100">
                                     <span className="drop-shadow-2xl">{link.label}</span>
                                 </Link>
                             </div>
                         ))}
                         {authLinks.map((link, index) => (
                             <div key={index}>
-                                <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-300">
+                                <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100">
                                     <span className="drop-shadow-2xl">{link.label}</span>
                                 </Link>
                             </div>
                         ))}
                     </div>
                 )}
-                {user?.role === 'admin' && (
-                    <div className="mr-20 flex gap-10">
-                        {adminLinks.map((link, index) => (
-                            <div key={index} className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] font-kanit transition duration-300 hover:transform hover:-translate-y-1">
-                                <Link href={link.href}>
-                                    <span>{link.label}</span>
-                                </Link>
-                            </div>
-                        ))}
-                        <Profilemanu user={user} />
+                {/* {pathName === '/Home' && user?.role === 'admin' && (
+                    <div className='flex' >
+                        <div className="">
+                            <Profilemanu user={user} />
+                        </div>
+                        <Sidebar />
                     </div>
-                )}
+                )} */}
             </div>
         </div>
     );

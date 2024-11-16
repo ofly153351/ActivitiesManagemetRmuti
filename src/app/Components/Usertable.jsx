@@ -18,6 +18,15 @@ function Usertable() {
     const persons = [
         { id: "65172310303-5", firstName: 'Peerapat', lastname: 'Kla', hour: '80/100' },
         { id: "65172310303-2", firstName: 'Kla', lastname: 'Klintan', hour: '12/100' },
+        { id: "65172310303-1", firstName: 'Kla', lastname: 'Klintan', hour: '12/100' },
+        { id: "65172310303-3", firstName: 'Kla', lastname: 'Klintan', hour: '12/100' },
+        { id: "65172310303-4", firstName: 'Kla', lastname: 'Klintan', hour: '12/100' },
+        { id: "65172310303-6", firstName: 'Kla', lastname: 'Klintan', hour: '12/100' },
+        { id: "65172310303-7", firstName: 'Kla', lastname: 'Klintan', hour: '12/100' },
+        { id: "65172310303-8", firstName: 'Kla', lastname: 'Klintan', hour: '12/100' },
+        { id: "65172310303-9", firstName: 'Kla', lastname: 'Klintan', hour: '12/100' },
+        { id: "65172310303-0", firstName: 'Kla', lastname: 'Klintan', hour: '12/100' },
+
         // (Additional person objects here)
     ];
 
@@ -79,7 +88,8 @@ function Usertable() {
                                 <th className="px-6 py-4">การจัดการ</th>
                             </tr>
                         </thead>
-                        <tbody className='text-center'>
+                        {/* //view */}
+                        <tbody className='text-center '>
                             {currentItems.map((person) => (
                                 <tr key={person.id} className="bg-white border-b dark:border-gray-200 hover:bg-gray-50">
                                     <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{person.id}</th>

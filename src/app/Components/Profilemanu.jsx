@@ -42,7 +42,7 @@ function Profilemanu() {
     const handleMenuItemClick = (route) => {
         if (route === '/logout') {
             Cookies.remove('access_token');
-            setUser(null); // Set user to null after removing cookie
+            setUser(null);
             router.push('/Login');
         } else {
             router.push(route);
@@ -51,13 +51,13 @@ function Profilemanu() {
     };
 
     return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 ">
             <div className='relative flex justity-center items-center '>
                 {/* Add the user's name here */}
                 {user && (
-                    <span className=" text-gray-500  text-md font-kanit hover:underline ">{user.email}</span>
+                <span className=" text-gray-500  text-md font-kanit hover:underline ">{user.email} ({user.role})</span>
                 )}
-                <div className='rounded-full flex items-center justify-center p-0'>
+                <div className='ml-1 rounded-full flex items-center justify-center p-0'>
                     <Button
                         id="basic-button"
                         aria-controls={open ? 'basic-menu' : undefined}
@@ -80,23 +80,23 @@ function Profilemanu() {
                 >
                     {user ? (
                         user.role === 'admin' ? (
-                            <div>
-                                <MenuItem onClick={() => handleMenuItemClick('/Admin')}>Admin</MenuItem>
-                                <MenuItem onClick={() => handleMenuItemClick('/profile')}>ประวัติส่วนตัว</MenuItem>
-                                <MenuItem onClick={() => handleMenuItemClick('/account')}>My account</MenuItem>
-                                <MenuItem onClick={() => handleMenuItemClick('/logout')}>Logout</MenuItem>
+                            <div className='font-kanit' >
+                                <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/Admin')}>Admin</MenuItem>
+                                <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/profile')}>ประวัติส่วนตัว</MenuItem>
+                                <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/account')}>My account</MenuItem>
+                                <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/logout')}>Logout</MenuItem>
                             </div>
                         ) : user.role === 'user' ? (
                             <div>
-                                <MenuItem onClick={() => handleMenuItemClick('/profile')}>ประวัติส่วนตัว</MenuItem>
-                                <MenuItem onClick={() => handleMenuItemClick('/account')}>My account</MenuItem>
-                                <MenuItem onClick={() => handleMenuItemClick('/logout')}>Logout</MenuItem>
+                                <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/profile')}>ประวัติส่วนตัว</MenuItem>
+                                <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/account')}>My account</MenuItem>
+                                <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/logout')}>Logout</MenuItem>
                             </div>
                         ) : null
                     ) : (
-                        <div>
-                            <MenuItem onClick={() => handleMenuItemClick('/Register')}>สมัครสมาชิก</MenuItem>
-                            <MenuItem onClick={() => handleMenuItemClick('/Login')}>เข้าสู่ระบบ</MenuItem>
+                        <div className='font-kanit' >
+                            <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/Register')}>สมัครสมาชิก</MenuItem>
+                            <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/Login')}>เข้าสู่ระบบ</MenuItem>
                         </div>
                     )}
                 </Menu>

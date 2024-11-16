@@ -5,24 +5,109 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
-import CloseIcon from '@mui/icons-material/Close';
+import ViewPopup from './viewPopup';
+import EditPopup from './editPopup';
 import { filterEvent } from '../Utils/handler'
+import { create } from '@mui/material/styles/createTransitions';
 function Eventtable() {
 
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEvent, setSelectedEvent] = useState(null);
+    const [selectedEditEvent, setSelectedEditEvent]  = useState(null)
     const itemsPerPage = 5;
 
     const events = [
         {
             id: '1',
             Name: "กวาดวัด",
+            createBy: "จารหนู",
+            startDate: "00-00-00",
             credit: "10",
+            description: "-",
             slots: "99/100",
-            description: "อย่าไปต่อยพระ"
+        },{
+            id: '2',
+            Name: "กวาดวัด",
+            createBy: "จารหนู",
+            startDate: "00-00-00",
+            credit: "10",
+            description: "-",
+            slots: "99/100",
         },
-        // Add more events as needed
+        {
+            id: '3',
+            Name: "กวาดวัด",
+            createBy: "จารหนู",
+            startDate: "00-00-00",
+            credit: "10",
+            description: "-",
+            slots: "99/100",
+        },
+        {
+            id: '4',
+            Name: "กวาดวัด",
+            createBy: "จารหนู",
+            startDate: "00-00-00",
+            credit: "10",
+            description: "-",
+            slots: "99/100",
+        },
+        {
+            id: '5',
+            Name: "กวาดวัด",
+            createBy: "จารหนู",
+            startDate: "00-00-00",
+            credit: "10",
+            description: "-",
+            slots: "99/100",
+        },
+        {
+            id: '6',
+            Name: "กวาดวัด",
+            createBy: "จารหนู",
+            startDate: "00-00-00",
+            credit: "10",
+            description: "-",
+            slots: "99/100",
+        },
+        {
+            id: '7',
+            Name: "กวาดวัด",
+            createBy: "จารหนู",
+            startDate: "00-00-00",
+            credit: "10",
+            description: "-",
+            slots: "99/100",
+        },
+        {
+            id: '8',
+            Name: "กวาดวัด",
+            createBy: "จารหนู",
+            startDate: "00-00-00",
+            credit: "10",
+            description: "-",
+            slots: "99/100",
+        },
+        {
+            id: '9',
+            Name: "กวาดวัด",
+            createBy: "จารหนู",
+            startDate: "00-00-00",
+            credit: "10",
+            description: "-",
+            slots: "99/100",
+        },
+        {
+            id: '10',
+            Name: "กวาดวัด",
+            createBy: "จารหนู",
+            startDate: "00-00-00",
+            credit: "10",
+            description: "-",
+            slots: "99/100",
+        },
+
     ];
 
     const filteredEvents = filterEvent(events , searchQuery)
@@ -41,13 +126,21 @@ function Eventtable() {
         setSelectedEvent(event);
     };
 
-    const closeModal = () => {
+
+    const handleClose = () => {
         setSelectedEvent(null);
+        setSelectedEditEvent(null)
     };
 
+    const teble = [{
+        id : "รหัส",
+        name : "ชื่อ"
+    }]
+
+
     return (
-        <div className="bg-slate-50 w-full h-screen flex justify-center items-center">
-            <div className="bg-white p-8 rounded-xl shadow-lg w-11/12 max-w-5xl">
+        <div className="bg-slate-50 w-full h-screen flex  justify-center items-center">
+            <div className="bg-white p-8 rounded-xl shadow-lg mt-10 w-11/12 max-w-5xl">
                 <span className='font-kanit p-4 text-[45px] border-b-[2px] border-gray-200'>รายชื่อกิจกรรม</span>
                 <div className='mt-10 flex items-center'>
                     <div className='border-[1px] px-2 py-[7.5px] rounded-l-lg border-r-0 border-gray-150 w-fit'>
@@ -68,8 +161,11 @@ function Eventtable() {
                             <tr className='text-center text-sm'>
                                 <th scope="col" className="px-6 font-kanit py-4">รหัสกิจกรรม</th>
                                 <th scope="col" className="px-6 font-kanit py-4">ชื่อกิจกรรม</th>
-                                <th scope="col" className="px-6 font-kanit py-4">เครดิต</th>
-                                <th scope="col" className="px-6 font-kanit py-4">จำนวนที่นั่ง</th>
+                                <th scope="col" className="px-6 font-kanit py-4">ผู้สร้างกิจกรรม</th>
+                                <th scope="col" className="px-6 font-kanit py-4">วันที่</th>
+                                <th scope="col" className="px-6 font-kanit py-4">หน่วยกิต</th>
+                                <th scope="col" className="px-6 font-kanit py-4">รายละเอียดกิจกรรม</th>
+                                <th scope="col" className="px-6 font-kanit py-4">จำนวน</th>
                                 <th scope="col" className="px-6 font-kanit py-4">การจัดการ</th>
                             </tr>
                         </thead>
@@ -79,9 +175,12 @@ function Eventtable() {
                                     <th scope="row" className="px-6 font-kanit py-4 font-medium text-gray-900 whitespace-nowrap">
                                         {event.id}
                                     </th>
-                                    <td className="px-6 py-4">{event.Name}</td>
-                                    <td className="px-6 py-4">{event.credit}</td>
-                                    <td className="px-6 py-4">{event.slots}</td>
+                                    <td className="px-6 py-4 w-32 ">{event.Name}</td>
+                                    <td className="px-6 py-4 w-32 ">{event.createBy}</td>
+                                    <td className="px-6 py-4 w-32 ">{event.startDate}</td>
+                                    <td className="px-6 py-4 w-32 ">{event.credit}</td>
+                                    <td className="px-6 py-4 w-32 ">{event.description}</td>
+                                    <td className="px-6 py-4 w-32 ">{event.slots}</td>
                                     <td className='flex justify-center gap-3 py-4'>
                                         <button className='px-2 py-2 rounded-full hover:bg-blue-50 transition duration-500' onClick={() => handleView(event)} aria-label="View"><VisibilityIcon style={{ color: "green" }} /></button>
                                         <Link className='px-2 py-2 rounded-full hover:bg-blue-50 transition duration-500' href='/Admin/Edit' aria-label="Edit"><EditIcon style={{ color: "#FFC300" }} /></Link>
@@ -106,29 +205,32 @@ function Eventtable() {
             </div>
 
             {selectedEvent && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full transform transition-all duration-300 scale-100">
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-2xl font-kanit text-gray-700">ข้อมูลกิจกรรม</h2>
-                            <button onClick={closeModal} aria-label="Close">
-                                <CloseIcon className="text-gray-600 hover:text-gray-800 transition duration-300" />
-                            </button>
-                        </div>
-                        <div className="mb-4">
-                            <p><strong>รหัสกิจกรรม:</strong> {selectedEvent.id}</p>
-                            <p><strong>ชื่อกิจกรรม:</strong> {selectedEvent.Name}</p>
-                            <p><strong>เครดิต:</strong> {selectedEvent.credit}</p>
-                            <p><strong>จำนวนที่นั่ง:</strong> {selectedEvent.slots}</p>
-                            <p><strong>รายละเอียด:</strong> {selectedEvent.description}</p>
-                        </div>
-                        <button
-                            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
-                            onClick={closeModal}
-                        >
-                            ปิด
-                        </button>
-                    </div>
-                </div>
+                // <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                //     <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full transform transition-all duration-300 scale-100">
+                //         <div className="flex justify-between items-center mb-4">
+                //             <h2 className="text-2xl font-kanit text-gray-700">ข้อมูลกิจกรรม</h2>
+                //             <button onClick={closeModal} aria-label="Close">
+                //                 <CloseIcon className="text-gray-600 hover:text-gray-800 transition duration-300" />
+                //             </button>
+                //         </div>
+                //         <div className="mb-4">
+                //             <p><strong>รหัสกิจกรรม:</strong> {selectedEvent.id}</p>
+                //             <p><strong>ชื่อกิจกรรม:</strong> {selectedEvent.Name}</p>
+                //             <p><strong>เครดิต:</strong> {selectedEvent.credit}</p>
+                //             <p><strong>จำนวนที่นั่ง:</strong> {selectedEvent.slots}</p>
+                //             <p><strong>รายละเอียด:</strong> {selectedEvent.description}</p>
+                //         </div>
+                //         <button
+                //             className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+                //             onClick={closeModal}
+                //         >
+                //             ปิด
+                //         </button>
+                //     </div>
+                // </div>
+                <>
+                <ViewPopup selectedUser={selectedEvent} closeModal={handleClose} />
+            </>
             )}
         </div>
     )

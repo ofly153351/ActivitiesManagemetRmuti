@@ -26,27 +26,22 @@ function Page() {
   const onSubmit = async (data) => {
     const payload = {
       user: {
+        title: data.nameTitle,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phone: data.phone,
         email: data.email,
         password: data.password
-      },
-      information: {
-        title_name: data.nameTitle,
-        first_name: data.firstName,
-        last_name: data.lastName,
-        phone: data.phone
       }
     };
 
+    console.log('Payload to send:', payload); // เพิ่มบรรทัดนี้เพื่อพิมพ์ Payload
+
     try {
-      // เรียกใช้ฟังก์ชัน registerUser จาก utils/api.js
-      const res = await registerUser(payload);
-      if (res.status === 200) {
-        alert("SignUp Successfully");
-        router.push('/Login');
-      }
+      const result = await registerUser(payload);
+      console.log('Registration successful:', result);
     } catch (error) {
-      // เรียกใช้ฟังก์ชัน handleApiError จาก utils/errorHandler.js
-      handleApiError(error);
+      handleApiError(error)// แสดงข้อความผิดพลาดจาก API
     }
   };
 
@@ -200,7 +195,7 @@ function Page() {
                 </div>
                 <div className=" w-full flex justify-end items-center" >
                   <p>
-                    มีบัญชีอยู่แล้ว? 
+                    มีบัญชีอยู่แล้ว?
                     <Link href='/Login' className="hover:text-blue-500"> เข้าสู่ระบบที่นี่</Link>
                   </p>
                 </div>

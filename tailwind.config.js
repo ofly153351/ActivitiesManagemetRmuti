@@ -1,3 +1,4 @@
+const { default: shadows } = require('@mui/material/styles/shadows');
 const { Kanit } = require('next/font/google');
 
 /** @type {import('tailwindcss').Config} */

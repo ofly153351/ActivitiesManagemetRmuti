@@ -3,15 +3,29 @@ import Nav from '../../Components/Nav'
 import React, { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import Activity from '../../Components/Activity';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+
+
 
 function Page() {
-    const [selected, setSelected] = useState('highTolow');
     const [searchQuery, setSearchQuery] = useState(''); // เพิ่ม state สำหรับคำค้นหา
     // const [loading, setLoading] = useState(true);
 
-    const handleChange = (event) => {
-        setSelected(event.target.value);
-    };
+
+
+    const Manu = [
+        { selectName: "เวลา", SelectValue: "เวลา" },
+        { selectName: "วันที่", SelectValue: "วันที่" },
+        { selectName: "ชั่วโมง", SelectValue: "ชั่วโมง" },
+
+
+    ]
 
     // useEffect(() => {
     //     const fetchData = async () => {
@@ -43,9 +57,9 @@ function Page() {
         <>
             <Nav />
             <div className='flex'>
-                <div className='w-full  m-20 '>
-                    <div className="px-10 py-16 mt-20">
-                        <span className='font-kanit text-[45px]'>กิจกรรมที่สามารถลงทะเบียนได้</span>
+                <div className='w-full m-20 '>
+                    <div className="px-10 py-16 w-[650px]">
+                        <h1 className='font-kanit text-[45px] text-shadow-sm border-b-[2px]'>กิจกรรมที่สามารถลงทะเบียนได้</h1>
                     </div>
                     <div className='border-b-2 p-4 mx-4'>
                         <form className="flex justify-end items-center mr-[60px] gap-3">
@@ -61,11 +75,18 @@ function Page() {
                                     placeholder='ค้าหาชื่อกิจกรรม'
                                     className='w-[400px] border-[1px] p-1.5 font-kanit rounded-br-lg rounded-tr-lg' />
                             </div>
-                            <label className='font-kanit text-[20px]'>เรียงตาม : </label>
-                            <select value={selected} onChange={handleChange} className="p-2 rounded-lg text-sm w-[160px] bg-gray-50 border border-gray-300">
-                                <option className='font-kanit' value="highTolow">หน่วยกิต มาก - น้อย</option>
-                                <option className='font-kanit' value="lowTohigh">หน่วยกิต น้อย - มาก</option>
-                            </select>
+                            <Select>
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="เรียงตาม" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {
+                                        Manu.map((item, index) => (
+                                            <SelectItem key={index} value={item.SelectValue}>{item.selectName}</SelectItem>
+                                        ))
+                                    }
+                                </SelectContent>
+                            </Select>
                         </form>
                     </div>
                     <Activity searchQuery={searchQuery} /> {/* ส่ง searchQuery ไปยัง Activity */}
