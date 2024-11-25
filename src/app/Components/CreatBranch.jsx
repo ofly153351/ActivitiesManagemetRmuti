@@ -104,14 +104,17 @@ function CreatBranch({ openDialog, handleCloseDialog }) {
                             margin="dense"
                             label="รหัสสาขา"
                             fullWidth
-                            type='number'
+                            type='text'
                             inputProps={{ min: 1, maxLength: 4 }}
                             variant="outlined"
                             sx={{ width: isDesktop ? '100%' : '100%' }}
                             onKeyDown={(e) => {
-                                if (['e', 'E', '+', '-'].includes(e.key)) {
-                                    e.preventDefault();  // ป้องกันการใส่ e, E, +, -
-                                }
+                                if(isNaN(e.key) && e.key !== 'Backspace') {
+                                    e.preventDefault();
+                                  }
+                                // if (['e', 'E', '+', '-'].includes(e.key)) {
+                                //     e.preventDefault();  // ป้องกันการใส่ e, E, +, -
+                                // }
                             }}
                             value={Value}
                             onChange={(e) => {

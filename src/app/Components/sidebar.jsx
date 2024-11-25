@@ -69,11 +69,13 @@ export default function Sidebar() {
         },
         {
             name: 'เพิ่มรายชื่อคณะ',
+            link: '',
             icon: <AddRoundedIcon />,
             action: () => handleDialogToggle('createFaculty', true)
         },
         {
             name: 'เพิ่มรายชื่อสาขา',
+            link: '',
             icon: <AddRoundedIcon />,
             action: () => handleDialogToggle('createBranch', true)
         }

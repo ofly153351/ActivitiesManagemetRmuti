@@ -5,7 +5,6 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 function ActivityAccordion({ activity }) {
-    console.log(activity);
 
     return (
         <div className="my-4">

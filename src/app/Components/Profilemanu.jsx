@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { jwtDecode } from "jwt-decode";
 import Button from '@mui/material/Button';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
@@ -13,6 +13,7 @@ function Profilemanu() {
     const router = useRouter();
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
+    const pathName = usePathname() || " ";
 
     useEffect(() => {
         const token = Cookies.get('access_token');
@@ -82,8 +83,7 @@ function Profilemanu() {
                         user.role === 'admin' ? (
                             <div className='font-kanit' >
                                 <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/Admin')}>Admin</MenuItem>
-                                <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/profile')}>ประวัติส่วนตัว</MenuItem>
-                                <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/account')}>My account</MenuItem>
+                                <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/Home/Profile')}>แก้ไขข้อมูลส่วนตัว</MenuItem>
                                 <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/logout')}>Logout</MenuItem>
                             </div>
                         ) : user.role === 'user' ? (
