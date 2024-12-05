@@ -7,120 +7,97 @@ import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import { creatFaculties } from '../Utils/api';
+import { checkValidationfacuiltiesAndbraches, handleKeyDown } from '../Utils/onkeyDown';
 
-
-function Creatfaculty({ openDialog, handleCloseDialog }) {
+function Creatfaculty({ openDialog, handleCloseDialog, onSave }) {
     const theme = useTheme();
-    const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));  // Desktop
-    const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'lg')); // iPad
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));  // iPhone
-    const [Value , setValue] = useState('')
+    const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
+    const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'lg'));
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+    const [facultieName, setFacultieName] = useState('');
+    const [facultieID, setFacultieID] = useState('');
+    const [error, setError] = useState(null); // Track errors for display
+
+    const resetForm = () => {
+        setFacultieName('');
+        setFacultieID('');
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const payload = {
+            faculty_id: facultieID,
+            faculty_name: facultieName,
+        };
+
+        try {
+            const response = await creatFaculties(payload);
+            console.log('API Response:', response.data); 
+            onSave(response.data); 
+            resetForm();
+            handleCloseDialog();
+        } catch (error) {
+            console.error('Error during form submission:', error);
+            setError('Failed to create faculty. Please try again.');
+        }
+    };
 
     return (
-        <div className='w-screen' >
-            <Dialog
-                open={openDialog}
-                onClose={handleCloseDialog}
-                maxWidth="xs"
-                fullWidth={false}
-                sx={{
-                    '& .MuiDialog-paper': {
-                        width: isDesktop ? '400px' : isTablet ? '300px' : '200px',
-                        maxWidth: '100%',
-                    }
-                }}
-            >
-                <Box
-                    sx={{
-                        fontSize: 40,
-                        px: { xs: 1, sm: 3 },
-                        pt: { xs: 3, md: 3 },
-                        fontFamily: "Kanit",
-                        textAlign: 'left',
-                        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
-                    }}
-                >
-                    เพิ่มรายชื่อคณะ
-                </Box>
-                <DialogContent
-                    sx={{
-                        minWidth: isDesktop ? 300 : isTablet ? 200 : 'auto',
-                        padding: isMobile ? 1 : 3
-                    }}
-                >
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: isMobile ? 'column' : 'row',
-                            gap: 2,
-                            mb: 2
-                        }}
-                    >
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            label="ชื่อคณะ"
-                            fullWidth
-                            variant="outlined"
-                            sx={{
-                                width: isMobile ? "100%" : '100%'
-                            }}
-                        />
-                    </Box>
-                    <Box sx={{
-                        display: 'flex',
-                        gap: 2,
-                        mb: 2,
-                        display: isMobile ? 'grid' : 'flex'
-                    }}
-                    >
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            label="รหัสคณะ"
-                            fullWidth
-                            type='text'
-                            inputProps={{ min: 1 ,maxLength: 4 }}
-                            variant="outlined"
-                            sx={{ width: isDesktop ? '100%' : '100%' }}
-                            onKeyDown={(e) => {
-                                if(isNaN(e.key) && e.key !== 'Backspace') {
-                                    e.preventDefault();
-                                  }
-                            }}
-                            value={Value}
-                            onChange ={(e) => {
-                                const inputValue = e.target.value;
-                                if (inputValue.length <= 4) {
-                                    setValue(inputValue);
-                                }
-                            }}
-                        />
-                    </Box>
+        <Dialog
+            open={openDialog}
+            onClose={handleCloseDialog}
+            maxWidth="xs"
+            fullWidth
+            sx={{
+                '& .MuiDialog-paper': {
+                    width: isDesktop ? '400px' : isTablet ? '300px' : '200px',
+                },
+            }}
+        >
+            <Box sx={{ px: 3, pt: 3, fontFamily: 'Kanit', fontSize: 24, textAlign: 'left' }}>
+                เพิ่มรายชื่อคณะ
+            </Box>
+            <form onSubmit={handleSubmit}>
+                <DialogContent sx={{ padding: isMobile ? 1 : 3 }}>
+                    <TextField
+                        label="ชื่อคณะ"
+                        value={facultieName}
+                        onChange={(e) => setFacultieName(e.target.value)}
+                        fullWidth
+                        variant="outlined"
+                        margin="dense"
+                        required
+                    />
+                    <TextField
+                        label="รหัสคณะ"
+                        value={facultieID}
+                        onChange={(e) => checkValidationfacuiltiesAndbraches(e, setFacultieID)}
+                        onKeyDown={handleKeyDown}
+                        fullWidth
+                        variant="outlined"
+                        margin="dense"
+                        inputProps={{ maxLength: 4 }}
+                        required
+                    />
+                    {error && (
+                        <Box sx={{ color: 'red', mt: 1, fontSize: 14 }}>
+                            {error}
+                        </Box>
+                    )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseDialog} color="primary"
-                        sx={{
-                            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.1)',
-                            fontSize: 20,
-                            fontFamily: 'kanit'
-                        }}
-                    >
+                    <Button onClick={handleCloseDialog} sx={{ fontFamily: 'Kanit' }}>
                         ยกเลิก
                     </Button>
-                    <Button onClick={handleCloseDialog} color="primary"
-                        sx={{
-                            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.1)',
-                            fontSize: 20,
-                            fontFamily: 'kanit'
-                        }}
-                    >
+                    <Button type="submit" color="primary" sx={{ fontFamily: 'Kanit' }}>
                         สร้างกิจกรรม
                     </Button>
                 </DialogActions>
-            </Dialog>
-        </div>
-    )
+            </form>
+        </Dialog>
+    );
 }
 
-export default Creatfaculty
+export default Creatfaculty;

@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-function CustomTextfield({ label, width = '25ch', readOnly = false, value, type = 'text' }) {
 
+// Wrap the component with React.forwardRef to handle refs
+const CustomTextfield = React.forwardRef(({ label, width = '25ch', readOnly = false, type = 'text' , id = ''}, ref) => {
     return (
         <Box
-            component="form"
             sx={{
                 '& > :not(style)': {
                     m: 1,
@@ -14,13 +14,13 @@ function CustomTextfield({ label, width = '25ch', readOnly = false, value, type 
                 },
             }}
             noValidate
-            autoComplete="off"
+            autoComplete="on"
         >
             <TextField
-                id="outlined-basic"
+                id={id}
                 label={label}
                 variant="outlined"
-                value={value}
+                ref={ref} // Forward the ref to the TextField component
                 InputProps={{
                     readOnly: readOnly,
                     style: { fontFamily: 'Kanit, sans-serif' },
@@ -29,6 +29,9 @@ function CustomTextfield({ label, width = '25ch', readOnly = false, value, type 
             />
         </Box>
     );
-}
+});
+
+// Optional: Add displayName for better debugging in React DevTools
+CustomTextfield.displayName = 'CustomTextfield';
 
 export default CustomTextfield;

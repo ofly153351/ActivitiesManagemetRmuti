@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
-
+import { editFacultybyID } from '../Utils/api';
 const style = {
     position: 'absolute',
     top: '50%',
@@ -16,34 +16,49 @@ const style = {
     p: 4,
 };
 
-export default function ViewPopup({ selectedEditUser, closeModal }) {
-    const open = !!selectedEditUser; // ใช้ selectedUser ในการควบคุมเปิด/ปิด
+export default function EditPopup({ selectedEditItem, closeModal, onSave, fields }) {
+    const open = !!selectedEditItem; 
     const [updated, setUpdated] = useState(false);
+    const [formData, setFormData] = useState({});
+
+    useEffect(() => {
+        if (selectedEditItem) {
+            setFormData(selectedEditItem); 
+        }
+    }, [selectedEditItem]);
+
+    
     const handleSubmit = (event) => {
         event.preventDefault(); // ป้องกันการรีเฟรชหน้า
-        const formData = new FormData(event.currentTarget);
-        const updatedData = Object.fromEntries(formData);
+        const updatedData = { ...formData };
         console.log(updatedData);
+        onSave(updatedData); // ส่งข้อมูลที่แก้ไขไปยัง parent
         setUpdated(true); // แสดงการแจ้งเตือนเมื่อมีการส่งข้อมูล
+        console.log(updatedData);
+        
+        editFacultybyID()
         closeModal(); // ปิดโมดัลหลังจากส่งข้อมูล
-
+     
         // รีเซ็ตสถานะหลังจาก 2 วินาที
         setTimeout(() => {
             setUpdated(false);
         }, 2000);
     };
+
+    
+    
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
     const handleClose = () => {
         closeModal(); // เรียกใช้ closeModal เมื่อปิดโมดัล
     };
-
-    useEffect(() => {
-        if (updated) {
-            const timer = setTimeout(() => {
-                setUpdated(false);
-            }, 2000);
-            return () => clearTimeout(timer); // เคลียร์ timer เมื่อ unmount
-        }
-    }, [updated]);
 
     return (
         <Modal
@@ -55,29 +70,24 @@ export default function ViewPopup({ selectedEditUser, closeModal }) {
             <Box sx={style}>
                 <form onSubmit={handleSubmit}>
                     <div className='flex justify-center items-center'>
-                        <span className='font-kanit text-xl'>
-                            แก้ไขข้อมูลของ {selectedEditUser?.firstName} {selectedEditUser?.lastname}
+                        <span className='font-kanit text-xl text-center'>
+                            แก้ไขข้อมูล
                         </span>
                     </div>
                     <div id='info'>
-                        <div>
-                            <input
-                                type="text"
-                                placeholder="ชื่อ"
-                                defaultValue={selectedEditUser?.firstName || ''}
-                                className="w-full border p-2 mt-2"
-                                name='firstName'
-                            />
-                        </div>
-                        <div>
-                            <input
-                                type="text"
-                                placeholder="นามสกุล"
-                                defaultValue={selectedEditUser?.lastname || ''}
-                                className="w-full border p-2 mt-2"
-                                name='lastName'
-                            />
-                        </div>
+                        {fields.map((field) => (
+                            <div key={field.name}>
+                                <label>{field.label}</label>
+                                <input
+                                    type="text"
+                                    placeholder={field.placeholder}
+                                    value={formData[field.name] || ''}
+                                    onChange={handleChange}
+                                    className="w-full border p-2 mt-2"
+                                    name={field.name}
+                                />
+                            </div>
+                        ))}
                     </div>
                     <div className='mt-4'>
                         <button
@@ -90,7 +100,7 @@ export default function ViewPopup({ selectedEditUser, closeModal }) {
                 </form>
                 {updated && (
                     <Alert icon={<CheckIcon fontSize="inherit" />} severity="success" sx={{ mt: 2 }}>
-                        Here is a gentle confirmation that your action was successful.
+                        ข้อมูลถูกอัปเดตสำเร็จ
                     </Alert>
                 )}
             </Box>

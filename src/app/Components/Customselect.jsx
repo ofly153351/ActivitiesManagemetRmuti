@@ -5,13 +5,14 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function Customselect({ width = '25ch',label, value = '', onChange, options = [] }) {
+export default function Customselect({ high = '50px', width = '25ch', label, value = '', onChange, options = [] }) {
   const handleChange = (event) => {
     onChange(event.target.value); // ส่งค่าที่เลือกกลับไปยัง parent component
+    
   };
 
   return (
-    <Box sx={{ width: width, margin: 1}}>
+    <Box sx={{ height: high, width: width, margin: 1 }}>
       <FormControl fullWidth>
         <InputLabel id="custom-select-label">{label}</InputLabel>
         <Select
@@ -20,9 +21,10 @@ export default function Customselect({ width = '25ch',label, value = '', onChang
           value={value}
           label={label}
           onChange={handleChange}
+          sx={{fontFamily : 'Kanit, sans-serif'}}
         >
           {options.map((option, index) => (
-            <MenuItem key={index} value={option.value}>
+            <MenuItem sx={{fontFamily: 'Kanit, sans-serif'}} key={index} value={option.value}>
               {option.label}
             </MenuItem>
           ))}

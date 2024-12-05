@@ -23,8 +23,11 @@ function Page() {
       password: data.password,
     }
     try {
+      
       const res = await loginUser(payload);
-      const token = Cookies.get('access_token'); // ตรวจสอบค่านี้
+      const token = Cookies.get('token'); // ตรวจสอบค่านี้
+      console.log(token);
+      
       if (res && token) {
         setSuccessMessage('Login successful!');
         setTimeout(() => {

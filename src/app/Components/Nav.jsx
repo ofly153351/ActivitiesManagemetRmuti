@@ -6,27 +6,25 @@ import Profilemanu from './Profilemanu';
 import Cookies from 'js-cookie';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import { jwtDecodeToken } from '../Utils/function'
+import { jwtDecodeToken } from '../Utils/function';
 import Sidebar from './sidebar';
 import LogoDevIcon from '@mui/icons-material/LogoDev';
+
 function Nav() {
     const pathName = usePathname() || " ";
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-
     useEffect(() => {
-        const token = Cookies.get('access_token');
-        // console.log(token);
+        const token = Cookies.get('token');
         if (token) {
             const jwtDecoded = jwtDecodeToken(token);
             setUser(jwtDecoded);
-            // console.log(jwtDecoded);
             setLoading(false);
         } else {
-            setLoading(false)
+            setLoading(false);
         }
-    }, []); // ควรใช้ [] เป็น dependencies เพื่อให้ useEffect ทำงานเพียงครั้งเดียว
+    }, []); 
 
     if (loading) {
         return (
@@ -38,23 +36,21 @@ function Nav() {
         );
     }
 
-
     const commonLinks = [
         { href: '/Home', label: 'รายชื่อกิจกรรม' }
     ];
 
     const loginPath = [
         { href: '/Register', label: 'ลงทะเบียน' }
-    ]
+    ];
 
     const registerPath = [
-        // { href: '/Register', label: 'ลงทะเบียน' },
         { href: '/Login', label: 'เข้าสู่ระบบ' }
     ];
 
     const authLinks = [
         { href: '/Register', label: 'ลงทะเบียน' }
-    ]
+    ];
 
     const userLinks = [
         { href: '/', label: 'ขอเพิ่มกิจกรรมนอกสถานที่' },
@@ -62,39 +58,37 @@ function Nav() {
         { href: '/', label: '-' }
     ];
 
-    const adminLinks = [
-        { href: '/Admin/Userlist', label: 'แสดงรายชื่อนักศึกษาทั้งหมด' },
-        { href: '/Admin/Eventlist', label: 'แสดงกิจกรรมทั้งหมด' },
-        { href: '/', label: 'เพิ่มกิจกรรม' }
-    ];
 
     return (
-        <div className="sticky w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-between items-center z-10">
-            {user?.role === 'admin' ? (
-                <div className='flex justify-between items-center ml-20 w-screen' >
+        <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-between items-center z-10">
+            {(user?.role === 'teacher' || user?.role === 'admin') && (
+                <div className='flex justify-between items-center ml-20 w-screen'>
                     <div className='flex justify-between items-center w-full'>
-                        <div className='flex justify-center items-center ' >
-                            <Link href="/Home" className='hover:bg-stone-50' >
+                        <div className='flex justify-center items-center'>
+                            <Link href="/Home" className='hover:bg-stone-50'>
                                 <LogoDevIcon style={{
                                     fontSize: "50px",
-                                    color: "#0067B3" // แก้จาก colors เป็น color
+                                    color: "#0067B3"
                                 }} />
                             </Link>
                         </div>
                     </div>
-                    <div className='flex' >
-                            <div className="w-64">
-                                <Profilemanu user={user} />
-                            </div>
-                            <Sidebar />
+                    <div className='flex justify-center items-center'>
+                        <div className="w-[230px]">
+                            <Profilemanu user={user} />
                         </div>
+                        <Sidebar  />
+                    </div>
                 </div>
-            ) : (
-                <Link href="/Home" >
+            )}
+
+            {user?.role !== 'teacher' && user?.role !== 'admin' && (
+                <Link href="/Home">
                     <span className="ml-[50px] font-kanit text-2xl">LOGO</span>
                 </Link>
             )}
-            <div className="gap-2 flex mr-[50px] ">
+
+            <div className="gap-2 flex mr-[50px]">
                 {pathName === '/Login' && (
                     <div className='flex gap-5'>
                         {loginPath.map((link, index) => (
@@ -113,8 +107,9 @@ function Nav() {
                         ))}
                     </div>
                 )}
-                {pathName === '/Register' && (
-                    <div className='flex gap-5' >
+
+                {pathName === '/Register/Student' || pathName === '/Register/Teacher' && (
+                    <div className='flex gap-5'>
                         {registerPath.map((link, index) => (
                             <div key={index}>
                                 <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100">
@@ -123,7 +118,7 @@ function Nav() {
                             </div>
                         ))}
                         {commonLinks.map((link, index) => (
-                            <div key={link.href}> {/* ใช้ href เป็น key */}
+                            <div key={index}>
                                 <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100">
                                     <span className="drop-shadow-2xl">{link.label}</span>
                                 </Link>
@@ -131,6 +126,7 @@ function Nav() {
                         ))}
                     </div>
                 )}
+
                 {pathName === '/Home' && user?.role === 'user' && (
                     <div className="mr-20 flex gap-10">
                         {userLinks.map((link, index) => (
@@ -143,8 +139,9 @@ function Nav() {
                         <Profilemanu user={user} />
                     </div>
                 )}
-                {pathName === '/Home' && user == null && (
-                    <div className='flex gap-5' >
+
+                {pathName === '/Home' && !user && (
+                    <div className='flex gap-5'>
                         {commonLinks.map((link, index) => (
                             <div key={index}>
                                 <Link href={link.href} className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100">
@@ -161,14 +158,6 @@ function Nav() {
                         ))}
                     </div>
                 )}
-                {/* {pathName === '/Home' && user?.role === 'admin' && (
-                    <div className='flex' >
-                        <div className="">
-                            <Profilemanu user={user} />
-                        </div>
-                        <Sidebar />
-                    </div>
-                )} */}
             </div>
         </div>
     );

@@ -4,19 +4,20 @@ import Cookies from 'js-cookie';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { jwtDecode } from "jwt-decode";
 import Button from '@mui/material/Button';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { colors } from '@mui/material';
+import { red } from '@mui/material/colors';
 
 function Profilemanu() {
     const [user, setUser] = useState(null);
     const router = useRouter();
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
-    const pathName = usePathname() || " ";
 
     useEffect(() => {
-        const token = Cookies.get('access_token');
+        const token = Cookies.get('token');
         if (token) {
             try {
                 const decodedJwt = jwtDecode(token);
@@ -28,7 +29,7 @@ function Profilemanu() {
         } else {
             setUser(null);
         }
-    }, []); // Dependency array is empty, so this effect runs once on mount
+    }, []);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -42,7 +43,7 @@ function Profilemanu() {
 
     const handleMenuItemClick = (route) => {
         if (route === '/logout') {
-            Cookies.remove('access_token');
+            Cookies.remove('token');
             setUser(null);
             router.push('/Login');
         } else {
@@ -53,12 +54,11 @@ function Profilemanu() {
 
     return (
         <div className="flex items-center gap-2 ">
-            <div className='relative flex justity-center items-center '>
-                {/* Add the user's name here */}
+            <div className='relative flex justity-center items-center rounded-full border-[1px] border-gray '>
                 {user && (
-                <span className=" text-gray-500  text-md font-kanit hover:underline ">{user.email} ({user.role})</span>
+                    <span className=" text-gray-500 px-3 py-1 text-md font-kanit hover:underline w-full ">userID: {user.user_id} Role:({user.role})</span>
                 )}
-                <div className='ml-1 rounded-full flex items-center justify-center p-0'>
+                <div className='ml-1 rounded-full flex items-center justify-center '>
                     <Button
                         id="basic-button"
                         aria-controls={open ? 'basic-menu' : undefined}
@@ -66,6 +66,11 @@ function Profilemanu() {
                         aria-expanded={open ? 'true' : undefined}
                         onClick={handleClick}
                         style={{ borderRadius: '100px' }}
+                        sx={{
+                            "&:hover": {
+                                background: 'none'
+                            }
+                        }}
                     >
                         <AccountCircleIcon fontSize="large" />
                     </Button>
