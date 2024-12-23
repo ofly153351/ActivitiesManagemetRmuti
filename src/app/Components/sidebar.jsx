@@ -17,24 +17,34 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import Link from 'next/link';
 import Button from '@mui/material/Button';
 import CreatEventpopup from './CreatEventpopup';
-import Creatfaculty from './Creatfaculty';
-import CreatBranch from './CreatBranch';
+import Creatfaculty from './Createfaculty';
+import CreatBranch from './CreateBranch';
 import AddIcon from '@mui/icons-material/Add';
 import ListIcon from '@mui/icons-material/List';
-import EditOffIcon from '@mui/icons-material/EditOff';
+import { ErrorAlert, SuccessAlert } from './Alert';
 
 export default function Sidebar() {
     const [open, setOpen] = useState(false);
     const [submenuBranch, setSubmenuBranch] = useState(false);
     const [submenuFaculty, setSubmenuFaculty] = useState(false);
-
     const [openCreateventDialog, setOpenCreateventDialog] = useState(false);
     const [openCreatfacultyDialog, setOpenCreatfacultyDialog] = useState(false);
     const [openCreatBranchDialog, setOpenCreatBranchDialog] = useState(false);
+    const [alertMessage, setAlertMessage] = useState(null); // ข้อความ Alert
+    const [alertType, setAlertType] = useState("success"); // ประเภท Alert
 
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
     };
+
+    const showAlert = (message, type = "success") => {
+        setAlertMessage(message);
+        setAlertType(type);
+        setTimeout(() => {
+            setAlertMessage(null);
+        }, 3000); // ปิด Alert อัตโนมัติหลัง 3 วินาที
+    };
+
 
     const handleDialogToggle = (dialog, state) => {
         switch (dialog) {
@@ -127,7 +137,7 @@ export default function Sidebar() {
                     <React.Fragment key={index}>
                         <ListItem disablePadding>
                             {item.link ? (
-                                <Link href={item.link} passHref>
+                                <Link className='w-64' href={item.link} passHref>
                                     <ListItemButton component="a" onClick={toggleDrawer(false)}>
                                         <ListItemIcon>{item.icon}</ListItemIcon>
                                         <ListItemText primary={item.name} />
@@ -191,16 +201,35 @@ export default function Sidebar() {
 
     return (
         <div className="z-20 w-16">
-            <Button sx={{ width: 5 , "&:hover" : {
-                background : 'none'
-            }}} onClick={toggleDrawer(true)}>
+            {alertMessage && (
+                <div className="fixed bottom-4 right-[142px]  z-50 w-[300px] duration-150">
+                    {alertType === "success" ? (
+                        <SuccessAlert label={alertMessage} />
+                    ) : (
+                        <ErrorAlert label={alertMessage} />
+                    )}
+                </div>
+            )}
+            <Button sx={{
+                width: 5, "&:hover": {
+                    background: 'none'
+                }
+            }} onClick={toggleDrawer(true)}>
                 <MenuIcon sx={{ fontSize: '32px' }} />
             </Button>
             <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
                 {DrawerList}
             </Drawer>
             <CreatEventpopup openDialog={openCreateventDialog} handleCloseDialog={() => handleDialogToggle('createEvent', false)} />
-            <Creatfaculty openDialog={openCreatfacultyDialog} handleCloseDialog={() => handleDialogToggle('createFaculty', false)} />
+            <Creatfaculty
+                openDialog={openCreatfacultyDialog}
+                handleCloseDialog={() => handleDialogToggle('createFaculty', false)}
+                onSave={(newFaculty) => {
+                    showAlert("เพิ่มคณะสำเร็จ!", "success");
+                    console.log(newFaculty);
+                }}
+            />
+
             <CreatBranch openDialog={openCreatBranchDialog} handleCloseDialog={() => handleDialogToggle('createBranch', false)} />
         </div>
     );

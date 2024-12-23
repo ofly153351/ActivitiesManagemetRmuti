@@ -1,7 +1,8 @@
 
-export const colorsCode = [
-    {red : '#FA8072'},
-    {green : '#32CD32'},
-    {whiteSmoke : '#f5f5f5'}
-]
+export const colorsCode = {
+    red: '#FA8072',
+    green: '#32CD32',
+    whiteSmoke: '#f5f5f5',
+    blue: '#1976d2',
+}
 

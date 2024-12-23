@@ -10,15 +10,14 @@ import Button from '@mui/material/Button';
 import { creatFaculties } from '../Utils/api';
 import { checkValidationfacuiltiesAndbraches, handleKeyDown } from '../Utils/onkeyDown';
 
-function Creatfaculty({ openDialog, handleCloseDialog, onSave }) {
+function Creatfaculty({ openDialog, handleCloseDialog, onSave = () => { }, showAlert = () => { } }) {
     const theme = useTheme();
     const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'lg'));
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
     const [facultieName, setFacultieName] = useState('');
     const [facultieID, setFacultieID] = useState('');
-    const [error, setError] = useState(null); // Track errors for display
+    const [error, setError] = useState(null);
 
     const resetForm = () => {
         setFacultieName('');
@@ -28,19 +27,26 @@ function Creatfaculty({ openDialog, handleCloseDialog, onSave }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const payload = {
-            faculty_id: facultieID,
+            faculty_code: facultieID,
             faculty_name: facultieName,
         };
+        console.log('[Creatfaculty] Payload:', payload);
 
         try {
             const response = await creatFaculties(payload);
-            console.log('API Response:', response.data); 
-            onSave(response.data); 
-            resetForm();
-            handleCloseDialog();
+            console.log("[Creatfaculty] handleCreateFaculty status:", response.status);
+            if (response.status === 201) {
+                console.log('[Creatfaculty] Calling showAlert with success');
+                resetForm();
+                onSave(response.data);
+                handleCloseDialog();
+                showAlert("เพิ่มคณะสำเร็จ!", "success");
+            }
         } catch (error) {
+            console.log('[Creatfaculty] Calling showAlert with error');
             console.error('Error during form submission:', error);
-            setError('Failed to create faculty. Please try again.');
+            setError(`เกิดข้อผิดพลาดในการเพิ่มรายชื่อคณะ (รหัสคณะ ${facultieID})`);
+            showAlert("เกิดข้อผิดพลาดในการเพิ่มคณะ", "error");
         }
     };
 

@@ -13,6 +13,9 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { creatBranch, getFaculties } from '../Utils/api';
 import { checkValidationfacuiltiesAndbraches, handleKeyDown } from '../Utils/onkeyDown';
+import { ErrorAlert, SuccessAlert } from './Alert';
+import { fontFamily } from '../Utils/font';
+import useStore from '@/store/useStore';
 
 function CreatBranch({ openDialog, handleCloseDialog }) {
     const theme = useTheme();
@@ -23,18 +26,39 @@ function CreatBranch({ openDialog, handleCloseDialog }) {
     const [facultiesList, setFacultiesList] = useState([]);
     const [branchName, setBranchName] = useState('');
     const [branchID, setBranchID] = useState('');
+    const [alertMessage, setAlertMessage] = useState(null); // ข้อความ Alert
+    const [alertType, setAlertType] = useState("success"); // ประเภท Alert
+    const {  setFaculties } = useStore();
+
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await getFaculties();
                 setFacultiesList(response.data);
+                setFaculties(response.data);
             } catch (error) {
                 console.error("Error fetching faculties:", error);
             }
         };
         fetchData();
     }, []);
+
+
+
+    const showAlert = (message, type = "success") => {
+        setAlertMessage(message);
+        setAlertType(type);
+        setTimeout(() => {
+            setAlertMessage(null);
+        }, 3000);
+    };
+
+    const resetForm = () => {
+        setSelectedFaculties('')
+        setBranchName('')
+        setBranchID('')
+    }
 
     const handleChange = (event) => {
         setSelectedFaculties(event.target.value);
@@ -47,32 +71,60 @@ function CreatBranch({ openDialog, handleCloseDialog }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Check if all fields are filled
         if (!selectedFaculties || !branchName || !branchID) {
             alert("Please fill in all fields");
             return;
         }
 
+        console.log("Selected Faculty ID:", selectedFaculties);
+        console.log("Branch Name:", branchName);
+        console.log("Branch ID:", branchID);
+
         const payload = {
             faculty_id: selectedFaculties,
             branch_name: branchName,
-            branchID: branchID
+            branch_code: branchID
         };
 
         try {
             const response = await creatBranch(payload);
+            console.log(response.status);
 
             if (response.status === 201) {
                 console.log("Branch created successfully:", response.data);
-                handleCloseDialog();
+                resetForm();
+                showAlert("เพิ่มสาขาสำเร็จ!", "success");
+                console.log(alertMessage);
             }
         } catch (error) {
             console.error('Error during form submission:', error);
+            showAlert("เกิดข้อผิดพลาดในการเพิ่มสาขา", "Error");
+            console.log(alertMessage);
+
         }
     };
 
     return (
-        <div className="w-screen">
+        <Dialog
+            open={openDialog}
+            onClose={handleCloseDialog}
+            maxWidth="xs"
+            fullWidth
+            sx={{
+                '& .MuiDialog-paper': {
+                    width: isDesktop ? '400px' : isTablet ? '300px' : '200px',
+                },
+            }}
+        >
+            {alertMessage != null && (
+                <div className="fixed bottom-4 right-[50px]  z-50 w-[300px] duration-150">
+                    {alertType === "success" ? (
+                        <SuccessAlert label={alertMessage} />
+                    ) : (
+                        <ErrorAlert label={alertMessage} />
+                    )}
+                </div>
+            )}
             <form>
                 <Dialog
                     open={openDialog}
@@ -190,15 +242,15 @@ function CreatBranch({ openDialog, handleCloseDialog }) {
                             sx={{
                                 textShadow: '2px 2px 4px rgba(0, 0, 0, 0.1)',
                                 fontSize: 20,
-                                fontFamily: 'kanit',
+                                fontFamily: fontFamily.Kanit,
                             }}
                         >
-                            สร้างกิจกรรม
+                            ตกลง
                         </Button>
                     </DialogActions>
                 </Dialog>
             </form>
-        </div>
+        </Dialog>
     );
 }
 

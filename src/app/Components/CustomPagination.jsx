@@ -15,7 +15,8 @@ const Pagination = ({ totalPages, currentPage, onPageChange }) => {
     };
 
     return (
-        <div className="flex justify-end items-center gap-4 p-4 bg-transparent w-full border-[1px] border-slate-200 ">
+        <div className="flex justify-end items-center gap-4 p-4 bg-transparent w-full  border-slate-200 ">
+            
             <BasicButtons
                 width={10}
                 height={40}

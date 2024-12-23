@@ -9,6 +9,8 @@ export const handleKeyDown = (e) => {
 export const checkValidationfacuiltiesAndbraches = (e, setFacultieID) => {
     const inputValue = e.target.value;
     if (!isNaN(inputValue) && inputValue.length <= 4) {
-        setFacultieID(Number(inputValue));  // Update the Facultie ID state
+        setFacultieID(inputValue);  // Update the Facultie ID state
     }
 }
+
+

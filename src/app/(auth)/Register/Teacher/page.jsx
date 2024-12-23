@@ -9,8 +9,10 @@ import { registerTeacher } from '../../../Utils/api';
 import { handleApiError } from '../../../Utils/errorhandler';
 import Nav from "../../../Components/Nav";
 import Link from 'next/link';
+import { useRouter } from "next/navigation";
 
 function Page() {
+    const router = useRouter();
     const { register, handleSubmit, setValue, formState: { errors }, watch } = useForm();
     const [gender, setGender] = useState('');
 
@@ -33,11 +35,13 @@ function Page() {
         };
 
 
-        console.log('Payload to send:', payload);
+        // console.log('Payload to send:', payload);
 
         try {
             const result = await registerTeacher(payload);
             console.log('Registration successful:', result);
+            alert(result.message);
+            router.push('/Login')
         } catch (error) {
             handleApiError(error);
         }
@@ -68,9 +72,9 @@ function Page() {
                                     onChange={handleChangegender}
                                     label="คำนำหน้า"
                                 >
-                                    <MenuItem value="Mister">นาย</MenuItem>
-                                    <MenuItem value="Missus">นาง</MenuItem>
-                                    <MenuItem value="Miss">นางสาว</MenuItem>
+                                    <MenuItem value="นาย">นาย</MenuItem>
+                                    <MenuItem value="นาง">นาง</MenuItem>
+                                    <MenuItem value="นางสาว">นางสาว</MenuItem>
                                 </Select>
                                 {errors.nameTitle && <div className="text-red-500 text-xs mt-1">{errors.nameTitle.message}</div>}
                             </FormControl>

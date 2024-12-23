@@ -26,13 +26,13 @@ function Page() {
       
       const res = await loginUser(payload);
       const token = Cookies.get('token'); // ตรวจสอบค่านี้
-      console.log(token);
+      // console.log(token);
       
       if (res && token) {
         setSuccessMessage('Login successful!');
         setTimeout(() => {
           router.push('/Home');
-        }, 800); // Redirect after a short delay to show success message
+        }, 600); // Redirect after a short delay to show success message
       }
     } catch (error) {
       setErrorMessage('Login failed. Please check your Email or Password');
