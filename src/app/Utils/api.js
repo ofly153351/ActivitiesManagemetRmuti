@@ -225,3 +225,17 @@ export const updateTeacher = async (payload) => {
     }
   }
 }
+
+export const CreateEvent = async (payload) => {
+  try {
+    const response = await axios.post('http://localhost:8080/protected/admin-teacher/event', payload,{
+      withCredentials: true
+    });
+    console.log(response);
+
+    return response
+  } catch (error) {
+    console.log(error);
+
+  }
+}

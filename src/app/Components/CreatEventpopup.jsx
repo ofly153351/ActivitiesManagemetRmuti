@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -10,12 +10,173 @@ import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import dayjs from 'dayjs';
+import { TimeField } from '@mui/x-date-pickers/TimeField';
+import TransferList from './Tranferlist';
+import Customselect from './Customselect';
+import useStore from '@/store/useStore';
+import BasicButtons from './BasicButtons';
+import { CreateEvent, getBranches } from '../Utils/api';
+import CheckboxButtonLabel from './CheckbokButton';
+import { isNumber } from '@mui/x-data-grid/internals';
+
+
+
 
 function CreatEventpopup({ openDialog, handleCloseDialog }) {
     const theme = useTheme();
     const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));  // Desktop
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'lg')); // iPad
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));  // iPhone
+    const [eventName, setEventname] = useState('');
+    const [location, setLocation] = useState('')
+    const [selectedTime, setSelectedTime] = useState(dayjs());
+    const [selectedDate, setSelectedDate] = useState(dayjs());
+    const [space, setSpace] = useState('')
+    const [hour, setHour] = useState('')
+    const [detail, setDetail] = useState('')
+    const [selectedFaculty, setSelectedFaculty] = useState('')
+    const { faculties } = useStore()
+    const [faculty, setFacultyID] = useState('')
+    const [branches, setBranches] = useState([])
+    const [filteredBranch, setFilteredBranches] = useState([])
+    const [selectedBranches, setSelectedBranches] = useState([]);
+    const [selectedYears, setSelectedYears] = useState([]);
+
+    const years = [
+        { fild: 'ปี 1', value: 1 },
+        { fild: 'ปี 2', value: 2 },
+        { fild: 'ปี 3', value: 3 },
+        { fild: 'ปี 4', value: 4 },
+    ]
+
+
+    const handleRightListChange = (newRight) => {
+        setSelectedBranches(newRight);
+    };
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await getBranches();
+            setBranches(response.data)
+        }
+        fetchData()
+    }, [filteredBranch])
+
+
+    // console.log(selectedBranches.map(branch => branch.branch_id));
+
+    const handleOnchange = (e, field) => {
+
+        switch (field) {
+            case 'eventName':
+                const eventName = e.target.value
+                setEventname(eventName)
+                break;
+            case 'location':
+                const location = e.target.value
+                setLocation(location)
+                break;
+            case 'detail':
+                const detail = e.target.value
+                setDetail(detail)
+            default:
+                break;
+        }
+
+    }
+
+
+    const handleSelectedFaculty = (value) => {
+        const selectedFaculty = faculties.find(f => f.faculty_name === value);
+        setSelectedFaculty(value);
+        setFacultyID(selectedFaculty?.faculty_id || '');
+        setFilteredBranches(
+            branches.filter(branch => branch.faculty.faculty_id === selectedFaculty?.faculty_id)
+        );
+
+    };
+
+    const handleOnchangeDate = (key, newValue) => {
+        if (newValue) {
+            const formattedDate = newValue.format('DD-MM-YYYY'); // เอาแค่วันที่
+            console.log(`${key}:`, formattedDate);
+            setSelectedDate(newValue);
+        }
+    };
+
+    // ฟังก์ชันจัดการเวลา
+    const handleOnchangeTime = (newValue) => {
+        if (newValue) {
+            // แก้ไขให้ seconds เป็น 00
+            const formattedTime = newValue.set('second', 0).format('HH:mm:ss'); // ตั้งค่า second ให้เป็น 00
+            console.log("Selected Time:", formattedTime); // แสดงผลใน console
+            setSelectedTime(newValue.set('second', 0)); // ตั้งค่า seconds เป็น 00 ใน state
+        }
+    };
+
+    const clear = () => {
+        setSelectedFaculty('')
+        setFacultyID('')
+        setSelectedBranches([])
+    }
+
+
+    const startDate = selectedDate
+        .set('hour', selectedTime.hour())
+        .set('minute', selectedTime.minute())
+        .set('second', 0) // ตั้งค่า seconds ให้เป็น 0
+        .format('YYYY-MM-DD HH:mm:ss'); // กำหนดรูปแบบที่ต้องการ
+
+    const handleChangeYears = (label) => {
+        setSelectedYears((prevSelectedYears) => {
+            if (prevSelectedYears.includes(label)) {
+                // ถ้าเลือกแล้ว ก็เอาออกจาก list
+                return prevSelectedYears.filter((year) => year !== label);
+            } else {
+                // ถ้ายังไม่เลือก ก็เพิ่มเข้าไปใน list
+                return [...prevSelectedYears, label];
+            }
+        });
+    };
+
+    // console.log(selectedYears);
+
+
+
+    const handleSubmit = async () => {
+        const payload = {
+            event_name: eventName,
+            start_date: startDate,
+            working_hour: Number(hour),  // Ensure this is a number
+            free_space: Number(space),    // Ensure this is a number
+            location: location,
+            detail: detail,
+            branches: selectedBranches.map(branch => branch.branch_id),
+            years: selectedYears
+        }
+
+        try {
+            const response = await CreateEvent(payload)
+            console.log(response);
+
+        } catch (error) {
+            console.error(error);
+        }
+        handleCloseDialog()
+
+    }
+    // }
+    // {
+    //     "event_name":"กวาดบ้าน",
+    //     "start_date":"2024-12-01 17:30:00",
+    //     "working_hour":5,
+    //     "free_space":50,
+    //     "location":"บ้านมึงไง",
+    //     "detail":"ทำความสะอาดสักทีเถอะ",
+    //     "branches":[],
+    //     "years":[]
+
+    // console.log(eventName, startDate, hour, space, location, detail, selectedBranches.map(branch => branch.branch_id));
 
     return (
         <div className='w-screen'>
@@ -37,7 +198,7 @@ function CreatEventpopup({ openDialog, handleCloseDialog }) {
                         px: { xs: 1, sm: 3 },
                         pt: { xs: 3, md: 3 },
                         fontFamily: "Kanit",
-                        textAlign : 'left',
+                        textAlign: 'left',
                         textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
                     }}
                 >
@@ -64,13 +225,28 @@ function CreatEventpopup({ openDialog, handleCloseDialog }) {
                             fullWidth
                             variant="outlined"
                             sx={{
-                                width: isMobile ? "100%" : '80%'
+                                width: isMobile ? "100%" : '70%'
                             }}
+                            onChange={(e) => handleOnchange(e, 'eventName')}
+                            required
                         />
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 label="วันที่เริ่มกิจกรรม"
                                 sx={{ width: isMobile ? '100%' : '200px', mt: isMobile ? 0 : '8px' }}
+                                onChange={(newValue) => handleOnchangeDate('date', newValue)}
+                                format="DD/MM/YYYY"
+                                required
+                            />
+                        </LocalizationProvider>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <TimeField
+                                label="เวลาเริ่มต้น"
+                                value={selectedDate}
+                                onChange={(newValue) => handleOnchangeTime(newValue)}
+                                sx={{ width: isMobile ? '100%' : '100px', mt: isMobile ? 0 : '8px' }}
+                                format="HH:mm" // กำหนดฟอร์แมตเป็น 24 ชั่วโมง
+                                required
                             />
                         </LocalizationProvider>
                     </Box>
@@ -86,41 +262,47 @@ function CreatEventpopup({ openDialog, handleCloseDialog }) {
                             margin="dense"
                             label="จำนวนที่รับ"
                             fullWidth
-                            type='number'
+                            type='text'
                             inputProps={{ min: 1 }}
                             variant="outlined"
                             sx={{ width: isDesktop ? 180 : '100%' }}
-                            onKeyDown={(e) => {
-                                if (['e', 'E', '+', '-'].includes(e.key)) {
-                                    e.preventDefault();  // ป้องกันการใส่ e, E, +, -
-                                }
+                            onChange={(e) => {
+                                // กรองให้รับเฉพาะตัวเลข
+                                const value = e.target.value;
+                                const numericValue = value.replace(/[^0-9]/g, ''); // กรองเฉพาะตัวเลข
+                                e.target.value = numericValue;  // อัปเดตค่าที่ผู้ใช้กรอก
+                                setSpace(numericValue ? Number(numericValue) : 0);  // เก็บค่าใน state และแปลงเป็นตัวเลข
+
                             }}
+                            required
                         />
+
                         <TextField
                             autoFocus
                             margin="dense"
                             label="จำนวนชั่วโมง"
                             fullWidth
                             variant="outlined"
-                            type='number'
+                            type='text'
                             inputProps={{ min: 1 }}
-                            sx={{ width: isDesktop ? 200   : '100%' }}
-                            onKeyDown={(e) => {
-                                if (['e', 'E', '+', '-'].includes(e.key)) {
-                                    e.preventDefault();  // ป้องกันการใส่ e, E, +, -
-                                }
+                            sx={{ width: isDesktop ? 200 : '100%' }}
+                            onChange={(e) => {
+                                // กรองให้รับเฉพาะตัวเลข
+                                const value = e.target.value;
+                                const numericValue = value.replace(/[^0-9]/g, ''); // กรองเฉพาะตัวเลข
+                                e.target.value = numericValue;  // อัปเดตค่าที่ผู้ใช้กรอก
+                                setHour(numericValue ? Number(numericValue) : 0);  // เก็บค่าใน state และแปลงเป็นตัวเลข
                             }}
+                            required
                         />
                         <TextField
-                            autoFocus
-                            margin='dense'
-                            label='ผู้สร้างกิจกรรม'
-                            variant="outlined"
+                            margin="dense"
+                            label="สถานที่"
                             fullWidth
-                            type='text'
-                            sx={{
-                                width: isMobile ? '100%' : isTablet ? '100%' : isDesktop ? '100%' : 200
-                            }}
+                            variant="outlined"
+                            multiline
+                            onChange={(e) => handleOnchange(e, 'location')}
+                            required
                         />
                     </Box>
                     <TextField
@@ -129,8 +311,56 @@ function CreatEventpopup({ openDialog, handleCloseDialog }) {
                         fullWidth
                         variant="outlined"
                         multiline
-                        rows={4}
+                        onChange={(e) => handleOnchange(e, 'detail')}
+                        rows={2}
+                        required
                     />
+                    <div className='flex items-center gap-2 py-2'>
+                        <span>ชั้นปีที่สามารถเข้าร่วมได้</span>
+                        {years.map((item) => (
+                            <CheckboxButtonLabel
+                                key={item.value}
+                                label={item.fild}
+                                selected={selectedYears.includes(item.value)} // ตรวจสอบว่า value ของ item อยู่ใน selectedYears หรือไม่
+                                onChange={() => handleChangeYears(item.value)}
+                            />
+                        ))}
+                    </div>
+                    <label htmlFor="" className='text-red-500' >*เลือกสาขาที่สามารถเข้าร่วมกิจกรรมได้(ถ้าว่างเท่ากับทุกสาขาสามารถลงได้)</label>
+                    <div className='grid' >
+                        <div className='flex gap-2' >
+                            <Customselect
+                                label={'คณะ'}
+                                options={faculties}
+                                field='faculty_name'
+                                onChange={(e) => handleSelectedFaculty(e)}
+                                value={selectedFaculty}
+                            />
+                            <div className='py-3 flex' >
+                                <BasicButtons
+                                    label={'ล้าง'}
+                                    width={'60px'}
+                                    onClick={clear}
+                                />
+
+                            </div>
+
+                        </div>
+                        <div className='flex' >
+                            {!selectedFaculty ? (
+                                <div className=""></div>
+                            ) : (
+                                <div className='p-4'>
+                                    <TransferList
+                                        item={filteredBranch}
+                                        onRightListChange={handleRightListChange}
+                                    />
+                                </div>
+
+                            )}
+                        </div>
+
+                    </div>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseDialog} color="primary"
@@ -142,7 +372,7 @@ function CreatEventpopup({ openDialog, handleCloseDialog }) {
                     >
                         ยกเลิก
                     </Button>
-                    <Button onClick={handleCloseDialog} color="primary"
+                    <Button onClick={handleSubmit} color="primary"
                         sx={{
                             textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
                             fontSize: 20,
