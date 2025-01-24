@@ -1,16 +1,100 @@
 // store/useStore.js
 import { create } from "zustand";
+import { getUserbyClaim, getBranches, getFaculties } from "@/app/Utils/api"; // เพิ่ม API สำหรับ branches และ faculties
+import { jwtDecodeToken } from "@/app/Utils/function";
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
-const useStore = create((set) => ({
-    user: null,
-    // branches: null,
-    faculties: [],
-    setUser: (user) => set({ user }),
-    clearUser: () => set({ user: null }),
-    // setBranches: (branches) => set({ branches }),
-    // clearBranches: () => set({ branches: null }),
-    setFaculties: (faculties) => set({ faculties }),
-    clearFaculties: () => set({ faculties: null }),
+// store/useStore.js
+const storedUser = typeof window !== "undefined" ? localStorage.getItem('user') : null;
+const storedUserRole = typeof window !== "undefined" ? localStorage.getItem('userRole') : null;
+
+export const useStore = create((set) => ({
+    user: storedUser ? JSON.parse(storedUser) : null,
+    userRole: storedUserRole ? JSON.parse(storedUserRole) : null,
+    isLoading: false,
+
+    login: async (payload) => {
+        try {
+            set({ isLoading: true });
+
+            console.log('Attempting login with:', payload);
+
+            // 1. Login API call
+            const response = await axios.post('http://localhost:8080/login', payload, {
+                withCredentials: true,
+            });
+            console.log('Login response:', response.data);
+
+            // 2. Get token from cookies
+            const token = Cookies.get('token');
+            console.log('Token from cookies:', token);
+
+            if (!token) {
+                throw new Error('Token not found in Cookies.');
+            }
+
+            // 3. Decode JWT
+            const decodedJwt = jwtDecodeToken(token);
+            console.log('Decoded JWT:', decodedJwt);
+
+            if (!decodedJwt) {
+                throw new Error('Invalid token structure.');
+            }
+
+            // 4. Set role from token
+            set({ userRole: { role: decodedJwt.role } });
+
+            try {
+                // 5. Fetch user data
+                const userResponse = await getUserbyClaim();
+                console.log('User data response:', userResponse.data);
+
+                const userData = {
+                    role: decodedJwt.role || '',
+                    user_id: userResponse.data.user_id,
+                    title_name: userResponse.data.title_name,
+                    first_name: userResponse.data.first_name,
+                    last_name: userResponse.data.last_name,
+                    phone: userResponse.data.phone,
+                    code: userResponse.data.code,
+                    branch: userResponse.data.branch || '',
+                    email: userResponse.data.email || '',
+                    year: userResponse.data.year || '',
+                };
+
+                // 6. Set user data
+                set({ user: userData });
+                console.log('User data set in store:', userData);
+
+                // เก็บข้อมูลใน localStorage
+                localStorage.setItem('user', JSON.stringify(userData));
+                localStorage.setItem('userRole', JSON.stringify({ role: decodedJwt.role }));
+
+                set({ isLoading: false });
+                return response.data;
+            } catch (userError) {
+                console.error('Error fetching user data:', userError);
+                set({ isLoading: false });
+                throw userError;
+            }
+        } catch (error) {
+            console.error('Login process error:', error);
+            set({ isLoading: false });
+            throw error;
+        }
+    },
+
+    clearAll: () => {
+        // เคลียร์ข้อมูลจากทั้งใน zustand store และ localStorage
+        localStorage.removeItem('user');
+        localStorage.removeItem('userRole');
+        set({
+            user: null,
+            userRole: null,
+            isLoading: false
+        });
+    }
+
+    
 }));
-
-export default useStore;

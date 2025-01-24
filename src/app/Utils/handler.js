@@ -1,9 +1,30 @@
 //search function
 
 export const filterActivities = (activities, searchQuery) => {
-    return activities.filter(activity =>
-        activity.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // ตรวจสอบว่า activities เป็นอาร์เรย์
+    if (!Array.isArray(activities)) {
+        return []; // คืนค่าอาร์เรย์เปล่าถ้าไม่มีข้อมูล
+    }
+
+    // ถ้าไม่มี searchQuery หรือเป็นค่าว่าง คืนค่ากิจกรรมทั้งหมด
+    if (!searchQuery || searchQuery.trim() === "") {
+        return activities;
+    }
+
+    const lowerQuery = searchQuery.toLowerCase(); // แปลง query เป็นตัวพิมพ์เล็กสำหรับการค้นหาแบบไม่สนตัวพิมพ์
+
+    return activities.filter(activity => {
+        return (
+            Object.values(activity).some(value => {
+                if (value === null || value === undefined) {
+                    return false; // ข้ามค่า null หรือ undefined
+                }
+
+                // แปลงค่าทั้งหมดเป็นสตริงและตรวจสอบว่ามี `searchQuery` หรือไม่
+                return value.toString().toLowerCase().includes(lowerQuery);
+            })
+        );
+    });
 };
 export const filterEvent = (events, searchQuery) => {
     return events.filter(events =>

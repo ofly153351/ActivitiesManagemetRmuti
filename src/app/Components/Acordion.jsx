@@ -22,13 +22,13 @@ function ActivityAccordion({ activity }) {
                     id="panel-header"
                 >
                     <div className="font-kanit">
-                        รายละเอียดเพิ่มเติมสำหรับ: {activity.name}
+                        รายละเอียดเพิ่มเติมสำหรับ: {activity.event_name}
                     </div>
                 </AccordionSummary>
                 <AccordionDetails>
                     <div className="font-kanit">
                         <p>
-                            {activity.location}
+                            {activity.detail}
                         </p>
                     </div>
                 </AccordionDetails>

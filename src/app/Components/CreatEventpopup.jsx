@@ -14,7 +14,7 @@ import dayjs from 'dayjs';
 import { TimeField } from '@mui/x-date-pickers/TimeField';
 import TransferList from './Tranferlist';
 import Customselect from './Customselect';
-import useStore from '@/store/useStore';
+import { useStore } from '@/store/useStore';
 import BasicButtons from './BasicButtons';
 import { CreateEvent, getBranches } from '../Utils/api';
 import CheckboxButtonLabel from './CheckbokButton';
@@ -42,6 +42,7 @@ function CreatEventpopup({ openDialog, handleCloseDialog }) {
     const [filteredBranch, setFilteredBranches] = useState([])
     const [selectedBranches, setSelectedBranches] = useState([]);
     const [selectedYears, setSelectedYears] = useState([]);
+    const { user } = useStore()
 
     const years = [
         { fild: 'ปี 1', value: 1 },
@@ -144,39 +145,32 @@ function CreatEventpopup({ openDialog, handleCloseDialog }) {
 
 
     const handleSubmit = async () => {
-        const payload = {
-            event_name: eventName,
-            start_date: startDate,
-            working_hour: Number(hour),  // Ensure this is a number
-            free_space: Number(space),    // Ensure this is a number
-            location: location,
-            detail: detail,
-            branches: selectedBranches.map(branch => branch.branch_id),
-            years: selectedYears
-        }
-
         try {
-            const response = await CreateEvent(payload)
-            console.log(response);
+            const payload = {
+                event_name: eventName,
+                start_date: startDate,
+                working_hour: Number(hour),
+                free_space: Number(space),
+                location,
+                detail,
+                branches: selectedBranches.map(branch => branch.branch_id),
+                years: selectedYears == null ? [] : selectedYears,  // ใช้ ternary operator
+            };
 
+            const response = await CreateEvent(user.role, payload);
+            console.log("CreateEvent response:", response); // Debug log
+
+            if (response) {
+                console.log("Event created successfully:", response);
+                handleCloseDialog()
+            } else {
+                console.error("Event creation failed. No response received.");
+            }
         } catch (error) {
-            console.error(error);
+            console.error("Error in handleSubmit:", error);
         }
-        handleCloseDialog()
+    };
 
-    }
-    // }
-    // {
-    //     "event_name":"กวาดบ้าน",
-    //     "start_date":"2024-12-01 17:30:00",
-    //     "working_hour":5,
-    //     "free_space":50,
-    //     "location":"บ้านมึงไง",
-    //     "detail":"ทำความสะอาดสักทีเถอะ",
-    //     "branches":[],
-    //     "years":[]
-
-    // console.log(eventName, startDate, hour, space, location, detail, selectedBranches.map(branch => branch.branch_id));
 
     return (
         <div className='w-screen'>
@@ -348,7 +342,7 @@ function CreatEventpopup({ openDialog, handleCloseDialog }) {
                         </div>
                         <div className='flex' >
                             {!selectedFaculty ? (
-                                <div className=""></div>
+                                < div className=""></div>
                             ) : (
                                 <div className='p-4'>
                                     <TransferList
@@ -372,7 +366,20 @@ function CreatEventpopup({ openDialog, handleCloseDialog }) {
                     >
                         ยกเลิก
                     </Button>
-                    <Button onClick={handleSubmit} color="primary"
+                    {/* const payload = {
+                event_name: eventName,
+                start_date: startDate,
+                working_hour: Number(hour),
+                free_space: Number(space),
+                location,
+                detail,
+                branches: selectedBranches.map(branch => branch.branch_id),
+                years: selectedYears,
+            }; */}
+                    < Button onClick={handleSubmit} color="primary"
+                        disabled={
+                            !eventName || !startDate || !hour || !space || !location
+                        }
                         sx={{
                             textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
                             fontSize: 20,
@@ -381,9 +388,10 @@ function CreatEventpopup({ openDialog, handleCloseDialog }) {
                     >
                         สร้างกิจกรรม
                     </Button>
+
                 </DialogActions>
             </Dialog>
-        </div>
+        </div >
     )
 }
 

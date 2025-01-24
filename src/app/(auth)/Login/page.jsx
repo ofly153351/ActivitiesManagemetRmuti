@@ -10,8 +10,9 @@ import { loginUser } from "@/app/Utils/api";
 import Cookies from "js-cookie";
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check'; // Import the CheckIcon
-
+import { useStore } from '@/store/useStore';
 function Page() {
+  const login = useStore((state) => state.login);
   const { register, handleSubmit, formState: { errors } } = useForm();
   const router = useRouter();
   const [errorMessage, setErrorMessage] = React.useState('');
@@ -21,26 +22,32 @@ function Page() {
     const payload = {
       email: data.email,
       password: data.password,
-    }
+    };
+
     try {
-      
-      const res = await loginUser(payload);
-      const token = Cookies.get('token'); // ตรวจสอบค่านี้
-      // console.log(token);
-      
-      if (res && token) {
+      // เรียกใช้ login function และรอผลลัพธ์
+      await login(payload);
+
+      // ตรวจสอบ token หลังจาก login สำเร็จ
+      const token = Cookies.get('token');
+
+      if (token) {
         setSuccessMessage('Login successful!');
         setTimeout(() => {
           router.push('/Home');
-        }, 600); // Redirect after a short delay to show success message
+        }, 600);
+      } else {
+        throw new Error('No token received after login');
       }
     } catch (error) {
+      console.error('Login error:', error);
       setErrorMessage('Login failed. Please check your Email or Password');
       setTimeout(() => {
         setErrorMessage('');
       }, 5000);
     }
-  }
+  };
+
 
   return (
     <div>
@@ -105,9 +112,9 @@ function Page() {
 
                 {/* Success or error alert message */}
                 {successMessage && (
-                    <Alert icon={<CheckIcon fontSize="inherit" />} severity="success" className="mt-4">
-                      {successMessage}
-                    </Alert>
+                  <Alert icon={<CheckIcon fontSize="inherit" />} severity="success" className="mt-4">
+                    {successMessage}
+                  </Alert>
                 )}
 
                 {errorMessage && (

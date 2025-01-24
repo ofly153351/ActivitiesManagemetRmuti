@@ -2,38 +2,43 @@ import { NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
 
 export function middleware(request) {
-    // ดึงค่า access_token จาก cookies
     const accessToken = request.cookies.get('token');
     const homeUrl = new URL('/Home', request.url).href;
     
-    let role = null
+    let role = null;
+    
+    // ตรวจสอบ token
     if (accessToken) {
         try {
             // แยกค่า payload จาก JWT
-            const decoded = jwt.decode(accessToken.value)
-            // console.log(decoded);
-            
-            // ตรวจสอบ role จาก payload
-            role = decoded?.role
-            // console.log('Role:', role )
+            const decoded = jwt.decode(accessToken.value);
+            role = decoded?.role;
         } catch (error) {
-            console.error('Error decoding JWT:', error)
+            console.error('Error decoding JWT:', error);
         }
-    } else {
-        console.log('No access_token found')
     }
+    
+    // ตรวจสอบเส้นทาง '/Admin' และเส้นทางอื่นๆ
+    if (request.nextUrl.pathname.startsWith('/Admin')) {
+        if (!role || role !== 'admin') {
+            console.log('User does not have the correct role or no token found, redirecting to unauthorized');
+            return NextResponse.redirect(homeUrl); // เปลี่ยนเส้นทางไปที่หน้า Home
+        }
+    }
+    
 
-    if (request.nextUrl.pathname.startsWith('/teacher')) {
-        if (role !== 'teacher' || role === null ) {
-            console.log('User role is not teacher or no token found, redirecting to unauthorized');
+    // ตรวจสอบเส้นทาง '/home'
+    if (request.nextUrl.pathname.startsWith('/home')) {
+        if (role === null) {
+            console.log('User role is null, redirecting to unauthorized');
             return NextResponse.redirect(homeUrl);
         }
     }
+
     // สร้าง response
-    const response = NextResponse.next()
-    return response
+    return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/Home' , '/Admin' , '/Admin/Userlist' , '/Admin/Facultylist'],
+    matcher: ['/Home', '/Home/Infomation', '/Admin', '/Admin/Userlist', '/Admin/Facultylist', '/teacher'],
 }

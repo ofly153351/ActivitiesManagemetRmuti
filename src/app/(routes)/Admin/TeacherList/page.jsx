@@ -1,24 +1,21 @@
 'use client'
-import React, { use, useEffect, useState } from 'react'
-import Nav from '@/app/Components/Nav'
 import CustomTable from '@/app/Components/CustomTable'
-import { getAllUser } from '@/app/Utils/api'
 import Loading from '@/app/Components/Loading'
-import useStore from '@/store/useStore'
+import Nav from '@/app/Components/Nav'
+import { getAllteacher } from '@/app/Utils/api'
+import React, { useEffect, useState } from 'react'
 
 function page() {
     const title = 'รายชื่อนักศึกษาในระบบ'
     const [allUser, setAlluser] = useState([])
     const [loading, setLoading] = useState(true)
-    const { faculties } = useStore()
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getAllUser()
+                const response = await getAllteacher()
                 console.log('ข้อมูลที่ได้:', response.data);
                 setAlluser(response.data)
-
 
             } catch (error) {
                 console.log('error:', error.message);
@@ -32,30 +29,17 @@ function page() {
     }, [])
 
 
-
-    if (allUser.length > 0 && allUser[0]?.branch?.faculty_id !== undefined) {
-        console.log(allUser[0].branch.faculty_id); // จะพิมพ์ 5
-    } else {
-        console.log("ข้อมูลไม่ครบถ้วนหรือว่างเปล่า");
-    }
+    console.log(allUser);
 
     const columns = [
-        { headerName: 'รหัสนักศึกษา', field: 'code' },
+        { headerName: 'รหัส', field: 'code' },
         // {headerName : 'คำนำหน้า' , field: 'title_name'},
         { headerName: 'ชื่อจริง', field: 'first_name' },
         { headerName: 'นามสกุล', field: 'last_name' },
-        //     {headerName : 'เบอร์โทร' , field: 'phone'},
-        //     {headerName : 'ปีการศึกษา' , field: 'years'},
-        {
-            headerName: 'คณะ',
-            field: 'faculty_name',
-        },
-        { headerName: 'สาขา', field: 'branch_name' },
+        { headerName: 'เบอร์โทร', field: 'phone' },
+
     ]
     return (
-
-
-
         <>
             <div className='min-h-screen bg-gray-50' >
                 <Nav />

@@ -7,16 +7,18 @@ import { colorsCode } from '@/app/Utils/color';
 import CustomTextfield from '@/app/Components/Textfield';
 import Customselect from '@/app/Components/Customselect';
 import width from '@/app/Utils/textfieldWidth';
-import useStore from '@/store/useStore';
+import { useStore } from '@/store/useStore';
 import BasicButtons from '@/app/Components/BasicButtons';
 import { getBranches, getFaculties, updateTeacher, updateUser } from '@/app/Utils/api';
 import Loading from '@/app/Components/Loading';
 import { handleValidationThai, handleCodeValidation, handlePhoneValidation } from '@/app/Utils/validation';
 import { SuccessAlert } from '@/app/Components/Alert';
+import { useRouter } from 'next/navigation';
 
 
 function Page() {
 
+    const router = useRouter()
     const { user } = useStore();
     const [selectedTitle, setSelectedTitle] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -50,6 +52,9 @@ function Page() {
                 console.error('Error fetching branches:', error);
             } finally {
                 setIsLoading(false); // หยุดแสดง Loading
+                // if(!user){
+                //     router.push('/Home')                    
+                // }
             }
         };
 
@@ -115,6 +120,8 @@ function Page() {
                 console.warn(`Unhandled field: ${field}`);
         }
     };
+
+
 
     const handleSubmit = async () => {
         // ตรวจสอบ Validation ก่อน

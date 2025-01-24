@@ -1,12 +1,14 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
-import { EditBranchbyID, editFacultybyID, getFaculties } from '../Utils/api';
+import ErrorIcon from '@mui/icons-material/Error';
+import { EditBranchbyID, editEventById, editFacultybyID, getFaculties } from '../Utils/api';
 import Customselect from './Customselect';
 import { usePathname } from 'next/navigation';
+import { useStore } from '@/store/useStore';
 
 const style = {
     position: 'absolute',
@@ -20,162 +22,114 @@ const style = {
     p: 4,
 };
 
-export default function EditPopup({ selectedEditItem, closeModal, onSave, fields, }) {
-    const open = !!selectedEditItem;
+export default function EditPopup({ selectedEditItem, closeModal, onSave, fields }) {
     const [updated, setUpdated] = useState(false);
+    const [error, setError] = useState(false); // เพิ่มสถานะสำหรับ error
     const [formData, setFormData] = useState({});
     const [facultiesList, setFacultiesList] = useState([]);
     const path = usePathname();
+    const { user } = useStore();
 
     useEffect(() => {
         if (selectedEditItem) {
             setFormData(selectedEditItem);
         }
-        try {
-            const FetchData = async () => {
-                const respones = await getFaculties();
-                setFacultiesList(respones.data);
+
+        if (path === '/Admin/Branchlist') {
+            const fetchFaculties = async () => {
+                try {
+                    const response = await getFaculties();
+                    setFacultiesList(response.data);
+                } catch (error) {
+                    console.error('Error fetching faculties:', error);
+                }
             };
-            FetchData();
-        } catch (error) {
-            console.log(error);
+            fetchFaculties();
         }
-    }, [selectedEditItem]);
+    }, [selectedEditItem, path]);
 
-    const handleSubmit = (event) => {
-        event.preventDefault(); // หยุดการส่งฟอร์ม
+    const handleSubmit = async (event) => {
+        event.preventDefault();
 
-        const updatedData = { ...formData }; // Copy ข้อมูลจาก formData
+        try {
+            const updatedData = { ...formData };
 
-        if (path === '/Admin/Facultylist') {
-            const payload = {
-                faculty_code: updatedData.faculty_code,
-                faculty_name: updatedData.faculty_name,
-            };
-            editFacultybyID(Number(updatedData.faculty_id), payload);
+            if (path === '/Admin/Facultylist') {
+                await editFacultybyID(Number(updatedData.faculty_id), {
+                    faculty_code: updatedData.faculty_code,
+                    faculty_name: updatedData.faculty_name,
+                });
+            } else if (path === '/Admin/Branchlist') {
+                await EditBranchbyID(updatedData.faculty_id, {
+                    faculty_id: updatedData.faculty_id,
+                    branch_code: updatedData.branch_code,
+                    branch_name: updatedData.branch_name,
+                });
+            } else if (path === '/Admin/MyEvent') {
+                const formattedStartDate = `${updatedData.start_date} ${updatedData.start_time}`;
+                await editEventById(user.role, Number(updatedData.event_id), {
+                    event_name: updatedData.event_name,
+                    start_date: formattedStartDate,
+                    free_space: updatedData.free_space,
+                    limit: updatedData.limit,
+                    location: updatedData.location,
+                });
+            }
+
+            onSave(updatedData);
             setUpdated(true);
-            onSave(updatedData); // เรียกฟังก์ชัน onSave เพื่อนำข้อมูลที่แก้ไขส่งไปยัง CustomTable
+            setError(false); // ปิด error
             setTimeout(() => setUpdated(false), 2000);
             closeModal();
-        } else if (path === '/Admin/Branchlist') {
-            const payload = {
-                faculty_id: updatedData.faculty_id,
-                branch_code: updatedData.branch_code,
-                branch_name: updatedData.branch_name,
-            };
-            EditBranchbyID(payload.faculty_id, payload);
-            onSave(updatedData); // เรียกฟังก์ชัน onSave เพื่อนำข้อมูลที่แก้ไขส่งไปยัง CustomTable
-            closeModal();
-            setUpdated(true);
-            setTimeout(() => setUpdated(false), 2000);
+        } catch (error) {
+            console.error('Error updating data:', error);
+            setUpdated(false);
+            setError(true); // แสดง error
+            setTimeout(() => setError(false), 2000);
         }
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-        // ตรวจสอบให้ "รหัสคณะ" เป็นตัวเลข และมีความยาวไม่เกิน 4 ตัว
-        if (name === 'faculty_code' && !isNaN(value) && value.length <= 4 ||
-            name === 'branch_code' && !isNaN(value) && value.length <= 4) {
-            setFormData((prev) => ({
-                ...prev,
-                [name]: value,
-            }));
-        } else if (name !== 'faculty_code' || name === 'branch_code') {
-            // ถ้าไม่ใช่ "รหัสคณะ" ให้บันทึกข้อมูลปกติ
-            setFormData((prev) => ({
-                ...prev,
-                [name]: value,
-            }));
-        }
-    };
-
-    const handleClose = () => {
-        closeModal();
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     return (
         <Modal
-            open={open} // ใช้ open เพื่อควบคุมสถานะ
-            onClose={handleClose}
+            open={!!selectedEditItem}
+            onClose={closeModal}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
         >
             <Box sx={style}>
                 <form onSubmit={handleSubmit}>
-                    <div className='flex justify-center items-center'>
-                        <span className='font-kanit text-xl text-center'>
-                            แก้ไขข้อมูล
-                        </span>
+                    <div className="flex justify-center items-center">
+                        <span className="font-kanit text-xl text-center">แก้ไขข้อมูล</span>
                     </div>
-                    {path === '/Admin/Branchlist' ? (
-                        <div id='info' className='grid justify-center items-center' >
-                            <div className='my-2' >
-                                <Customselect
-                                    margin={0}
-                                    width="100%"
-                                    high="50px"
-                                    label="คณะที่ต้องการ"
-                                    value={formData.faculty?.faculty_name || ''}
-                                    onChange={(newValue) => {
-                                        const faculty = facultiesList.find((option) => option.faculty_name === newValue);
-                                        if (faculty) {
-                                            setFormData((prev) => ({
-                                                ...prev,
-                                                faculty_id: faculty.faculty_id,
-                                            }));
-                                        }
-                                    }}
-                                    options={facultiesList}
-                                    field="faculty_name" />
+                    <div className="grid gap-4">
+                        {fields.map((field) => (
+                            <div key={field.name}>
+                                <label>{field.label}</label>
+                                <input
+                                    type="text"
+                                    placeholder={field.placeholder}
+                                    value={formData[field.name] || ''}
+                                    onChange={handleChange}
+                                    className="w-full border p-2 mt-2"
+                                    name={field.name}
+                                />
                             </div>
-
-                            {
-                                fields.map((field) => (
-                                    <div key={field.name}>
-                                        <label>{field.label}</label>
-                                        <input
-                                            type="text"
-                                            placeholder={field.placeholder}
-                                            value={formData[field.name] || ''}
-                                            onChange={handleChange}
-                                            className="w-full border p-2 mt-2"
-                                            name={field.name}
-                                        />
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    ) : (
-                        <div id='info'>
-                            {
-                                fields.map((field) => (
-                                    <div key={field.name}>
-                                        <label>{field.label}</label>
-                                        <input
-                                            type="text"
-                                            placeholder={field.placeholder}
-                                            value={formData[field.name] || ''}
-                                            onChange={handleChange}
-                                            className="w-full border p-2 mt-2"
-                                            name={field.name}
-                                        />
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    )}
-                    <div className='flex justify-end items-center mr-10 mt-4'>
+                        ))}
+                    </div>
+                    <div className="flex justify-end items-center mt-4">
                         <button
                             type="submit"
-                            className=' px-4 py-2 rounded-lg font-kanit bg-blue-400 text-white hover:bg-blue-600 duration-100'
+                            className="px-4 py-2 rounded-lg font-kanit bg-blue-400 text-white hover:bg-blue-600 duration-100"
                         >
                             แก้ไข
                         </button>
                     </div>
                 </form>
-
-                {/* Show Alert in Bottom Right Corner */}
                 {updated && (
                     <Alert
                         icon={<CheckIcon fontSize="inherit" />}
@@ -185,12 +139,25 @@ export default function EditPopup({ selectedEditItem, closeModal, onSave, fields
                             bottom: 20,
                             right: 20,
                             zIndex: 9999,
-                            mt: 0,
-                            mb: 0,
                             width: 'auto',
                         }}
                     >
                         ข้อมูลถูกอัปเดตสำเร็จ
+                    </Alert>
+                )}
+                {error && (
+                    <Alert
+                        icon={<ErrorIcon fontSize="inherit" />}
+                        severity="error"
+                        sx={{
+                            position: 'fixed',
+                            bottom: 20,
+                            right: 20,
+                            zIndex: 9999,
+                            width: 'auto',
+                        }}
+                    >
+                        การอัปเดตข้อมูลล้มเหลว
                     </Alert>
                 )}
             </Box>

@@ -1,60 +1,23 @@
-'use client'
 import React, { useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import Button from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import useStore from '@/store/useStore';
-import { getUserbyClaim } from '../Utils/api';
-import { jwtDecodeToken } from '../Utils/function';
+import { Button, Menu, MenuItem } from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Cookies from 'js-cookie';
+import { useStore } from '@/store/useStore';
 
-function Profilemanu() {
-    const { user, setUser } = useStore();
-    const [userRole, setUserRole] = useState('');
-    const [loading, setLoading] = useState(true); // เพิ่มสถานะการโหลด
-    const router = useRouter();
+function ProfileMenu() {
+    const { user, clearAll, userRole, setUser, setUserRole } = useStore();
+
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
+    const router = useRouter();
 
+    // เช็คว่า user และ userRole มีการเปลี่ยนแปลงจริงก่อน
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = Cookies.get('token');
-                if (!token) {
-                    setLoading(false); // ข้อมูลโหลดเสร็จ แต่ไม่มี Token
-                    return;
-                }
-
-                const jwtToken = jwtDecodeToken(token);
-                if (jwtToken) setUserRole(jwtToken);
-
-                const [userResponse] = await Promise.all([
-                    getUserbyClaim(),
-                ]);
-
-                setUser({
-                    role: jwtToken?.role || '',
-                    user_id: userResponse.data.user_id,
-                    title_name: userResponse.data.title_name,
-                    first_name: userResponse.data.first_name,
-                    last_name: userResponse.data.last_name,
-                    phone: userResponse.data.phone,
-                    code: userResponse.data.code,
-                    branch: userResponse.data.branch || '',
-                    email: userResponse.data.email || '',
-                    year: userResponse.data.year || '',
-                });
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            } finally {
-                setLoading(false); // ข้อมูลโหลดเสร็จ
-            }
-        };
-
-        fetchData();
-    }, []);
+        if (user && userRole) {
+            console.log(user); // เมื่อ user และ userRole มีการเปลี่ยนแปลง จะแสดงผลข้อมูล
+        }
+    }, [user, userRole]);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -67,81 +30,95 @@ function Profilemanu() {
     };
 
     const logOut = () => {
-        setUser(null);
-        setUserRole(null);
+        if (user || userRole) {
+            clearAll(null);
+            // รีเซ็ตข้อมูลผู้ใช้ใน Zustand store        // รีเซ็ตข้อมูล role ใน Zustand store
+        }
+        Cookies.remove('token');    // ลบ token ออกจาก cookies
+        localStorage.removeItem('user');  // ลบข้อมูล user ถ้าเก็บใน localStorage
+        sessionStorage.removeItem('user'); // ลบข้อมูล user ถ้าเก็บใน sessionStorage
+        router.push('/Login');        // นำทางไปที่หน้า login
     };
 
     const handleMenuItemClick = (route) => {
         if (route === '/logout') {
-            Cookies.remove('token');
             logOut();
-            router.push('/Login');
         } else {
             router.push(route);
         }
         handleClose();
     };
 
-    if (loading) {
-        // ข้อมูลกำลังโหลด
+    // หากยังไม่มี user ให้แสดงสถานะกำลังโหลด
+    if (!user) {
         return (
             <div className="flex justify-center items-center h-screen">
-                <span className="text-gray-500 text-lg">กำลังโหลดข้อมูล...</span>
+                <span className="text-gray-500 text-lg font-kanit">กำลังโหลดข้อมูล...</span>
             </div>
         );
     }
 
     return (
-        <div className="flex items-center gap-2 ">
-            <div className='relative flex justify-center items-center rounded-full border-[1px] border-gray '>
-                {user && (
-                    <span className="text-gray-500 px-3 py-1 text-md font-kanit hover:underline w-full">
-                        userID: {user.user_id} Role: ({userRole.role})
-                    </span>
-                )}
-                <div className='ml-1 rounded-full flex items-center justify-center '>
+        <div className="flex items-center gap-2">
+            <div className="relative flex justify-center items-center rounded-full border border-gray">
+                <span className="text-gray-500 px-3 py-1 text-md font-kanit hover:underline">
+                    {user.first_name} {user.last_name} ({userRole?.role || 'ไม่มีข้อมูล'})
+                </span>
+                <div className="ml-1 rounded-full flex items-center justify-center">
                     <Button
-                        id="basic-button"
-                        aria-controls={open ? 'basic-menu' : undefined}
+                        id="profile-menu-button"
+                        aria-controls={open ? 'profile-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                         onClick={handleClick}
-                        style={{ borderRadius: '100px' }}
-                        sx={{
-                            "&:hover": {
-                                background: 'none'
-                            }
-                        }}
+                        className="rounded-full hover:bg-transparent"
                     >
                         <AccountCircleIcon fontSize="large" />
                     </Button>
                 </div>
                 <Menu
-                    id="basic-menu"
+                    id="profile-menu"
                     anchorEl={anchorEl}
                     open={open}
                     onClose={handleClose}
                     MenuListProps={{
-                        'aria-labelledby': 'basic-button',
+                        'aria-labelledby': 'profile-menu-button',
                     }}
                 >
                     {userRole ? (
-                        userRole.role === 'teacher' ? (
-                            <div className='font-kanit'>
-                                <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/Admin')}>Dashboard</MenuItem>
-                                <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/Home/Infomation')}>แก้ไขข้อมูลส่วนตัว</MenuItem>
-                                <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/logout')}>Logout</MenuItem>
+                        ['teacher', 'admin'].includes(userRole.role) ? (
+                            <div className="font-kanit">
+                                <MenuItem onClick={() => handleMenuItemClick('/Admin')}>
+                                    Dashboard
+                                </MenuItem>
+                                <MenuItem onClick={() => handleMenuItemClick('/Infomation')}>
+                                    แก้ไขข้อมูลส่วนตัว
+                                </MenuItem>
+                                <MenuItem onClick={() => handleMenuItemClick('/logout')}>
+                                    Logout
+                                </MenuItem>
                             </div>
                         ) : userRole.role === 'student' ? (
-                            <div>
-                                <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/Home/Infomation')}>แก้ไขข้อมูลส่วนตัว</MenuItem>
-                                <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/logout')}>Logout</MenuItem>
+                            <div className="font-kanit">
+                                <MenuItem onClick={() => handleMenuItemClick('/Infomation')}>
+                                    แก้ไขข้อมูลส่วนตัว
+                                </MenuItem>
+                                <MenuItem onClick={() => handleMenuItemClick('/Information/MyEvent')}>
+                                    กิจกรรมของฉัน
+                                </MenuItem>
+                                <MenuItem onClick={() => handleMenuItemClick('/logout')}>
+                                    Logout
+                                </MenuItem>
                             </div>
                         ) : null
                     ) : (
-                        <div className='font-kanit'>
-                            <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/Register')}>สมัครสมาชิก</MenuItem>
-                            <MenuItem style={{ fontFamily: 'kanit' }} onClick={() => handleMenuItemClick('/Login')}>เข้าสู่ระบบ</MenuItem>
+                        <div className="font-kanit">
+                            <MenuItem onClick={() => handleMenuItemClick('/Register')}>
+                                สมัครสมาชิก
+                            </MenuItem>
+                            <MenuItem onClick={() => handleMenuItemClick('/Login')}>
+                                เข้าสู่ระบบ
+                            </MenuItem>
                         </div>
                     )}
                 </Menu>
@@ -150,4 +127,4 @@ function Profilemanu() {
     );
 }
 
-export default Profilemanu;
+export default ProfileMenu;

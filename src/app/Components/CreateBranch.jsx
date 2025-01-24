@@ -15,7 +15,7 @@ import { creatBranch, getFaculties } from '../Utils/api';
 import { checkValidationfacuiltiesAndbraches, handleKeyDown } from '../Utils/onkeyDown';
 import { ErrorAlert, SuccessAlert } from './Alert';
 import { fontFamily } from '../Utils/font';
-import useStore from '@/store/useStore';
+import { useStore } from '@/store/useStore';
 
 function CreatBranch({ openDialog, handleCloseDialog }) {
     const theme = useTheme();
@@ -28,22 +28,25 @@ function CreatBranch({ openDialog, handleCloseDialog }) {
     const [branchID, setBranchID] = useState('');
     const [alertMessage, setAlertMessage] = useState(null); // ข้อความ Alert
     const [alertType, setAlertType] = useState("success"); // ประเภท Alert
-    const {  setFaculties } = useStore();
+    const { faculties, setFaculties } = useStore();
+
 
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const response = await getFaculties();
-                setFacultiesList(response.data);
-                setFaculties(response.data);
-            } catch (error) {
-                console.error("Error fetching faculties:", error);
+            // ตรวจสอบว่า faculties เป็น null หรือ length <= 0
+            if (!faculties || faculties.length <= 0) {
+                try {
+                    const response = await getFaculties();
+                    setFacultiesList(response.data);
+                    setFaculties(response.data);
+                } catch (error) {
+                    console.error("Error fetching faculties:", error);
+                }
             }
-        };
+        }
         fetchData();
-    }, []);
-
+    }, [faculties]);  // ค่าของ faculties จะเป็น dependency ที่ตรวจสอบเพื่อทำให้ useEffect ทำงานใหม่
 
 
     const showAlert = (message, type = "success") => {

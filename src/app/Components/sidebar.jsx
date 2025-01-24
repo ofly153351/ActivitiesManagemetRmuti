@@ -22,8 +22,12 @@ import CreatBranch from './CreateBranch';
 import AddIcon from '@mui/icons-material/Add';
 import ListIcon from '@mui/icons-material/List';
 import { ErrorAlert, SuccessAlert } from './Alert';
+import { useStore } from '@/store/useStore';
+import { name } from 'dayjs/locale/th';
 
 export default function Sidebar() {
+    const { user } = useStore()
+
     const [open, setOpen] = useState(false);
     const [submenuBranch, setSubmenuBranch] = useState(false);
     const [submenuFaculty, setSubmenuFaculty] = useState(false);
@@ -32,6 +36,14 @@ export default function Sidebar() {
     const [openCreatBranchDialog, setOpenCreatBranchDialog] = useState(false);
     const [alertMessage, setAlertMessage] = useState(null); // ข้อความ Alert
     const [alertType, setAlertType] = useState("success"); // ประเภท Alert
+    const [submenuUser, setSubmenuUser] = useState(false)
+    const [submenuEvent, setSubmenuEvent] = useState(false)
+
+    // console.log(user);
+
+    if (!user || !user.role) {
+        return null; // หรือแสดง Loading Indicator เช่น <CircularProgress />
+    }
 
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
@@ -70,6 +82,14 @@ export default function Sidebar() {
         setSubmenuBranch((prev) => !prev);
     };
 
+    const toggleSubmenuUser = () => {
+        setSubmenuUser((prev) => !prev)
+    }
+
+    const toggleSubmenuEvent = () => {
+        setSubmenuEvent((prev) => !prev);
+    };
+
     const menuPath = [
         {
             name: 'หน้าแรก',
@@ -77,54 +97,86 @@ export default function Sidebar() {
             icon: <HomeIcon />,
         },
         {
-            name: 'แสดงรายชื่อนักศึกษา',
-            link: '/Admin/Userlist',
-            icon: <PeopleIcon />,
-        },
-        {
-            name: 'กิจกรรมที่เปิดลงทะเบียน',
-            link: '/Admin/Eventlist',
-            icon: <EventIcon />,
-        },
-        {
-            name: 'สร้างกิจกรรม',
-            icon: <EditIcon />,
-            action: () => handleDialogToggle('createEvent', true),
-        },
-        {
-            name: 'จัดการคณะ',
-            icon: submenuFaculty ? <ExpandLess /> : <ExpandMore />,
-            action: toggleSubmenuFaculty,
+            name: 'รายชื่อ นักศึกษา/ครู',
+            icon: submenuUser ? <ExpandLess /> : <ExpandMore />,
+            action: toggleSubmenuUser,
             Children: [
                 {
-                    name: 'เรียกดูรายชื่อคณะ',
-                    link: '/Admin/Facultylist',
+                    name: 'ดูรายชื่อนักศึกษา',
+                    link: '/Admin/Userlist',
                     icon: <ListIcon sx={{ color: 'gray' }} />,
                 },
                 {
-                    name: 'เพิ่มรายชื่อคณะ',
-                    action: () => handleDialogToggle('createFaculty', true),
-                    icon: <AddIcon sx={{ color: 'gray' }} />,
+                    name: 'ดูรายชื่ออาจารย์',
+                    link: '/Admin/TeacherList',
+                    icon: <ListIcon sx={{ color: 'gray' }} />,
                 },
             ],
         },
         {
-            name: 'จัดการสาขา',
-            icon: submenuBranch ? <ExpandLess /> : <ExpandMore />,
-            action: toggleSubmenuBranch,
+            name: 'เกี่ยวกับกิจกรรม',
+            icon: submenuEvent ? <ExpandLess /> : <ExpandMore />,
+            action: toggleSubmenuEvent,
             Children: [
                 {
-                    name: 'เรียกดูรายชื่อสาขา',
-                    link: '/Admin/Branchlist',
+                    name: 'สร้างกิจกรรม',
+                    icon: <EditIcon />,
+                    action: () => handleDialogToggle('createEvent', true),
+                },
+                {
+                    name: 'ดูรายชื่อกิจกรรม',
+                    link: '/Admin/EventList',
                     icon: <ListIcon sx={{ color: 'gray' }} />,
                 },
                 {
-                    name: 'เพิ่มรายชื่อสาขา',
-                    action: () => handleDialogToggle('createBranch', true),
-                    icon: <AddIcon sx={{ color: 'gray' }} />,
-                },
+                    name: 'กิจกรรมของฉัน',
+                    link: '/Admin/MyEvent',
+                    icon: <ListIcon sx={{ color: 'gray' }} />,
+
+                }
             ],
         },
+
+        // เพิ่มเฉพาะถ้า role ไม่ใช่ teacher
+        ...(user.role === 'admin'
+            ? [
+                {
+                    name: 'จัดการคณะ',
+                    icon: submenuFaculty ? <ExpandLess /> : <ExpandMore />,
+                    action: toggleSubmenuFaculty,
+                    Children: [
+                        {
+                            name: 'เรียกดูรายชื่อคณะ',
+                            link: '/Admin/Facultylist',
+                            icon: <ListIcon sx={{ color: 'gray' }} />,
+                        },
+                        {
+                            name: 'เพิ่มรายชื่อคณะ',
+                            action: () => handleDialogToggle('createFaculty', true),
+                            icon: <AddIcon sx={{ color: 'gray' }} />,
+                        },
+                    ],
+                },
+                {
+                    name: 'จัดการสาขา',
+                    icon: submenuBranch ? <ExpandLess /> : <ExpandMore />,
+                    action: toggleSubmenuBranch,
+                    Children: [
+                        {
+                            name: 'เรียกดูรายชื่อสาขา',
+                            link: '/Admin/Branchlist',
+                            icon: <ListIcon sx={{ color: 'gray' }} />,
+                        },
+                        {
+                            name: 'เพิ่มรายชื่อสาขา',
+                            action: () => handleDialogToggle('createBranch', true),
+                            icon: <AddIcon sx={{ color: 'gray' }} />,
+                        },
+                    ],
+                },
+            ]
+            : []
+        ),
     ];
 
     const DrawerList = (
@@ -138,7 +190,7 @@ export default function Sidebar() {
                         <ListItem disablePadding>
                             {item.link ? (
                                 <Link className='w-64' href={item.link} passHref>
-                                    <ListItemButton component="a" onClick={toggleDrawer(false)}>
+                                    <ListItemButton component="div" onClick={toggleDrawer(false)}>
                                         <ListItemIcon>{item.icon}</ListItemIcon>
                                         <ListItemText primary={item.name} />
                                     </ListItemButton>
@@ -150,42 +202,84 @@ export default function Sidebar() {
                                 </ListItemButton>
                             )}
                         </ListItem>
-                        {item.Children && item.name === 'จัดการคณะ' && submenuFaculty && (
+                        {item.Children && item.name === 'รายชื่อ นักศึกษา/ครู' && submenuUser && (
                             <List component="div" disablePadding>
                                 {item.Children.map((subItem, subIndex) => (
                                     <ListItem key={subIndex} disablePadding>
                                         {subItem.link ? (
-                                            <Link href={subItem.link} passHref>
-                                                <ListItemButton component="a">
+                                            <Link className='w-64' href={subItem.link} passHref>
+                                                <ListItemButton sx={{ width: 'full' }} omponent="a">
                                                     <ListItemIcon sx={{ pl: 4 }}>{subItem.icon}</ListItemIcon>
-                                                    <ListItemText sx={{ pl: 2 }} primary={subItem.name} />
+                                                    <ListItemText sx={{ pl: 4 }} primary={subItem.name} />
                                                 </ListItemButton>
                                             </Link>
                                         ) : (
                                             <ListItemButton onClick={subItem.action}>
                                                 <ListItemIcon sx={{ pl: 4 }}>{subItem.icon}</ListItemIcon>
-                                                <ListItemText sx={{ pl: 2 }} primary={subItem.name} />
+                                                <ListItemText sx={{ pl: 4 }} primary={subItem.name} />
                                             </ListItemButton>
                                         )}
                                     </ListItem>
                                 ))}
                             </List>
                         )}
-                        {item.Children && item.name === 'จัดการสาขา' && submenuBranch && (
+                        {item.Children && item.name === 'เกี่ยวกับกิจกรรม' && submenuEvent && (
                             <List component="div" disablePadding>
                                 {item.Children.map((subItem, subIndex) => (
                                     <ListItem key={subIndex} disablePadding>
                                         {subItem.link ? (
-                                            <Link href={subItem.link} passHref>
-                                                <ListItemButton component="a">
+                                            <Link className='w-64' href={subItem.link} passHref>
+                                                <ListItemButton sx={{ width: 'full' }} omponent="a">
                                                     <ListItemIcon sx={{ pl: 4 }}>{subItem.icon}</ListItemIcon>
-                                                    <ListItemText sx={{ pl: 2 }} primary={subItem.name} />
+                                                    <ListItemText sx={{ pl: 4 }} primary={subItem.name} />
                                                 </ListItemButton>
                                             </Link>
                                         ) : (
                                             <ListItemButton onClick={subItem.action}>
                                                 <ListItemIcon sx={{ pl: 4 }}>{subItem.icon}</ListItemIcon>
-                                                <ListItemText sx={{ pl: 2 }} primary={subItem.name} />
+                                                <ListItemText sx={{ pl: 4 }} primary={subItem.name} />
+                                            </ListItemButton>
+                                        )}
+                                    </ListItem>
+                                ))}
+                            </List>
+                        )}
+                        {item.Children && item.name === 'จัดการคณะ' && submenuFaculty && user.role === 'admin' && (
+                            <List component="div" disablePadding>
+                                {item.Children.map((subItem, subIndex) => (
+                                    <ListItem key={subIndex} disablePadding>
+                                        {subItem.link ? (
+                                            <Link className='w-64' href={subItem.link} passHref>
+                                                <ListItemButton component="div">
+                                                    <ListItemIcon sx={{ pl: 4 }}>{subItem.icon}</ListItemIcon>
+                                                    <ListItemText sx={{ pl: 4 }} primary={subItem.name} />
+                                                </ListItemButton>
+                                            </Link>
+                                        ) : (
+                                            <ListItemButton onClick={subItem.action}>
+                                                <ListItemIcon sx={{ pl: 4 }}>{subItem.icon}</ListItemIcon>
+                                                <ListItemText sx={{ pl: 4 }} primary={subItem.name} />
+                                            </ListItemButton>
+                                        )}
+                                    </ListItem>
+                                ))}
+                            </List>
+                        )}
+                        {item.Children && item.name === 'จัดการสาขา' && submenuBranch && user.role === 'admin' && (
+                            <List component="div" disablePadding>
+                                {item.Children.map((subItem, subIndex) => (
+                                    <ListItem key={subIndex} disablePadding>
+                                        {subItem.link ? (
+                                            <Link className='w-64' href={subItem.link} passHref>
+                                                <ListItemButton component="div">
+                                                    <ListItemIcon sx={{ pl: 4 }}>{subItem.icon}</ListItemIcon>
+                                                    <ListItemText sx={{ pl: 4 }} primary={subItem.name} />
+                                                </ListItemButton>
+                                            </Link>
+                                        ) : (
+                                            <ListItemButton onClick={subItem.action}>
+                                                <ListItemIcon sx={{ pl: 4 }}>{subItem.icon}</ListItemIcon>
+                                                <ListItemText sx={{ pl: 4 }} primary={subItem.name} />
                                             </ListItemButton>
                                         )}
                                     </ListItem>
@@ -229,8 +323,12 @@ export default function Sidebar() {
                     console.log(newFaculty);
                 }}
             />
+            {
+                openCreatBranchDialog && (
+                    <CreatBranch openDialog={openCreatBranchDialog} handleCloseDialog={() => handleDialogToggle('createBranch', false)} />
 
-            <CreatBranch openDialog={openCreatBranchDialog} handleCloseDialog={() => handleDialogToggle('createBranch', false)} />
+                )
+            }
         </div>
     );
 }

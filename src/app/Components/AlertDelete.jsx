@@ -7,9 +7,14 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { fontFamily } from '../Utils/font';
 
+
 function AlertDelete({ isOpen, onClose, onAgree, label }) {
 
+
     return (
+
+
+
         <Dialog
             open={isOpen}
             onClose={onClose}
