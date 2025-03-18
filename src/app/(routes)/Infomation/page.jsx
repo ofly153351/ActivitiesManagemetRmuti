@@ -210,6 +210,7 @@ function Page() {
         lastName: 'นามสกุล',
         email: 'Email',
         code: 'รหัสนักศึกษา',
+        teacherCode: 'รหัสอาจารย์',
         title: 'คำนำหน้า',
         phone: 'เบอร์โทร',
         branch: 'สาขา',
@@ -237,16 +238,16 @@ function Page() {
     return (
         <div>
             <Nav />
-            <div className="w-screen flex justify-center items-center">
-                <div className="mx-40 mt-20 w-fit bg-[#f5f5f5] rounded-xl shadow-md">
+            <div className="min-h-screen w-screen flex justify-center items-center">
+                <div className=" w-fit bg-[#f5f5f5] rounded-xl shadow-md">
                     <div className="flex p-4 justify-start items-center gap-4">
                         <PermIdentityIcon sx={{ fontSize: 64, color: colorsCode.blue }} />
                         <h1 className="text-2xl">แก้ไขข้อมูลส่วนตัว</h1>
                     </div>
-                    <div className="p-4">
+                    <div className="p-4 ">
                         {user?.role === 'student' ? (
                             <div className="">
-                                <div className="flex">
+                                <div className="grid">
                                     <Customselect
                                         width={width.sm}
                                         label={label.title}
@@ -329,9 +330,9 @@ function Page() {
                             </div>
                         ) : user?.role === 'teacher' || 'admin' ? (
                             <div className="">
-                                <div className="flex">
+                                <div className="grid">
                                     <Customselect
-                                        width={width.sm}
+                                        width={width.md}
                                         label={label.title}
                                         field="label"
                                         value={selectedTitle}
@@ -359,10 +360,10 @@ function Page() {
                                         )}
                                     </div>
                                 </div>
-                                <div className="flex">
+                                <div className="grid">
                                     <div className='grid' >
                                         <CustomTextfield
-                                            label={label.code}
+                                            label={label.teacherCode}
                                             value={code}
                                             onChange={(e) => handleCodeValidation(e.target.value, setCode, setValidationMessage)}
                                         />

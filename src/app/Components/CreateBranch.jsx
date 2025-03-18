@@ -17,37 +17,19 @@ import { ErrorAlert, SuccessAlert } from './Alert';
 import { fontFamily } from '../Utils/font';
 import { useStore } from '@/store/useStore';
 
-function CreatBranch({ openDialog, handleCloseDialog }) {
+function CreatBranch({ openDialog, handleCloseDialog, facultiesList = [] }) {
+
+    
+
     const theme = useTheme();
     const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));  // Desktop
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'lg')); // iPad
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));  // iPhone
     const [selectedFaculties, setSelectedFaculties] = useState('');
-    const [facultiesList, setFacultiesList] = useState([]);
     const [branchName, setBranchName] = useState('');
     const [branchID, setBranchID] = useState('');
     const [alertMessage, setAlertMessage] = useState(null); // ข้อความ Alert
     const [alertType, setAlertType] = useState("success"); // ประเภท Alert
-    const { faculties, setFaculties } = useStore();
-
-
-
-    useEffect(() => {
-        const fetchData = async () => {
-            // ตรวจสอบว่า faculties เป็น null หรือ length <= 0
-            if (!faculties || faculties.length <= 0) {
-                try {
-                    const response = await getFaculties();
-                    setFacultiesList(response.data);
-                    setFaculties(response.data);
-                } catch (error) {
-                    console.error("Error fetching faculties:", error);
-                }
-            }
-        }
-        fetchData();
-    }, [faculties]);  // ค่าของ faculties จะเป็น dependency ที่ตรวจสอบเพื่อทำให้ useEffect ทำงานใหม่
-
 
     const showAlert = (message, type = "success") => {
         setAlertMessage(message);
@@ -97,12 +79,13 @@ function CreatBranch({ openDialog, handleCloseDialog }) {
                 console.log("Branch created successfully:", response.data);
                 resetForm();
                 showAlert("เพิ่มสาขาสำเร็จ!", "success");
-                console.log(alertMessage);
+                // console.log(alertMessage);
             }
+            
         } catch (error) {
             console.error('Error during form submission:', error);
             showAlert("เกิดข้อผิดพลาดในการเพิ่มสาขา", "Error");
-            console.log(alertMessage);
+            // console.log(alertMessage);
 
         }
     };

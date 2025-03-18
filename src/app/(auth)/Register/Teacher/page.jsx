@@ -10,14 +10,21 @@ import { handleApiError } from '../../../Utils/errorhandler';
 import Nav from "../../../Components/Nav";
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+import { colorsCode } from "@/app/Utils/color";
+import { useStore } from "@/store/useStore";
 
 function Page() {
     const router = useRouter();
     const { register, handleSubmit, setValue, formState: { errors }, watch } = useForm();
     const [gender, setGender] = useState('');
+    const { user } = useStore();
 
 
     useEffect(() => {
+        if (user) {
+            router.push('/Home');
+        }
         register('nameTitle', {
             required: "กรุณาใส่คำนำหน้า",
         });
@@ -56,11 +63,11 @@ function Page() {
     return (
         <div>
             <Nav />
-            <div className="flex justify-center items-center mt-10">
-                <div className="bg-slate-100 w-[480px] p-6 shadow-2xl rounded-xl">
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="bg-slate-100 xs:w-[330px] md:w-[480px] p-6 shadow-2xl rounded-xl">
                     <div className="flex justify-center items-center">
-                        <img className="ml-4 p-2 w-[120px]" src="https://www.studentloan.or.th/th/system/files/files/knowledgemedia/%E0%B8%81%E0%B8%A2%E0%B8%A8-01.png" />
-                        <span className="font-kanit text-[35px] text-gray-700">สมัครสมาชิก</span>
+                        <AppRegistrationIcon sx={{ fontSize: 50, color: colorsCode.blue }} />
+                        <span className="font-kanit xs:text-[25px] text-[35px] text-gray-700">สมัครสมาชิก</span>
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mt-4">

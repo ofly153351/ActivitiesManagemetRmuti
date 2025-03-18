@@ -5,29 +5,34 @@ import { getAllevent, getBranches, joinEvent } from '../Utils/api';
 import dayjs from 'dayjs';
 import 'dayjs/locale/th';  // นำเข้า locale ภาษาไทย
 import BasicButtons from './BasicButtons';
-import { useStore } from '@/store/useStore';
 import width from '../Utils/textfieldWidth';
 import { ErrorAlert, SuccessAlert } from './Alert';
-
+import { useStore } from '@/store/useStore';
 
 function Activity({ searchQuery }) {
     const [activities, setActivities] = useState([]);
-    const [branchesList, setBranchesList] = useState([]);
+    const { branchesList, setbranchesList } = useStore();
     const { user } = useStore()
     const [errorMessage, setErrorMessage] = useState(false)
     const [successMessage, setSuccessMessage] = useState(false)
 
+    // console.log("branchesList", branchesList);
+
     dayjs.locale('th');
 
     useEffect(() => {
+
         const fetchData = async () => {
             const response = await getAllevent();
             setActivities(response.data);
+            if (branchesList.length <= 0 && branchesList === null) {
+                const branchResponse = await getBranches();
+                setbranchesList(branchResponse.data);
+            };
 
-            const branchResponse = await getBranches();
-            setBranchesList(branchResponse.data);
         };
         fetchData();
+
     }, []);
 
     // ฟังก์ชันในการดึงชื่อสาขาจาก ID ที่มี
@@ -59,20 +64,30 @@ function Activity({ searchQuery }) {
             // หากต้องการคืนค่าจาก handleSubmit
             return response;
         } catch (error) {
-            console.error('Error joining event:', error); // จัดการ error
-            setTimeout(() => {
-                setErrorMessage('ไม่สามารถส่งคำขอเข้าร่วมกิจกรรมได้');
+            if (error.status === 500) {
+                setErrorMessage('ไม่สามารถส่งคำขอเข้าร่วมกิจกรรมได้ เนื่องจากคุณได้เข้าร่วมไปแล้ว');
                 setTimeout(() => {
-                    setErrorMessage(false);
-                }, 3000); // ซ่อนข้อความหลัง 3 วินาที
-            }, 0); // แสดงข้อความทันที
+                    setErrorMessage('ไม่สามารถส่งคำขอเข้าร่วมกิจกรรมได้ เนื่องจากคุณได้เข้าร่วมแล้ว');
+                    setTimeout(() => {
+                        setErrorMessage(false);
+                    }, 3000); // ซ่อนข้อความหลัง 3 วินาที
+                }, 0); // แสดงข้อความทันที
+            }
+            console.error('Error joining event:', error.status); // จัดการ error
+            // setTimeout(() => {
+            //     setErrorMessage('ไม่สามารถส่งคำขอเข้าร่วมกิจกรรมได้');
+            //     setTimeout(() => {
+            //         setErrorMessage(false);
+            //     }, 3000); // ซ่อนข้อความหลัง 3 วินาที
+            // }, 0); // แสดงข้อความทันที
+
             throw error;
         }
     };
 
     const filteredActivities = filterActivities(activities, searchQuery);
 
-    console.log(activities);
+    // console.log(activities);
 
     return (
         <div>
@@ -86,9 +101,9 @@ function Activity({ searchQuery }) {
                 filteredActivities.map((activity, index) => (
                     <div
                         key={activity.id || index}  // Use index as fallback if activity.id is missing
-                        className="mx-4 p-4 items-center hover:bg-stone-100 border-b border-gray-200"
+                        className="lg:mx-4 p-4 items-center hover:bg-stone-100 border-b border-gray-200"
                     >
-                        <div className="flex w-full">
+                        <div className="flex w-full xs:w-[350px] ">
                             <div className="flex-grow"> {/* ใช้ flex-grow เพื่อให้พื้นที่ขยายเต็ม */}
                                 <div className="text-xl flex justify-between font-kanit">
                                     <div>

@@ -16,15 +16,15 @@ import TransferList from './Tranferlist';
 import Customselect from './Customselect';
 import { useStore } from '@/store/useStore';
 import BasicButtons from './BasicButtons';
-import { CreateEvent, getBranches } from '../Utils/api';
+import { CreateEvent, getBranches, getFaculties } from '../Utils/api';
 import CheckboxButtonLabel from './CheckbokButton';
-import { isNumber } from '@mui/x-data-grid/internals';
 
 
 
 
-function CreatEventpopup({ openDialog, handleCloseDialog }) {
+function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], branchesList = [] }) {
     const theme = useTheme();
+    // const { facultiesList, setBranchesList, setFacultiesList } = useStore()
     const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));  // Desktop
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'lg')); // iPad
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));  // iPhone
@@ -36,13 +36,35 @@ function CreatEventpopup({ openDialog, handleCloseDialog }) {
     const [hour, setHour] = useState('')
     const [detail, setDetail] = useState('')
     const [selectedFaculty, setSelectedFaculty] = useState('')
-    const { faculties } = useStore()
-    const [faculty, setFacultyID] = useState('')
-    const [branches, setBranches] = useState([])
+
     const [filteredBranch, setFilteredBranches] = useState([])
     const [selectedBranches, setSelectedBranches] = useState([]);
     const [selectedYears, setSelectedYears] = useState([]);
-    const { user } = useStore()
+    // const { branchesList, setbranchesList } = useStore()
+    const [faculty, setFacultyID] = useState('')
+    const [branches, setBranches] = useState([])
+
+    useEffect(() => {
+        // if (branchesList.length <= 0 || facultiesList.length <= 0) {
+        //     const fetchData = async () => {
+        //         try {
+        //             const response = await getBranches();
+        //             setBranchesList(response.data); // อัปเดต Zustand
+        //             // setBranches(response.data); // อัปเดต State
+
+        //             const facultyResponse = await getFaculties();
+        //             setFacultiesList(facultyResponse.data); // อัปเดต Zustand
+        //             // setFaculties(facultyResponse.data); // อัปเดต State
+        //         } catch (error) {
+        //             console.error("Error fetching data:", error);
+        //         }
+        //     };
+
+        //     fetchData();
+        // }
+    }, []); // ใส่ dependencies
+    console.log('branchesList:', branchesList);
+    console.log('facultiesList:', facultiesList);
 
     const years = [
         { fild: 'ปี 1', value: 1 },
@@ -55,13 +77,7 @@ function CreatEventpopup({ openDialog, handleCloseDialog }) {
     const handleRightListChange = (newRight) => {
         setSelectedBranches(newRight);
     };
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await getBranches();
-            setBranches(response.data)
-        }
-        fetchData()
-    }, [filteredBranch])
+
 
 
     // console.log(selectedBranches.map(branch => branch.branch_id));
@@ -88,11 +104,13 @@ function CreatEventpopup({ openDialog, handleCloseDialog }) {
 
 
     const handleSelectedFaculty = (value) => {
-        const selectedFaculty = faculties.find(f => f.faculty_name === value);
+        // console.log("selectedFaculty", selectedFaculty);
+
+        const selectedFaculty = facultiesList.find(f => f.faculty_name === value);
         setSelectedFaculty(value);
         setFacultyID(selectedFaculty?.faculty_id || '');
         setFilteredBranches(
-            branches.filter(branch => branch.faculty.faculty_id === selectedFaculty?.faculty_id)
+            branchesList.filter(branch => branch.faculty.faculty_id === selectedFaculty?.faculty_id)
         );
 
     };
@@ -325,7 +343,7 @@ function CreatEventpopup({ openDialog, handleCloseDialog }) {
                         <div className='flex gap-2' >
                             <Customselect
                                 label={'คณะ'}
-                                options={faculties}
+                                options={facultiesList}
                                 field='faculty_name'
                                 onChange={(e) => handleSelectedFaculty(e)}
                                 value={selectedFaculty}

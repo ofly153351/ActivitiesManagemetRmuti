@@ -94,7 +94,11 @@ export const useStore = create((set) => ({
             userRole: null,
             isLoading: false
         });
-    }
+    },
 
-    
+    branchesList: [],
+    setBranchesList: (newBranches) => set({ branchesList: newBranches }),
+    facultiesList: [],
+    setFacultiesList: (newFaculties) => set({ facultiesList: newFaculties }),
+
 }));

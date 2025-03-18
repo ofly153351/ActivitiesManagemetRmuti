@@ -6,16 +6,17 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Link from 'next/link';
-
 import Nav from "../../../components/Nav";
 import { getBranches, getFaculties, registerUser } from "@/app/Utils/api";
 import { handleApiError } from "@/app/Utils/errorhandler";
-
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import { useRouter } from 'next/navigation'
+import { colorsCode } from "@/app/Utils/color";
+import { useStore } from "@/store/useStore";
 
 function Page() {
   const router = useRouter();
-
+  const { user } = useStore();
   const {
     register,
     handleSubmit,
@@ -42,6 +43,9 @@ function Page() {
   const [branches, setBranches] = useState([]);
 
   useEffect(() => {
+    if (user) {
+      router.push('/Home');
+    }
     const fetchData = async () => {
       try {
         const [branchResponse, facultiesResponse] = await Promise.all([
@@ -87,15 +91,11 @@ function Page() {
   return (
     <div>
       <Nav />
-      <div className="flex justify-center items-center mt-10">
-        <div className="bg-slate-100 w-[480px] p-6 shadow-2xl rounded-xl">
+      <div className="flex justify-center items-center min-h-screen ">
+        <div className="bg-slate-100 xs:w-[320px] md:w-[480px] p-6 shadow-2xl rounded-xl">
           <div className="flex justify-center items-center mb-6">
-            <img
-              src="https://www.studentloan.or.th/th/system/files/files/knowledgemedia/%E0%B8%81%E0%B8%A2%E0%B8%A8-01.png"
-              alt="Registration Logo"
-              className="ml-4 p-2 w-[120px]"
-            />
-            <span className="font-kanit text-[35px] text-gray-700">สมัครสมาชิก</span>
+            <AppRegistrationIcon sx={{fontSize: 50 , color: colorsCode.blue}} />
+            <span className="font-kanit xs:text-[20px] text-[35px] text-gray-700">สมัครสมาชิก</span>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)}>

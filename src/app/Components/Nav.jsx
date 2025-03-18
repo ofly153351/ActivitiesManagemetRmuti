@@ -34,7 +34,7 @@ function Nav() {
 
     if (loading) {
         return (
-            <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-end px-10 items-center fixed z-10">
+            <div className=" xs:w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-end px-10 items-center fixed z-10">
                 <Box sx={{ display: 'flex' }}>
                     <CircularProgress />
                 </Box>
@@ -67,12 +67,14 @@ function Nav() {
     const isRegistrationPage = pathname === '/Register/Student' || pathname === '/Register/Teacher';
 
     return (
-        <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-between items-center z-10">
+        <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex lg:justify-between lg:items-center z-10 fixed top-0">
             {(user?.role === 'teacher' || user?.role === 'admin') && (
-                <div className='flex justify-between items-center ml-20 w-screen'>
+                <div className='flex justify-between items-center  lg:mx-20 w-screen'>
                     <div className='flex justify-between items-center w-full'>
                         <div className='flex justify-center items-center'>
-                            <Link href="/Home" className='hover:bg-stone-50'>
+                            <Sidebar />
+
+                            <Link href="/Home" className='hover:bg-stone-50 xs:hidden lg:block md:block'>
                                 <LogoDevIcon style={{
                                     fontSize: "50px",
                                     color: "#0067B3"
@@ -84,14 +86,13 @@ function Nav() {
                         <div className="w-[230px]">
                             <Profilemanu user={user} />
                         </div>
-                        <Sidebar />
                     </div>
                 </div>
             )}
 
             {!user?.role && (
-                <Link href="/Home">
-                    <span className="ml-[50px] font-kanit text-2xl">LOGO</span>
+                <Link href="/Home" className='ml-[50px]  justify-center items-center  lg:flex  xs:hidden' >
+                    <span className=" font-kanit text-2xl">LOGO</span>
                 </Link>
             )}
             {user?.role === 'student' && (
@@ -100,70 +101,71 @@ function Nav() {
                 </Link>
             )}
 
-            <div className="gap-2 flex mr-[50px]">
-                {pathname === '/Login' && (
-                    <div className='flex justify-center items-center gap-5'>
+            {pathname === '/Login' && (
+                <div className="xs:w-screen xs:flex  xs:justify-end xs:items-center xs:mr-2 lg:mr-10  md:justify-end">
+
+                    <div className='xs:grid xs:grid-cols-2 lg:flex justify-center items-center gap-5 xs:mr-5'>
                         <CustomMenu />
                         <BasicButtons
                             label={'กิจกรรม'}
                             onClick={() => router.push('/Home')}
                         />
                     </div>
-                )}
+                </div>
+            )}
 
-                {isRegistrationPage && (
-                    <div className='flex gap-5'>
-                        {registerPath.map((link, index) => (
-                            <Link
-                                key={index}
-                                href={link.href}
-                                className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100"
-                            >
-                                <span className="drop-shadow-2xl">{link.label}</span>
-                            </Link>
+            {isRegistrationPage && (
+                <div className='flex gap-5 xs:mr-5'>
+                    {registerPath.map((link, index) => (
+                        <Link
+                            key={index}
+                            href={link.href}
+                            className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100"
+                        >
+                            <span className="drop-shadow-2xl">{link.label}</span>
+                        </Link>
+                    ))}
+                    {commonLinks.map((link, index) => (
+                        <Link
+                            key={index}
+                            href={link.href}
+                            className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100"
+                        >
+                            <span className="drop-shadow-2xl">{link.label}</span>
+                        </Link>
+                    ))}
+                </div>
+            )}
+
+            {/* Home page navigation for user role */}
+            {user?.role === 'student' && (
+
+                <div className=" flex gap-10 justify-between">
+                    <div className='flex' >
+                        {userLinks.map((link, index) => (
+                            <div key={index} className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] font-kanit">
+                                <Link href={link.href}>
+                                    <span>{link.label}</span>
+                                </Link>
+                            </div>
                         ))}
-                        {commonLinks.map((link, index) => (
-                            <Link
-                                key={index}
-                                href={link.href}
-                                className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100"
-                            >
-                                <span className="drop-shadow-2xl">{link.label}</span>
-                            </Link>
-                        ))}
-                    </div>
-                )}
-
-                {/* Home page navigation for user role */}
-                {user?.role === 'student' && (
-
-                    <div className=" flex gap-10 justify-between">
-                        <div className='flex' >
-                            {userLinks.map((link, index) => (
-                                <div key={index} className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] font-kanit">
-                                    <Link href={link.href}>
-                                        <span>{link.label}</span>
-                                    </Link>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div>
-                            <Profilemanu user={user} />
-                        </div>
                     </div>
 
-                )}
-
-                {pathname === '/Home' && !user && (
-                    <div className='flex gap-5'>
-                        <CustomMenu />
-                        <BasicButtons label={'เข้าสู่ระบบ'} onClick={(e) => {
-                            router.push('/Login')
-                        }} />
+                    <div>
+                        <Profilemanu user={user} />
                     </div>
-                )}
-            </div>
+                </div>
+
+            )}
+
+            {pathname === '/Home' && !user && (
+                <div className='flex gap-5 xs:mr-5'>
+                    <CustomMenu />
+                    <BasicButtons label={'เข้าสู่ระบบ'} onClick={(e) => {
+                        router.push('/Login')
+                    }} />
+                </div>
+            )}
         </div>
     );
 }

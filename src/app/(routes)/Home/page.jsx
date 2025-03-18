@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/select"
 
 
-
 function Page() {
     const [searchQuery, setSearchQuery] = useState(''); // เพิ่ม state สำหรับคำค้นหา
     // const [loading, setLoading] = useState(true);
@@ -57,12 +56,12 @@ function Page() {
         <>
             <Nav />
             <div className='flex'>
-                <div className='w-full m-20 '>
-                    <div className="px-10 py-16 w-[650px]">
-                        <h1 className='font-kanit text-[45px] text-shadow-sm border-b-[2px]'>กิจกรรมที่สามารถลงทะเบียนได้</h1>
+                <div className='w-full lg:mx-20 md:mx-10 xs:m-0'>
+                    <div className="lg:px-0 md:px-0 xs:p-8 xs:pl-6 lg:py-16 lg:w-full xs:mt-20">
+                        <h1 className='font-kanit lg:text-[45px] md:text-[40px] text-shadow-sm border-b-[2px] xs:w-fit xs:text-[22px] lg:mx-4'>กิจกรรมที่สามารถลงทะเบียนได้</h1>
                     </div>
-                    <div className='border-b-2 p-4 mx-4'>
-                        <form className="flex justify-end items-center mr-[60px] gap-3">
+                    <div className='xs:mx-2  border-b-2 lg:p-4 xs:p-3 flex justify-end  lg:items-end lg:mx-6'>
+                        <form className="flex lg:justify-end lg:items-center lg:mr-[60px] xs:mr-0 gap-3">
                             <div className='flex' >
                                 <button className="border-b-[1px] border-l-[1px] border-t-[1px] w-10 rounded-tl-lg rounded-bl-lg hover:bg-gray-100">
                                     <SearchIcon fontSize='' />
@@ -73,10 +72,10 @@ function Page() {
                                     id="search-form"
                                     onChange={(e) => setSearchQuery(e.target.value)} // จัดการการเปลี่ยนแปลงคำค้นหา
                                     placeholder='ค้าหาชื่อกิจกรรม'
-                                    className='w-[400px] border-[1px] p-1.5 font-kanit rounded-br-lg rounded-tr-lg' />
+                                    className='w-[400px] xs:w-[190px] border-[1px] p-1.5 font-kanit rounded-br-lg rounded-tr-lg' />
                             </div>
                             <Select>
-                                <SelectTrigger className="w-[180px]">
+                                <SelectTrigger className="xs:w-[100px]  w-[180px]">
                                     <SelectValue placeholder="เรียงตาม" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -89,7 +88,10 @@ function Page() {
                             </Select>
                         </form>
                     </div>
-                    <Activity searchQuery={searchQuery} /> {/* ส่ง searchQuery ไปยัง Activity */}
+                    <div className='xs:mx-2' >
+                        <Activity searchQuery={searchQuery} />
+
+                    </div>
                 </div>
             </div>
             {/* <Footter /> */}
