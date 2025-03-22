@@ -6,25 +6,24 @@ export const filterActivities = (activities, searchQuery) => {
         return []; // คืนค่าอาร์เรย์เปล่าถ้าไม่มีข้อมูล
     }
 
-    // ถ้าไม่มี searchQuery หรือเป็นค่าว่าง คืนค่ากิจกรรมทั้งหมด
+    // กรองเฉพาะ activities ที่ status ไม่ใช่ false
+    const filteredActivities = activities.filter(activity => activity.status !== false);
+
+    // ถ้าไม่มี searchQuery หรือเป็นค่าว่าง คืนค่ากิจกรรมที่กรองแล้วทั้งหมด
     if (!searchQuery || searchQuery.trim() === "") {
-        return activities;
+        return filteredActivities;
     }
 
-    const lowerQuery = searchQuery.toLowerCase(); // แปลง query เป็นตัวพิมพ์เล็กสำหรับการค้นหาแบบไม่สนตัวพิมพ์
+    const lowerQuery = searchQuery.toLowerCase(); // แปลง query เป็นตัวพิมพ์เล็ก
 
-    return activities.filter(activity => {
-        return (
-            Object.values(activity).some(value => {
-                if (value === null || value === undefined) {
-                    return false; // ข้ามค่า null หรือ undefined
-                }
-
-                // แปลงค่าทั้งหมดเป็นสตริงและตรวจสอบว่ามี `searchQuery` หรือไม่
-                return value.toString().toLowerCase().includes(lowerQuery);
-            })
-        );
-    });
+    return filteredActivities.filter(activity =>
+        Object.values(activity).some(value => {
+            if (value === null || value === undefined) {
+                return false; // ข้ามค่า null หรือ undefined
+            }
+            return value.toString().toLowerCase().includes(lowerQuery);
+        })
+    );
 };
 export const filterEvent = (events, searchQuery) => {
     return events.filter(events =>

@@ -14,11 +14,18 @@ function ViewTable({ columns, rows }) {
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState('')
     const [selectedUser, setSelectedUser] = useState('')
-    const handleSelectedFile = (filePath, eventID, userID) => {
+    const [selectedFirstName, setSelectedFirstName] = useState('')
+    const [selectedLastName, setSelectedLastName] = useState('')
+    const [selectedStatus, setSelectedStatus] = useState(Boolean)
+
+    const handleSelectedFile = (filePath, eventID, userID, status, first_name, last_name) => {
         console.log(userID);
         setSelectedUser(userID)
+        setSelectedStatus(status)
         setSelectedFile(filePath);
         setSelectedEvent(eventID)
+        setSelectedFirstName(first_name)
+        setSelectedLastName(last_name)
         setOpenDialog(true);  // เปิด dialog เมื่อเลือกไฟล์
     };
 
@@ -29,9 +36,9 @@ function ViewTable({ columns, rows }) {
     };
 
     useEffect(() => {
-        if (selectedFile) {
-            console.log(`Selected file: ${selectedFile}`);
-        }
+        // if (selectedFile) {
+        //     console.log(`Selected file: ${selectedFile}`);
+        // }
     }, [selectedFile]); // ทำงานเมื่อ selectedFile เปลี่ยนค่า
 
     return (
@@ -53,6 +60,7 @@ function ViewTable({ columns, rows }) {
                         >
                             {columns.map((column, colIndex) => (
                                 <TableCell sx={{ fontFamily: fontFamily.Kanit }} key={colIndex} align="center">
+
                                     {column.field === 'status' ? (
                                         row['status'] ? (
                                             <span className="p-1 bg-green-500 rounded-md text-white">ผ่านกิจกรรมแล้ว</span>
@@ -62,8 +70,13 @@ function ViewTable({ columns, rows }) {
                                     ) : column.field === 'file_pdf' ? (
                                         row['file_pdf'] ? (
                                             <button
-                                                className="p-1 bg-[#e6cc59] rounded-md text-black hover:underline"
-                                                onClick={() => handleSelectedFile(row['file_pdf'], row['event_id'], row['user_id'])}
+                                                className="p-1 bg-[#f6df78] rounded-md text-black hover:underline"
+                                                onClick={() => handleSelectedFile(row['file_pdf'],
+                                                    row['event_id'],
+                                                    row['user_id'],
+                                                    row['status'],
+                                                    row['first_name'],
+                                                    row['last_name'])}
                                             >
                                                 ตรวจสอบไฟล์
                                             </button>
@@ -84,7 +97,11 @@ function ViewTable({ columns, rows }) {
                 <ViewPDFdialog open={open} onClose={handleCloseDialog}
                     filePath={selectedFile}
                     userID={selectedUser}
-                    eventID={selectedEvent} />
+                    eventID={selectedEvent} 
+                    firstName={selectedFirstName}
+                    lastName={selectedLastName}
+                    status={selectedStatus}
+                    />
             )}
         </TableContainer>
     );

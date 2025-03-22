@@ -6,7 +6,7 @@ import { useStore } from '@/store/useStore';
 import { checkFileStudent } from '../Utils/api';
 import { ErrorAlert, SuccessAlert } from './Alert';
 
-const ViewPDF = ({ filePath, eventID, userID }) => {
+const ViewPDF = ({ filePath, eventID, userID, setlecedStatus }) => {
     const [status, setStatus] = useState(null); // เก็บสถานะ (ผ่าน/ไม่ผ่าน)
     const { user } = useStore()
     const [comment, setComment] = useState(''); // State เก็บความคิดเห็น
@@ -85,20 +85,23 @@ const ViewPDF = ({ filePath, eventID, userID }) => {
                     type={'text'}
                     value={comment} // ผูกกับ state 'comment'
                 />
-
-                {/* ปุ่ม */}
                 <div className="flex justify-end gap-5">
-                    <BasicButtons
-                        hover={'#de0a26'}
-                        color={'#f94449'}
-                        label={'ไม่ผ่าน'}
-                        onClick={() => handleButtonClick(false)} // เมื่อกดปุ่ม 'ไม่ผ่าน'
-                    />
-                    <BasicButtons
-                        label={'ผ่าน'}
-                        onClick={() => handleButtonClick(true)} // เมื่อกดปุ่ม 'ผ่าน'
-                    />
+
+                    {!setlecedStatus ? (
+                        <BasicButtons
+                            label={'ผ่าน'}
+                            onClick={() => handleButtonClick(true)} // เมื่อกดปุ่ม 'ผ่าน'
+                        />
+                    ) : (
+                        <BasicButtons
+                            hover={'#de0a26'}
+                            color={'#f94449'}
+                            label={'ไม่ผ่าน'}
+                            onClick={() => handleButtonClick(false)} // เมื่อกดปุ่ม 'ไม่ผ่าน'
+                        />
+                    )}
                 </div>
+
             </div>
             {successMessage && (
                 <div className='fixed right-4 bottom-4' >

@@ -196,8 +196,8 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
 
 
     return (
-        <div>
-            <div className='flex justify-end items-center w-[100%] gap-4 p-2'>
+        <div className='' >
+            <div className='w-full flex justify-end items-center  gap-4 p-2 overflow-auto'>
                 <div>
                     {pathName === '/Admin/EventList' && (
                         <div className='flex gap-2' >
@@ -243,7 +243,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                 ) : null}
             </div>
 
-            <div className='flex justify-center items-center w-full h-[full] rounded-b-md'>
+            <div className='flex justify-center items-center w-full h-[full] rounded-b-md overflow-auto'>
                 <table className='w-full rounded-2 border-[1px] rounded-xl border-slate-200'>
                     <thead className='w-fit p-4 bg-[#F5F5F5] shadow-t-xl rounded-xl'>
                         <tr className='font-kanit'>
@@ -365,9 +365,9 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                 </table>
             </div>
 
-            <div className='flex justify-end items-center bg-transparent'>
-                <div className='flex justify-center items-center ' >
-                    <div className='flex justify-end items-center w-52 gap-2' >
+            <div className='flex justify-end items-center bg-transparent '>
+                <div className='md:flex md:justify-center md:items-center xs:grid xs:justify-end xs:items-end ' >
+                    <div className='flex xs:justify-end  items-center p-4 gap-2 md:w-full' >
                         <label htmlFor="" className='' >ข้อมูลที่แสดง</label>
                         <input
                             type="text"

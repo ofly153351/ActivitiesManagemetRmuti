@@ -35,6 +35,9 @@ function Activity({ searchQuery }) {
 
     }, []);
 
+    console.log(activities);
+    
+
     // ฟังก์ชันในการดึงชื่อสาขาจาก ID ที่มี
     const getBranchNames = (branchIds) => {
         if (!Array.isArray(branchIds) || !Array.isArray(branchesList)) {
@@ -103,7 +106,7 @@ function Activity({ searchQuery }) {
                         key={activity.id || index}  // Use index as fallback if activity.id is missing
                         className="lg:mx-4 p-4 items-center hover:bg-stone-100 border-b border-gray-200"
                     >
-                        <div className="flex w-full xs:w-[350px] ">
+                        <div className="flex xs:w-full  ">
                             <div className="flex-grow"> {/* ใช้ flex-grow เพื่อให้พื้นที่ขยายเต็ม */}
                                 <div className="text-xl flex justify-between font-kanit">
                                     <div>

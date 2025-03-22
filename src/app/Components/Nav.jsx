@@ -12,6 +12,8 @@ import LogoDevIcon from '@mui/icons-material/LogoDev';
 import CustomMenu from './CustomManu';
 import BasicButtons from './BasicButtons';
 import useStore from '@/store/useStore';
+import StudentNavmenu from './StudentNavmenu';
+
 
 function Nav() {
     const pathname = usePathname();
@@ -67,13 +69,13 @@ function Nav() {
     const isRegistrationPage = pathname === '/Register/Student' || pathname === '/Register/Teacher';
 
     return (
-        <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex lg:justify-between lg:items-center z-10 fixed top-0">
+
+        <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex  lg:justify-between md:justify-between xs:justify-between xs:items-center z-10 fixed top-0">
             {(user?.role === 'teacher' || user?.role === 'admin') && (
                 <div className='flex justify-between items-center  lg:mx-20 w-screen'>
                     <div className='flex justify-between items-center w-full'>
                         <div className='flex justify-center items-center'>
                             <Sidebar />
-
                             <Link href="/Home" className='hover:bg-stone-50 xs:hidden lg:block md:block'>
                                 <LogoDevIcon style={{
                                     fontSize: "50px",
@@ -82,22 +84,20 @@ function Nav() {
                             </Link>
                         </div>
                     </div>
-                    <div className='flex justify-center items-center'>
-                        <div className="w-[230px]">
-                            <Profilemanu user={user} />
-                        </div>
+                    <div className="min-w-fit">
+                        <Profilemanu user={user} />
                     </div>
                 </div>
             )}
 
             {!user?.role && (
-                <Link href="/Home" className='ml-[50px]  justify-center items-center  lg:flex  xs:hidden' >
+                <Link href="/Home" className='ml-[50px]  justify-center items-center lg:flex xs:hidden' >
                     <span className=" font-kanit text-2xl">LOGO</span>
                 </Link>
             )}
             {user?.role === 'student' && (
-                <Link href="/Home">
-                    <span className="ml-[50px] font-kanit text-2xl">LOGO</span>
+                <Link href="/Home" className='ml-[50px]  justify-center items-center lg:flex ' >
+                    <span className="ml-[50px] font-kanit text-2xl xs:hidden lg:flex ">LOGO</span>
                 </Link>
             )}
 
@@ -139,19 +139,20 @@ function Nav() {
 
             {/* Home page navigation for user role */}
             {user?.role === 'student' && (
-
-                <div className=" flex gap-10 justify-between">
-                    <div className='flex' >
+                <div className=" flex  justify-between">
+                    <div className='flex ' >
                         {userLinks.map((link, index) => (
-                            <div key={index} className="p-2 flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] font-kanit">
+                            <div key={index} className="p-2 flex xs:hidden lg:flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] font-kanit">
                                 <Link href={link.href}>
                                     <span>{link.label}</span>
                                 </Link>
                             </div>
                         ))}
                     </div>
-
-                    <div>
+                    <div className='flex justify-center items-center lg:hidden' >
+                        <StudentNavmenu buttonName="เมนู" menu={userLinks} />
+                    </div>
+                    <div className="min-w-fit mr-20">
                         <Profilemanu user={user} />
                     </div>
                 </div>

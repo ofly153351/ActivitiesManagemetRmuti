@@ -44,6 +44,7 @@ function Page() {
 
   useEffect(() => {
     if (user) {
+      
       router.push('/Home');
     }
     const fetchData = async () => {
@@ -92,9 +93,9 @@ function Page() {
     <div>
       <Nav />
       <div className="flex justify-center items-center min-h-screen ">
-        <div className="bg-slate-100 xs:w-[320px] md:w-[480px] p-6 shadow-2xl rounded-xl">
+        <div className="bg-slate-100 xs:w-[320px] md:w-[480px] p-6 shadow-2xl rounded-xl xs:mt-20">
           <div className="flex justify-center items-center mb-6">
-            <AppRegistrationIcon sx={{fontSize: 50 , color: colorsCode.blue}} />
+            <AppRegistrationIcon sx={{ fontSize: 50, color: colorsCode.blue }} />
             <span className="font-kanit xs:text-[20px] text-[35px] text-gray-700">สมัครสมาชิก</span>
           </div>
 

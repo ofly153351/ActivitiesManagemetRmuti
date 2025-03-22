@@ -4,7 +4,7 @@ import { Button, Menu, MenuItem } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Cookies from 'js-cookie';
 import { useStore } from '@/store/useStore';
-
+import MailNotification from './MailNotification';
 function ProfileMenu() {
     const { user, clearAll, userRole, setUser, setUserRole } = useStore();
     const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -51,6 +51,12 @@ function ProfileMenu() {
         }, 100);
     };
 
+    const mailClick = () => {
+        let count = 0;
+        console.log('click', count);
+        count++;
+    }
+
     // ✅ ให้ return UI ด้านล่าง แต่แสดงสถานะการโหลด
     let content;
     if (isLoggingOut) {
@@ -67,7 +73,13 @@ function ProfileMenu() {
         );
     } else {
         content = (
-            <div className="lg:flex lg:items-center lg:gap-2 xs:mr-2">
+            <div className="xs:flex xs:items-center xs:gap-2 xs:mr-5">
+                <div className='mx-5' >
+                    <button type="button" onClick={mailClick} >
+                        <MailNotification />
+                    </button>
+                </div>
+
                 <div className="relative flex justify-center items-center rounded-full border border-gray">
                     <span className="text-gray-500 px-3 py-1 text-md font-kanit hover:underline">
                         {user.first_name} {user.last_name} ({userRole?.role || 'ไม่มีข้อมูล'})
@@ -97,41 +109,48 @@ function ProfileMenu() {
                             ['teacher', 'admin'].includes(userRole.role) ? (
                                 <div className="font-kanit">
                                     <MenuItem onClick={() => handleMenuItemClick('/Admin')}>
-                                        Dashboard
+                                        <p className='font-kanit' >Dashboard</p>
+
                                     </MenuItem>
                                     <MenuItem onClick={() => handleMenuItemClick('/Infomation')}>
-                                        แก้ไขข้อมูลส่วนตัว
+                                        <p className='font-kanit' >แก้ไขข้อมูลส่วนตัว</p>
+
                                     </MenuItem>
                                     <MenuItem onClick={() => handleMenuItemClick('/logout')}>
-                                        Logout
+                                        <p className='font-kanit' >Logout</p>
                                     </MenuItem>
                                 </div>
                             ) : userRole.role === 'student' ? (
                                 <div className="font-kanit">
                                     <MenuItem onClick={() => handleMenuItemClick('/Infomation')}>
-                                        แก้ไขข้อมูลส่วนตัว
+                                        <p className='font-kanit' >
+                                            แก้ไขข้อมูลส่วนตัว
+                                        </p>
                                     </MenuItem>
                                     <MenuItem onClick={() => handleMenuItemClick('/Information/MyEvent')}>
-                                        กิจกรรมของฉัน
+                                        <p className='font-kanit' >กิจกรรมของฉัน</p>
+
                                     </MenuItem>
                                     <MenuItem onClick={() => handleMenuItemClick('/logout')}>
-                                        Logout
+                                        <p className='font-kanit' >Logout</p>
                                     </MenuItem>
                                 </div>
                             ) : null
                         ) : (
                             <div className="font-kanit">
                                 <MenuItem onClick={() => handleMenuItemClick('/Register')}>
-                                    สมัครสมาชิก
+                                    <p className='font-kanit' >สมัครสมาชิก</p>
+
                                 </MenuItem>
                                 <MenuItem onClick={() => handleMenuItemClick('/Login')}>
-                                    เข้าสู่ระบบ
+                                    <p className='font-kanit' >เข้าสู่ระบบ</p>
+
                                 </MenuItem>
                             </div>
                         )}
                     </Menu>
                 </div>
-            </div>
+            </div >
         );
     }
 

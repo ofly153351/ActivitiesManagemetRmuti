@@ -64,7 +64,7 @@ function page() {
                 return String(params.value) ? <SwitchOnOff /> : 'ปิด';
             }
         },
-        { headerName: 'ผู่สี่สมัครเข้าร่วม', field: 'userList' },
+        { headerName: 'ผู้ที่สมัครเข้าร่วม', field: 'userList' },
 
     ];
 
@@ -75,7 +75,7 @@ function page() {
     return (
         <div className="bg-gray-50 h-screen">
             <Nav />
-            <div className="flex justify-center items-center bg-gray-50">
+            <div className="flex justify-center items-center bg-gray-50 min-h-screen">
                 <div className="w-[80%] bg-white rounded-md mt-10 font-kanit shadow-md">
                     <h1 className="text-[52px] text-shadow-md p-10">{title}</h1>
                     {loading ? (
@@ -97,9 +97,9 @@ function page() {
 
             {EditPopupOpen && (
                 <EditPopup
-                    closeModal={() => setEditPopupOpen(false)} // Close the popup when clicked
+                    closeModal={() => setEditPopupOpen(false)} 
                     fields={fields}
-                    selectedEditItem={selectedRow} // Pass the selectedRow to the EditPopup
+                    selectedEditItem={selectedRow} 
                 />
             )}
         </div>

@@ -63,8 +63,8 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
         //     fetchData();
         // }
     }, []); // ใส่ dependencies
-    console.log('branchesList:', branchesList);
-    console.log('facultiesList:', facultiesList);
+    // console.log('branchesList:', branchesList);
+    // console.log('facultiesList:', facultiesList);
 
     const years = [
         { fild: 'ปี 1', value: 1 },
