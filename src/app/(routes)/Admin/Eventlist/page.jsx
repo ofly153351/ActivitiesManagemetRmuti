@@ -60,6 +60,7 @@ function Page() {
                     try {
                         const response = await getCurrentEvent();
                         setSelectedEvent(response.data);
+                        console.log(response.data);
 
                     } catch (error) {
                         console.log(error);
@@ -107,11 +108,11 @@ function Page() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className=" bg-gray-50 flex justify-center items-center">
             <Nav />
-            <div className="flex justify-center items-center bg-gray-50">
+            <div className="w-screen min-h-screen flex justify-center items-center bg-gray-50">
                 <div className="w-[80%] bg-white rounded-md mt-10 font-kanit shadow-md">
-                    <h1 className="text-[52px] text-shadow-md p-10">{title}</h1>
+                    <h1 className="min-w-full  text-[52px] text-shadow-md p-10">{title}</h1>
                     {loading ? (
                         <div className="flex justify-center items-center">
                             <div className="mt-40 px-10 h-[400px]">

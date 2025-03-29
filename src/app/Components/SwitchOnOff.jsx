@@ -47,6 +47,7 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 
 function SwitchOnOff({ status: initialStatus, onStatusChange, itemId, pathName }) {
   const [currentStatus, setCurrentStatus] = useState(Boolean(initialStatus));
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     setCurrentStatus(Boolean(initialStatus));
@@ -54,18 +55,23 @@ function SwitchOnOff({ status: initialStatus, onStatusChange, itemId, pathName }
 
   const handleSwitchChange = async (event) => {
     const newStatus = event.target.checked;
+
+    // Optimistically update the status
     setCurrentStatus(newStatus);
+    setError(null); // Reset any previous error
+
     try {
       await onStatusChange(itemId, newStatus);
     } catch (error) {
-      setCurrentStatus(!newStatus); // Revert if failed
+      // Revert the status if the update fails
+      setCurrentStatus(!newStatus);
+      setError('การอัปเดตสถานะล้มเหลว');
       console.error('Failed to update status:', error);
     }
   };
 
   return (
     <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-      {console.log(pathName)}
       <Typography>{currentStatus ? 'เปิด' : 'ปิด'}</Typography>
       <AntSwitch
         checked={currentStatus}
@@ -73,6 +79,7 @@ function SwitchOnOff({ status: initialStatus, onStatusChange, itemId, pathName }
         inputProps={{ 'aria-label': 'ant design' }}
         disabled={pathName !== '/Admin/MyEvent'}
       />
+      {error && <Typography color="error">{error}</Typography>}
     </Stack>
   );
 }

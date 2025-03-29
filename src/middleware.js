@@ -4,9 +4,9 @@ import jwt from 'jsonwebtoken'
 export function middleware(request) {
     const accessToken = request.cookies.get('token');
     const homeUrl = new URL('/Home', request.url).href;
-    
-    let role = null;
-    
+
+    let role = null
+
     // ตรวจสอบ token
     if (accessToken) {
         try {
@@ -17,18 +17,20 @@ export function middleware(request) {
             console.error('Error decoding JWT:', error);
         }
     }
-    
+
+    // console.log(role);
+
+
+
     // ตรวจสอบเส้นทาง '/Admin' และเส้นทางอื่นๆ
     if (request.nextUrl.pathname.startsWith('/Admin')) {
-        if (!role || role !== 'admin') {
-            console.log('User does not have the correct role or no token found, redirecting to unauthorized');
-            return NextResponse.redirect(homeUrl); // เปลี่ยนเส้นทางไปที่หน้า Home
+        if (role !== 'admin' && role !== 'teacher') {  // ตรวจสอบว่า role เป็น admin หรือ teacher เท่านั้น
+            console.log('User does not have the correct role, redirecting to /home');
+            return NextResponse.redirect(homeUrl); // เปลี่ยนเส้นทางไปที่ /home
         }
     }
-    
-
     // ตรวจสอบเส้นทาง '/home'
-    if (request.nextUrl.pathname.startsWith('/home')) {
+    if (request.nextUrl.pathname.startsWith('/Home/Information')) {
         if (role === null) {
             console.log('User role is null, redirecting to unauthorized');
             return NextResponse.redirect(homeUrl);
@@ -39,6 +41,3 @@ export function middleware(request) {
     return NextResponse.next();
 }
 
-export const config = {
-    matcher: ['/Home', '/Home/Infomation', '/Admin', '/Admin/Userlist', '/Admin/Facultylist', '/teacher'],
-}

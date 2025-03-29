@@ -8,11 +8,12 @@ const CustomTextfield = React.forwardRef(
       value = '',
       label = '',
       width = '25ch',
-      readOnly = false,
+      readOnly = null,
       type = 'text',
       id = '',
       placeholder = '',
-      onChange = () => {}, // เพิ่ม onChange เพื่อรองรับ callback
+      onChange = () => { }, // เพิ่ม onChange เพื่อรองรับ callback
+      disabled = false
     },
     ref
   ) => {
@@ -22,7 +23,7 @@ const CustomTextfield = React.forwardRef(
           fontFamily: 'Kanit, sans-serif',
           '& > :not(style)': {
             m: 1,
-            width: width,
+            width: { xs: '20ch', sm: '25ch', lg: width },
           },
         }}
       >
@@ -30,6 +31,7 @@ const CustomTextfield = React.forwardRef(
           sx={{
             background: 'white',
           }}
+          disabled={disabled}
           value={value}
           id={id}
           label={label}

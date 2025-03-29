@@ -25,6 +25,7 @@ export default function Customselect({
       <FormControl fullWidth sx={{ background: 'white' }}>
         <InputLabel sx={{ fontFamily: 'Kanit, sans-serif' }} id="custom-select-label">{label}</InputLabel>
         <Select
+        
           labelId="custom-select-label"
           id="custom-select"
           value={value}

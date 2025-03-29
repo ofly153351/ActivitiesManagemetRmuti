@@ -1,6 +1,6 @@
 'use client'
 import Nav from '../../Components/Nav'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import Activity from '../../Components/Activity';
 import {
@@ -10,47 +10,50 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { getMyEventStudent } from '@/app/Utils/api';
+import Loading from '@/app/Components/Loading';
+import { useStore } from '@/store/useStore';
 
 
 function Page() {
     const [searchQuery, setSearchQuery] = useState(''); // เพิ่ม state สำหรับคำค้นหา
-    // const [loading, setLoading] = useState(true);
-
-
+    const [loading, setLoading] = useState(true);
+    const { myEventList, setMyEventList , user } = useStore()
 
     const Manu = [
         { selectName: "เวลา", SelectValue: "เวลา" },
         { selectName: "วันที่", SelectValue: "วันที่" },
         { selectName: "ชั่วโมง", SelectValue: "ชั่วโมง" },
-
-
     ]
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             // แทนที่ URL ของ API ของคุณที่นี่
-    //             await axios.get('/api/activities');
-    //         } catch (error) {
-    //             console.error('Error fetching data:', error);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
+    const d = new Date();
+    let year = d.getFullYear();
 
-    //     fetchData();
-    // }, []);
+    useEffect(() => {
+        if  (user?.role === 'student') {
+            const fetchData = async () => {
+                try {
+                    const response = await getMyEventStudent(year + 543);
+                    setMyEventList(response.data);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                } finally {
+                    setLoading(false);
+                }
+            }
+            fetchData();
+        }
+        setLoading(false)
+    }, []);
+
+    // console.log(myEventList);
+    // console.log(searchQuery);
 
 
-    // if (loading) {
-    //     return (
-    //         <div className="w-screen  bg-white border-b-2 border-[#0067B3] shadow-md flex justify-center px-10 items-center fixed z-10">
-    //             <Box sx={{ display: 'flex' }}>
-    //                 <CircularProgress />
-    //             </Box>
-    //         </div>
-    //     );
-    // }
+
+    if (loading) {
+        return <div className='flex justify-center items-center min-h-screen p-20' ><Loading /></div>
+    }
 
     return (
         <>
@@ -89,12 +92,12 @@ function Page() {
                         </form>
                     </div>
                     <div className='xs:mx-2' >
-                        <Activity searchQuery={searchQuery} />
+                        <Activity searchQuery={searchQuery} inEvent={myEventList} />
 
                     </div>
                 </div>
             </div>
-            {/* <Footter /> */}
+
         </>
     );
 }

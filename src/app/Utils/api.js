@@ -335,25 +335,28 @@ export const getAllteacher = async () => {
 
 export const deleteEventByAdmin = async (id) => {
   try {
-    const response = await axios.delete(`http://localhost:8080/protected/admin/event/${id}`, {
-      withCredentials: true
+    const response = await axios.delete(`http://localhost:8080/admin/event/${Number(id)}`, {
+      withCredentials: true,
+      headers: { "Content-Type": "application/json" }
     },)
     return response
   } catch (error) {
     console.log(error.message);
-
+    throw error
   }
 }
 
 export const deleteEventByTeacher = async (id) => {
 
   try {
-    const response = await axios.delete(`http://localhost:8080/protected/teacher/event/${id}`, {
-      withCredentials: true
+    const response = await axios.delete(`http://localhost:8080/protected/teacher/event/${Number(id)}`, {
+      withCredentials: true,
+      headers: { "Content-Type": "application/json" }
     },)
     return response
   } catch (error) {
     console.log(error);
+    throw error
   }
 }
 
@@ -509,3 +512,40 @@ export const checkFileStudent = async (role, eventID, userID, payload) => {
     console.log(error.message);
   }
 }
+
+export const getMyEventStudent = async (currentYear) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/protected/student/myevents/${currentYear}`, {
+      withCredentials: true
+    })
+    return response
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+export const uploadFileMyEvent = async (eventID, file) => {
+  try {
+    const response = await axios.post(`http://localhost:8080/protected/student/upload/${Number(eventID)}`, file, {
+      withCredentials: true
+    })
+    return response
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+export const unJoinEvent = async (eventID) => {
+  if (eventID) {
+    try {
+      const response = await axios.delete(`http://localhost:8080/protected/student/unjoin/${eventID}`, {
+        withCredentials: true
+      })
+      return response
+    } catch (error) {
+      console.error(error);
+    }
+  }
+} 

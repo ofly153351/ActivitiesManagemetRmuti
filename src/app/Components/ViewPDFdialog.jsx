@@ -23,7 +23,7 @@ const ViewPDFdialog = ({ open, onClose, filePath, eventID, userID, status, first
                                 สถานะ :  {status === true ? <p className='text-green-500 px-2' >อนุมัติ</p> : <p className='text-red-500 px-2' > ไม่อนุมัติ</p>}
                             </div>
                         </div>
-                        <ViewPDF filePath={filePath} eventID={eventID} userID={userID} setlecedStatus={status} />
+                        <ViewPDF filePath={filePath} eventID={eventID} userID={userID} selectedStatus={status} />
 
                     </div>
 

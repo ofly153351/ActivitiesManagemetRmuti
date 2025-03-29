@@ -10,7 +10,6 @@ import React, { useEffect, useState } from 'react'
 import ViewTable from './ViewTable';
 import { getUserInEvent } from '../Utils/api';
 import { useStore } from '@/store/useStore';
-import ViewPDF from './ViewPDF';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -40,7 +39,7 @@ function ShowDialogTable({ isOpen, onClose, id }) {
         fetchData();
     }, [])
 
-    console.log(userListInEvent);
+    console.log("userListInEvent", userListInEvent);
 
     const colums = [
         { headerName: 'รหัสนักศึกษา', field: 'code' },

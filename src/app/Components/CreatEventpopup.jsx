@@ -18,8 +18,8 @@ import { useStore } from '@/store/useStore';
 import BasicButtons from './BasicButtons';
 import { CreateEvent, getBranches, getFaculties } from '../Utils/api';
 import CheckboxButtonLabel from './CheckbokButton';
-
-
+import width from '../Utils/textfieldWidth';
+import { ErrorAlert, SuccessAlert } from './Alert';
 
 
 function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], branchesList = [] }) {
@@ -43,28 +43,11 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
     // const { branchesList, setbranchesList } = useStore()
     const [faculty, setFacultyID] = useState('')
     const [branches, setBranches] = useState([])
+    const { user } = useStore();
+    const [selectedSchoolYear, setSelectedSchoolYear] = useState('')
+    const [errorsMessage, setErrorsMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
 
-    useEffect(() => {
-        // if (branchesList.length <= 0 || facultiesList.length <= 0) {
-        //     const fetchData = async () => {
-        //         try {
-        //             const response = await getBranches();
-        //             setBranchesList(response.data); // อัปเดต Zustand
-        //             // setBranches(response.data); // อัปเดต State
-
-        //             const facultyResponse = await getFaculties();
-        //             setFacultiesList(facultyResponse.data); // อัปเดต Zustand
-        //             // setFaculties(facultyResponse.data); // อัปเดต State
-        //         } catch (error) {
-        //             console.error("Error fetching data:", error);
-        //         }
-        //     };
-
-        //     fetchData();
-        // }
-    }, []); // ใส่ dependencies
-    // console.log('branchesList:', branchesList);
-    // console.log('facultiesList:', facultiesList);
 
     const years = [
         { fild: 'ปี 1', value: 1 },
@@ -78,6 +61,14 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
         setSelectedBranches(newRight);
     };
 
+    const d = new Date();
+    const n = d.getFullYear();
+
+    const schoolYears = [
+        { label: `${n + 543 + 1}`, value: n + 543 + 1 },
+        { label: `${n + 543}`, value: n + 543 },
+        { label: `${n + 543 - 1}`, value: n + 543 - 1 },
+    ];
 
 
     // console.log(selectedBranches.map(branch => branch.branch_id));
@@ -139,6 +130,11 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
         setSelectedBranches([])
     }
 
+    const handleSelectedSchoolYear = (value) => {
+        console.log("selectedSchoolYear", value);
+        setSelectedSchoolYear(value);
+    };
+
 
     const startDate = selectedDate
         .set('hour', selectedTime.hour())
@@ -158,11 +154,22 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
         });
     };
 
-    // console.log(selectedYears);
+
 
 
 
     const handleSubmit = async () => {
+
+        if (startDate < dayjs().format('YYYY-MM-DD HH:mm:ss')) {
+            setErrorsMessage('ไม่สามารถเลือกวันที่ที่ผ่านไปได้')
+            setTimeout(() => {
+                setErrorsMessage("")
+            }
+                , 3000);
+            return;
+        }
+
+
         try {
             const payload = {
                 event_name: eventName,
@@ -173,14 +180,19 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
                 detail,
                 branches: selectedBranches.map(branch => branch.branch_id),
                 years: selectedYears == null ? [] : selectedYears,  // ใช้ ternary operator
+                school_year: Number(selectedSchoolYear)
             };
+
 
             const response = await CreateEvent(user.role, payload);
             console.log("CreateEvent response:", response); // Debug log
 
             if (response) {
                 console.log("Event created successfully:", response);
+                setSuccessMessage('สร้างกิจกรรมเรียบร้อย')
+                setTimeout(() => { setSuccessMessage("") }, 3000);
                 handleCloseDialog()
+                window.location.reload();
             } else {
                 console.error("Event creation failed. No response received.");
             }
@@ -191,7 +203,7 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
 
 
     return (
-        <div className='w-screen'>
+        <div className='w-screen '>
             <Dialog
                 open={openDialog}
                 onClose={handleCloseDialog}
@@ -199,7 +211,7 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
                 fullWidth={false} // ปิด fullWidth เพื่อให้ขนาด Dialog ไม่เต็มหน้าจอ
                 sx={{
                     '& .MuiDialog-paper': {
-                        width: isDesktop ? '700px' : isTablet ? '500px' : '400px', // กำหนดขนาดกรอบที่เล็กลงตามหน้าจอ
+                        width: isDesktop ? '800px' : isTablet ? '700px' : '400px', // กำหนดขนาดกรอบที่เล็กลงตามหน้าจอ
                         maxWidth: '100%', // ป้องกันการขยายเต็มหน้าจอ
                     }
                 }}
@@ -218,20 +230,20 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
                 </Box>
                 <DialogContent
                     sx={{
-                        minWidth: isDesktop ? 400 : isTablet ? 400 : 'auto',
+                        minWidth: isDesktop ? 400 : isTablet ? 400 : '500',
                         padding: isMobile ? 1 : 3
                     }}
                 >
                     <Box
                         sx={{
-                            display: 'flex',
+                            display: isTablet ? 'flex' : 'flex',
                             flexDirection: isMobile ? 'column' : 'row',
                             gap: 2,
                             mb: 2
                         }}
                     >
                         <TextField
-                            autoFocus
+
                             margin="dense"
                             label="ชื่อกิจกรรม"
                             fullWidth
@@ -270,7 +282,7 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
                     }}
                     >
                         <TextField
-                            autoFocus
+
                             margin="dense"
                             label="จำนวนที่รับ"
                             fullWidth
@@ -290,7 +302,7 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
                         />
 
                         <TextField
-                            autoFocus
+
                             margin="dense"
                             label="จำนวนชั่วโมง"
                             fullWidth
@@ -340,20 +352,30 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
                     </div>
                     <label htmlFor="" className='text-red-500' >*เลือกสาขาที่สามารถเข้าร่วมกิจกรรมได้(ถ้าว่างเท่ากับทุกสาขาสามารถลงได้)</label>
                     <div className='grid' >
-                        <div className='flex gap-2' >
+                        <div className='xs:grid lg:flex ' >
                             <Customselect
-                                label={'คณะ'}
-                                options={facultiesList}
-                                field='faculty_name'
-                                onChange={(e) => handleSelectedFaculty(e)}
-                                value={selectedFaculty}
+                                label={'ประจำปีการศึกษา'}
+                                options={schoolYears}
+                                field='label'
+                                onChange={(e) => handleSelectedSchoolYear(e)}
+                                value={selectedSchoolYear}
+                                width={width.md}
                             />
-                            <div className='py-3 flex' >
-                                <BasicButtons
-                                    label={'ล้าง'}
-                                    width={'60px'}
-                                    onClick={clear}
+                            <div className='md:flex xs:grid ' >
+                                <Customselect
+                                    label={'คณะ'}
+                                    options={facultiesList}
+                                    field='faculty_name'
+                                    onChange={(e) => handleSelectedFaculty(e)}
+                                    value={selectedFaculty}
+                                    width={width.md}
                                 />
+                                <div className='py-3 flex  xs:mx-2' >
+                                    <BasicButtons
+                                        label={'ล้าง'}
+                                        onClick={clear}
+                                    />
+                                </div>
 
                             </div>
 
@@ -384,16 +406,6 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
                     >
                         ยกเลิก
                     </Button>
-                    {/* const payload = {
-                event_name: eventName,
-                start_date: startDate,
-                working_hour: Number(hour),
-                free_space: Number(space),
-                location,
-                detail,
-                branches: selectedBranches.map(branch => branch.branch_id),
-                years: selectedYears,
-            }; */}
                     < Button onClick={handleSubmit} color="primary"
                         disabled={
                             !eventName || !startDate || !hour || !space || !location
@@ -408,7 +420,18 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
                     </Button>
 
                 </DialogActions>
+
+                {errorsMessage ? (
+                    <div className="fixed bottom-4 right-4 z-30">
+                        <ErrorAlert label={errorsMessage} />
+                    </div>
+                ) : successMessage ? (
+                    <div className="fixed bottom-4 right-4 z-30">
+                        <SuccessAlert label={successMessage} />
+                    </div>
+                ) : null}
             </Dialog>
+
         </div >
     )
 }

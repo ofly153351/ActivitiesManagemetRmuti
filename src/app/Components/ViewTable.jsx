@@ -43,68 +43,75 @@ function ViewTable({ columns, rows }) {
 
     return (
         <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 500 }} aria-label="simple table">
-                <TableHead>
-                    <TableRow sx={{ fontFamily: 'Kanit, sans-serif' }} >
-                        {/* Render the table headers dynamically */}
-                        {columns.map((column, index) => (
-                            <TableCell sx={{ fontFamily: fontFamily.Kanit }} key={index} align="center">{column.headerName}</TableCell>
-                        ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row, rowIndex) => (
-                        <TableRow
-                            key={rowIndex} // Unique key for each row
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                            {columns.map((column, colIndex) => (
-                                <TableCell sx={{ fontFamily: fontFamily.Kanit }} key={colIndex} align="center">
-
-                                    {column.field === 'status' ? (
-                                        row['status'] ? (
-                                            <span className="p-1 bg-green-500 rounded-md text-white">ผ่านกิจกรรมแล้ว</span>
-                                        ) : (
-                                            <span className="p-1 bg-red-500 rounded-md text-white">ยังไม่ผ่าน</span>
-                                        )
-                                    ) : column.field === 'file_pdf' ? (
-                                        row['file_pdf'] ? (
-                                            <button
-                                                className="p-1 bg-[#f6df78] rounded-md text-black hover:underline"
-                                                onClick={() => handleSelectedFile(row['file_pdf'],
-                                                    row['event_id'],
-                                                    row['user_id'],
-                                                    row['status'],
-                                                    row['first_name'],
-                                                    row['last_name'])}
-                                            >
-                                                ตรวจสอบไฟล์
-                                            </button>
-                                        ) : (
-                                            <span className="p-1 bg-red-500 rounded-md text-white">ยังไม่ส่งเอกสาร</span>
-                                        )
-                                    ) : (
-                                        row[column.field] // แสดงข้อมูลสำหรับฟิลด์อื่นๆ ปกติ
-                                    )}
+            {(!rows || rows.length === 0) ? (
+                // ถ้าไม่มีข้อมูล แสดงข้อความ "ยังไม่มีผู้สมัคร"
+                <div style={{ textAlign: 'center', padding: '20px', fontFamily: 'Kanit, sans-serif' }}>
+                    ยังไม่มีผู้สมัคร
+                </div>
+            ) : (
+                <Table sx={{ minWidth: 500 }} aria-label="simple table">
+                    <TableHead>
+                        <TableRow sx={{ fontFamily: 'Kanit, sans-serif' }}>
+                            {/* Render the table headers dynamically */}
+                            {columns.map((column, index) => (
+                                <TableCell sx={{ fontFamily: fontFamily.Kanit }} key={index} align="center">
+                                    {column.headerName}
                                 </TableCell>
                             ))}
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHead>
+
+                    <TableBody>
+                        {rows.map((row, rowIndex) => (
+                            <TableRow key={rowIndex} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                {columns.map((column, colIndex) => (
+                                    <TableCell sx={{ fontFamily: fontFamily.Kanit }} key={colIndex} align="center">
+                                        {column.field === 'status' ? (
+                                            row['status'] ? (
+                                                <span className="p-1 bg-green-500 rounded-md text-white">ผ่านกิจกรรมแล้ว</span>
+                                            ) : (
+                                                <span className="p-1 bg-red-500 rounded-md text-white">ยังไม่ผ่าน</span>
+                                            )
+                                        ) : column.field === 'file_pdf' ? (
+                                            row['file_pdf']  ? (
+                                                <button
+                                                    className="p-1 bg-[#f6df78] rounded-md text-black hover:underline"
+                                                    onClick={() => handleSelectedFile(
+                                                        row['file_pdf'],
+                                                        row['event_id'],
+                                                        row['user_id'],
+                                                        row['status'],
+                                                        row['first_name'],
+                                                        row['last_name']
+                                                    )}
+                                                >
+                                                    ตรวจสอบไฟล์
+                                                </button>
+                                            ) : (
+                                                <span className="p-1 bg-red-500 rounded-md text-white">ยังไม่ส่งเอกสาร</span>
+                                            )
+                                        ) : (
+                                            row[column.field] ?? '-' // ป้องกัน undefined
+                                        )}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            )}
 
             {openDialog && (
                 <ViewPDFdialog open={open} onClose={handleCloseDialog}
                     filePath={selectedFile}
                     userID={selectedUser}
-                    eventID={selectedEvent} 
+                    eventID={selectedEvent}
                     firstName={selectedFirstName}
                     lastName={selectedLastName}
                     status={selectedStatus}
-                    />
+                />
             )}
         </TableContainer>
-    );
+    )
 }
-
 export default ViewTable;

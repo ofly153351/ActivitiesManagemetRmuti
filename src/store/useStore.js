@@ -101,4 +101,25 @@ export const useStore = create((set) => ({
     facultiesList: [],
     setFacultiesList: (newFaculties) => set({ facultiesList: newFaculties }),
 
+    myEventList: [],
+    setMyEventList: (newEventList) => set({ myEventList: newEventList }),
+
+    setUser: (newDataUser) => {
+        const currentUser = localStorage.getItem('user');
+        const parsedCurrentUser = currentUser ? JSON.parse(currentUser) : {};
+
+        // รวมข้อมูลผู้ใช้ปัจจุบันกับข้อมูลใหม่
+        const updatedUser = {
+            ...parsedCurrentUser,
+            ...newDataUser
+        };
+
+        // อัปเดต localStorage
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+
+        // อัปเดต Zustand store
+        set({ user: updatedUser });
+    },
+
+
 }));

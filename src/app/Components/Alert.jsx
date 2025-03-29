@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 
 export function SuccessAlert({ label = '' }) {
   return (
-    <Stack sx={{ width: '100%' }} spacing={2}>
+    <Stack sx={{ width: '100%' , animationDuration: '100' }} spacing={2}>
       <Alert severity="success">{label}</Alert>
     </Stack>
   );

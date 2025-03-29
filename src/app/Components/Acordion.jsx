@@ -6,6 +6,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 function ActivityAccordion({ activity }) {
 
+    // console.log(activity);
+
     return (
         <div className="my-4">
             <Accordion
@@ -22,7 +24,7 @@ function ActivityAccordion({ activity }) {
                     id="panel-header"
                 >
                     <div className="font-kanit">
-                        รายละเอียดเพิ่มเติมสำหรับ: {activity.event_name}
+                        รายละเอียด :
                     </div>
                 </AccordionSummary>
                 <AccordionDetails>

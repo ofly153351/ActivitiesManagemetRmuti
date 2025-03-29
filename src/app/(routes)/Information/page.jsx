@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
 import Nav from '@/app/Components/Nav';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
@@ -13,13 +12,12 @@ import { getBranches, getFaculties, updateTeacher, updateUser } from '@/app/Util
 import Loading from '@/app/Components/Loading';
 import { handleValidationThai, handleCodeValidation, handlePhoneValidation } from '@/app/Utils/validation';
 import { SuccessAlert } from '@/app/Components/Alert';
-import { useRouter } from 'next/navigation';
-
+import { blockNulluser } from '@/app/Utils/block';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 
 function Page() {
 
-    const router = useRouter()
-    const { user } = useStore();
+    const { user, setUser } = useStore();
     const [selectedTitle, setSelectedTitle] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -33,28 +31,26 @@ function Page() {
     const [year, setYear] = useState('');
     const [role, setRole] = useState('');
     const [isInitialized, setIsInitialized] = useState(false);
-    const [faculties, setFacultie] = useState([])
+    const [faculties, setFaculties] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [validationMessage, setValidationMessage] = useState({});
     const [isopen, setIsopen] = useState(false)
     // console.log(user);
-
+    const [isOpenEdit, setIsOpenEdit] = useState(true)
 
     useEffect(() => {
+        blockNulluser(user);
 
         const fetchData = async () => {
             try {
                 const response = await getBranches();
-                const faculties = await getFaculties();
+                const facultiesData = await getFaculties();
                 setBranches(response.data);
-                setFacultie(faculties.data);
+                setFaculties(facultiesData.data);
             } catch (error) {
-                console.error('Error fetching branches:', error);
+                console.error('Error fetching data:', error);
             } finally {
-                setIsLoading(false); // หยุดแสดง Loading
-                // if(!user){
-                //     router.push('/Home')                    
-                // }
+                setIsLoading(false);
             }
         };
 
@@ -71,8 +67,12 @@ function Page() {
             setIsInitialized(true);
         }
 
+
+
+
+
         fetchData();
-    }, [user, isInitialized]);
+    }, [user]); // ✅ เพิ่ม dependency
 
     const showSuccessAlert = () => {
         setIsopen(true)
@@ -124,10 +124,8 @@ function Page() {
 
 
     const handleSubmit = async () => {
-        // ตรวจสอบ Validation ก่อน
         const errors = {};
 
-        // Validation ชื่อ
         if (!firstName) {
             errors.firstName = 'กรุณากรอกชื่อจริง';
         } else if (!/^[ก-๙]+$/.test(firstName)) {
@@ -140,70 +138,53 @@ function Page() {
             errors.lastName = 'นามสกุลต้องเป็นภาษาไทยเท่านั้น';
         }
 
-        // Validation เบอร์โทร
         if (!phone) {
             errors.phone = 'กรุณากรอกเบอร์โทร';
         } else if (!/^0\d{9}$/.test(phone)) {
             errors.phone = 'เบอร์โทรต้องเป็นตัวเลข 10 หลักและขึ้นต้นด้วย 0';
         }
 
-        // Validation รหัสนักศึกษา
         if (!code) {
             errors.code = 'กรุณากรอกรหัสนักศึกษา';
         } else if (!/^\d{11}-\d$/.test(code)) {
             errors.code = 'รูปแบบไม่ถูกต้อง';
         }
 
-        // ถ้ามี Error แสดงข้อความเตือน
         if (Object.keys(errors).length > 0) {
             setValidationMessage(errors);
             return;
         }
 
-        // สร้างข้อมูลที่ต้องการส่ง
-        const updatedDataUser = {
+        const updatedData = {
             title_name: selectedTitle,
-            year: year,
             first_name: firstName,
             last_name: lastName,
-            code: code,
+            code,
             phone,
+            year,
             branch_id: branches.find(b => b.branch_name === branch)?.branch_id || user.branch?.branch_id,
         };
 
-        // console.log("updatedDataUser", updatedDataUser);
+
 
         try {
-            const isTeacherUpdate = !updatedDataUser.branch_id && !updatedDataUser.year;
-
-            const isUserUpdate = updatedDataUser.branch_id && updatedDataUser.year;
-
-            if (isTeacherUpdate) {
-                const teacherPayload = {
-                    title_name: selectedTitle,
-                    first_name: firstName,
-                    last_name: lastName,
-                    code: code,
-                    phone,
-                }
-                // console.log(teacherPayload);
-
-                const response = await updateTeacher(teacherPayload);
-                console.log('Teacher updated successfully:', response.data);
-                showSuccessAlert()
-            } else if (isUserUpdate) {
-                console.log(updatedDataUser);
-                const response = await updateUser(updatedDataUser);
-                console.log('User updated successfully:', response.data);
-                showSuccessAlert()
+            let response;
+            if (user.role === 'teacher' || user.role === 'admin') {
+                response = await updateTeacher(updatedData);
+                setUser(updatedData)
             } else {
-                console.warn('No valid update conditions met');
+                response = await updateUser(updatedData);
+                setUser(updatedData)
             }
-        } catch (error) {
+            console.log(user);
 
-            console.error('Error updating user/teacher:', error);
+            console.log('Update successful:', response.data);
+            showSuccessAlert();
+        } catch (error) {
+            console.error('Error updating data:', error);
         }
     };
+
 
     const label = {
         firstName: 'ชื่อจริง',
@@ -223,6 +204,7 @@ function Page() {
         { key: 'miss', label: 'นาง' },
         { key: 'missis', label: 'นางสาว' },
     ];
+
     const years = [
         { key: '1', label: 1 },
         { key: '2', label: 2 },
@@ -233,12 +215,15 @@ function Page() {
         { key: '7', label: 7 }
     ];
 
+    const handleOpenEdit = () => {
+        setIsOpenEdit(prev => !prev);
+    }
 
 
     return (
         <div>
             <Nav />
-            <div className="min-h-screen w-screen flex justify-center items-center">
+            <div className="min-h-screen w-screen flex justify-center items-center mt-10">
                 <div className=" w-fit bg-[#f5f5f5] rounded-xl shadow-md">
                     <div className="flex p-4 justify-start items-center gap-4">
                         <PermIdentityIcon sx={{ fontSize: 64, color: colorsCode.blue }} />
@@ -249,18 +234,21 @@ function Page() {
                             <div className="">
                                 <div className="grid">
                                     <Customselect
-                                        width={width.sm}
+                                        width={'full'}
                                         label={label.title}
                                         field="label"
                                         value={selectedTitle}
                                         onChange={(value) => handleChange(value, 'title')}
                                         options={titles}
+                                        readOnly={isOpenEdit}
                                     />
                                     <div className='grid' >
                                         <CustomTextfield
                                             label={label.firstName}
                                             value={firstName}
                                             onChange={(e) => handleValidationThai(e.target.value, 'firstName', handleChange, setValidationMessage)}
+                                            disabled={isOpenEdit}
+
                                         />
                                         {validationMessage.firstName && (
                                             <span className="text-red-500 text-sm pl-3 ">{validationMessage.firstName}</span>
@@ -271,49 +259,56 @@ function Page() {
                                             label={label.lastName}
                                             value={lastName}
                                             onChange={(e) => handleValidationThai(e.target.value, 'lastName', handleChange, setValidationMessage)}
+                                            disabled={isOpenEdit}
+
                                         />
                                         {validationMessage.lastName && (
                                             <span className="text-red-500 text-sm pl-3 ">{validationMessage.lastName}</span>
                                         )}
                                     </div>
                                     <Customselect
-                                        width={'20%'}
                                         label={label.year}
                                         field="label"
                                         value={year}
                                         onChange={(value) => handleChange(value, 'year')}
                                         options={years}
+                                        readOnly={isOpenEdit}
                                     />
                                 </div>
-                                <div className="flex">
+                                <div className="grid">
                                     <div className='grid' >
                                         <CustomTextfield
                                             label={label.code}
                                             value={code}
                                             onChange={(e) => handleCodeValidation(e.target.value, setCode, setValidationMessage)}
+                                            disabled={isOpenEdit}
+
                                         />
                                         {validationMessage.code && (
                                             <span className="text-red-500 text-sm pl-3 ">{validationMessage.code}</span>
                                         )}
                                     </div>
-                                    <Customselect
-                                        readOnly={true}
-                                        width={width.md}
-                                        label={label.faculties}
-                                        options={faculties} // ต้องเป็น array ที่มีข้อมูล
-                                        field="faculty_name" // field นี้ต้องตรงกับ key ใน options
-                                        value={faculty} // ค่าเริ่มต้นต้องตรงกับ faculty_name ใน options
-                                        onChange={(value) => handleChange(value, 'faculty')}
-                                    />
-                                    <Customselect
-                                        readOnly={true}
-                                        width={width.md}
-                                        label={label.branch}
-                                        field="branch_name"
-                                        value={branch}
-                                        onChange={(value) => handleChange(value, 'branch')}
-                                        options={branches}
-                                    />
+                                    <div className='grid' >
+                                        <Customselect
+                                            readOnly={true}
+                                            width={width.md}
+                                            label={label.faculties}
+                                            options={faculties} // ต้องเป็น array ที่มีข้อมูล
+                                            field="faculty_name" // field นี้ต้องตรงกับ key ใน options
+                                            value={faculty} // ค่าเริ่มต้นต้องตรงกับ faculty_name ใน options
+                                            onChange={(value) => handleChange(value, 'faculty')}
+
+                                        />
+                                        <Customselect
+                                            readOnly={true}
+                                            width={width.md}
+                                            label={label.branch}
+                                            field="branch_name"
+                                            value={branch}
+                                            onChange={(value) => handleChange(value, 'branch')}
+                                            options={branches}
+                                        />
+                                    </div>
                                 </div>
                                 <div className="flex">
                                     <div className='grid' >
@@ -321,6 +316,8 @@ function Page() {
                                             label={label.phone}
                                             value={phone}
                                             onChange={(e) => handlePhoneValidation(e.target.value, setPhone, setValidationMessage)}
+                                            disabled={isOpenEdit}
+
                                         />
                                         {validationMessage.phone && (
                                             <span className="text-red-500 text-sm pl-3">{validationMessage.phone}</span>
@@ -328,7 +325,7 @@ function Page() {
                                     </div>
                                 </div>
                             </div>
-                        ) : user?.role === 'teacher' || 'admin' ? (
+                        ) : (user?.role === 'teacher') || user?.role === 'admin' ? (
                             <div className="">
                                 <div className="grid">
                                     <Customselect
@@ -338,12 +335,15 @@ function Page() {
                                         value={selectedTitle}
                                         onChange={(value) => handleChange(value, 'title')}
                                         options={titles}
+                                        readOnly={isOpenEdit}
                                     />
                                     <div className='grid' >
                                         <CustomTextfield
                                             label={label.firstName}
                                             value={firstName}
                                             onChange={(e) => handleValidationThai(e.target.value, 'firstName', handleChange, setValidationMessage)}
+                                            disabled={isOpenEdit}
+
                                         />
                                         {validationMessage.firstName && (
                                             <span className="text-red-500 text-sm pl-3 ">{validationMessage.firstName}</span>
@@ -354,6 +354,8 @@ function Page() {
                                             label={label.lastName}
                                             value={lastName}
                                             onChange={(e) => handleValidationThai(e.target.value, 'lastName', handleChange, setValidationMessage)}
+                                            disabled={isOpenEdit}
+
                                         />
                                         {validationMessage.lastName && (
                                             <span className="text-red-500 text-sm pl-3 ">{validationMessage.lastName}</span>
@@ -366,6 +368,8 @@ function Page() {
                                             label={label.teacherCode}
                                             value={code}
                                             onChange={(e) => handleCodeValidation(e.target.value, setCode, setValidationMessage)}
+                                            disabled={isOpenEdit}
+
                                         />
                                         {validationMessage.code && (
                                             <span className="text-red-500 text-sm pl-3 ">{validationMessage.code}</span>
@@ -376,6 +380,8 @@ function Page() {
                                             label={label.phone}
                                             value={phone}
                                             onChange={(e) => handlePhoneValidation(e.target.value, setPhone, setValidationMessage)}
+                                            disabled={isOpenEdit}
+
                                         />
                                         {validationMessage.phone && (
                                             <span className="text-red-500 text-sm pl-3">{validationMessage.phone}</span>
@@ -390,7 +396,10 @@ function Page() {
                         )
 
                         }
-                        <div className="p-4 w-full flex justify-end">
+                        <div className="p-4 w-full flex justify-end items-center  ">
+                            <button onClick={() => handleOpenEdit()} className='p-2' >
+                                <ModeEditIcon sx={{ fontSize: 30, color: colorsCode.blue }} />
+                            </button >
                             <BasicButtons
                                 label="ยืนยันการแก้ไขข้อมูล"
                                 width={170}

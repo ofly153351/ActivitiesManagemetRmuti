@@ -6,12 +6,13 @@ import { useStore } from '@/store/useStore';
 import { checkFileStudent } from '../Utils/api';
 import { ErrorAlert, SuccessAlert } from './Alert';
 
-const ViewPDF = ({ filePath, eventID, userID, setlecedStatus }) => {
+const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
     const [status, setStatus] = useState(null); // เก็บสถานะ (ผ่าน/ไม่ผ่าน)
     const { user } = useStore()
     const [comment, setComment] = useState(''); // State เก็บความคิดเห็น
     const [successMessage, setSuccessMessage] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
+    console.log(selectedStatus);
 
     if (!filePath) {
         return (
@@ -69,7 +70,7 @@ const ViewPDF = ({ filePath, eventID, userID, setlecedStatus }) => {
 
     return (
         <div className="w-full max-w-5xl mx-auto p-4">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
                 {/* PDF Viewer */}
                 <iframe
                     src={pdfUrl}
@@ -77,7 +78,7 @@ const ViewPDF = ({ filePath, eventID, userID, setlecedStatus }) => {
                     frameBorder="0"
                 />
 
-                {/* ช่องแสดงความคิดเห็น */}
+                <span className='text-red-500 mx-2 w-full' >*กรณีที่ไม่ผ่านกรุณาใส่ความคิดเห็น</span>
                 <CustomTextfield
                     label={'แสดงความคิดเห็น'}
                     width={'100%'}
@@ -86,20 +87,31 @@ const ViewPDF = ({ filePath, eventID, userID, setlecedStatus }) => {
                     value={comment} // ผูกกับ state 'comment'
                 />
                 <div className="flex justify-end gap-5">
-
-                    {!setlecedStatus ? (
-                        <BasicButtons
-                            label={'ผ่าน'}
-                            onClick={() => handleButtonClick(true)} // เมื่อกดปุ่ม 'ผ่าน'
-                        />
-                    ) : (
-                        <BasicButtons
-                            hover={'#de0a26'}
-                            color={'#f94449'}
-                            label={'ไม่ผ่าน'}
-                            onClick={() => handleButtonClick(false)} // เมื่อกดปุ่ม 'ไม่ผ่าน'
-                        />
-                    )}
+                    <div className='flex gap-2 ' >
+                        {selectedStatus ? (
+                            <div>
+                                <BasicButtons
+                                    hover={'#de0a26'}
+                                    color={'#f94449'}
+                                    label={'ไม่ผ่าน'}
+                                    onClick={() => handleButtonClick(false)} // เมื่อกดปุ่ม 'ไม่ผ่าน'
+                                />
+                            </div>
+                        ) : (
+                            <div className='flex gap-2'> 
+                                <BasicButtons
+                                    hover={'#de0a26'}
+                                    color={'#f94449'}
+                                    label={'ไม่ผ่าน'}
+                                    onClick={() => handleButtonClick(false)} // เมื่อกดปุ่ม 'ไม่ผ่าน'
+                                />
+                                <BasicButtons
+                                    label={'ผ่าน'}
+                                    onClick={() => handleButtonClick(true)} // เมื่อกดปุ่ม 'ผ่าน'
+                                />
+                            </div>
+                        )}
+                    </div>
                 </div>
 
             </div>
