@@ -3,12 +3,16 @@ import BasicButtons from './BasicButtons';
 import { useRouter } from 'next/navigation';
 import Loading from './Loading';
 
-function HorizontalCard({ myevent }) {
+function HorizontalCard({ eventsInside, eventOutside }) {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        if (myevent) {
+        if (eventsInside) {
             setIsLoading(false)
+        }
+        if (eventOutside) {
+            setIsLoading(false)
+
         }
     }, [])
 
@@ -23,14 +27,16 @@ function HorizontalCard({ myevent }) {
         }
     }
 
+    console.log(eventOutside);
+
+
     if (isLoading)
         return <div className='p-20 flex justify-center items-center min-h-full' ><Loading /></div>
 
     return (
         <div className="">
-
-            {myevent?.map((item, index) => (
-                <button className="px-2 pt-2 border-md w-full hover:-translate-y-1 hover:duration-75  " key={index} onClick={() => selectEvent(item.event_id, item)} >
+            {eventsInside?.map((item, index) => (
+                <button className=" pt-2 border-md w-full hover:-translate-y-1 hover:duration-75  " key={index} onClick={() => selectEvent(item.event_id, item)} >
                     <div className="sm:h-[80px] xs:justify-center p-2 m-2 drop-shadow-md  xs:gap-2 bg-white sm:flex sm:justify-between items-center xs:grid  ">
                         <div className='sm:flex gap-2 px-2 xs:gird' >
                             <p className='truncate xs:border-[0px] sm:border-r-[1px] border-gray-200 px-2' >
@@ -69,7 +75,7 @@ function HorizontalCard({ myevent }) {
                                         </div>
                                     </div>
                                 </div>
-                            ) : (!item.status && item.file_pdf && item.comment !== ''  ) ? (
+                            ) : (!item.status && item.file_pdf && item.comment !== '') ? (
                                 <div className='w-fit xs:gap-1 sm:gap-2 flex' >
                                     <div className='xs:pl-0 sm:pl-2  ' >
                                         <div className='truncate p-2 bg-yellow-500 rounded-md text-shadow-md shadow-md text-white xs:border-[0px] sm:border-l-[1px]' >
@@ -103,6 +109,47 @@ function HorizontalCard({ myevent }) {
                 </button>
             ))
             }
+            {eventOutside && eventOutside.length > 0 ? (
+                <>
+                    {eventOutside?.map((item, index) => (
+                        <button className=" pt-2 border-md w-full hover:-translate-y-1 hover:duration-75  " key={index} onClick={() => selectEvent(item.event_id, item)} >
+                            <div className="sm:h-[80px] xs:justify-center p-2 m-2 drop-shadow-md  xs:gap-2 bg-white sm:flex sm:justify-between items-center xs:grid  ">
+                                <div className='sm:flex gap-2 px-2 xs:gird' >
+                                    <p className='truncate xs:border-[0px] sm:border-r-[1px] border-gray-200 px-2' >
+                                        กิจกรรมที่ : {index + 1}
+                                    </p>
+                                    <p className='truncate w-29 xs:border-[0px] sm:border-r-[1px] border-gray-200 px-2' >
+                                        {item.event_name}
+                                    </p>
+                                </div>
+                                <div className='xs:px-0 sm:px-2' >
+                                    {item.file_pdf ? (
+                                        <div className='w-fit flex xs:gap-1 sm:gap-2 ' >
+                                            <div className='xs:pl-0 sm:pl-2 xs:border-[0px] ' >
+                                                <div className='truncate p-2 bg-green-500 rounded-md text-shadow-md shadow-md text-white border-l-[1px]'
+                                                >
+                                                    สถานะ : ส่งเอกสารแล้ว
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) :(
+                                        <div className='w-fit flex xs:gap-1 sm:gap-2 ' >
+                                            <div className='xs:pl-0 sm:pl-2 xs:border-[0px] ' >
+                                                <div className='truncate p-2 bg-red-500 rounded-md text-shadow-md shadow-md text-white border-l-[1px]'>
+                                                    สถานะ : ยังไม่ส่งเอกสาร
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                            </div>
+                        </button>
+                    ))}
+                </>
+            ) : (Array.isArray(eventOutside).length <= 0) ? (
+                <div>ไม่มีข้อมูล</div>
+            ) : null}
         </div >
 
     )

@@ -5,7 +5,7 @@ import Nav from "@/app/Components/Nav";
 import EditPopup from "@/app/Components/editPopup";
 import Creatfaculty from "@/app/Components/Createfaculty";
 import { deleteFacultybtID, getFaculties } from "@/app/Utils/api";
-import { SuccessAlert, ErrorAlert } from '@/app/Components/Alert';
+import { SuccessAlert, ErrorAlert } from '@/app/Components/AlertShow';
 
 
 function Page() {

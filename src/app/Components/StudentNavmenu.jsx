@@ -6,6 +6,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { fontFamily } from '../Utils/font';
 import { useRouter } from 'next/navigation';
 
+
+
 function StudentNavmenu({ buttonName, menu = [] }) {
     const router = useRouter();
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -14,14 +16,10 @@ function StudentNavmenu({ buttonName, menu = [] }) {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = (href) => {
-        console.log(href);
-
-        if (href.typeof === 'string') {
-            router.push(href);
-        }
         setAnchorEl(null);
     };
 
+    console.log(menu);
 
     return (
         <div >
@@ -45,7 +43,7 @@ function StudentNavmenu({ buttonName, menu = [] }) {
             >
                 {Array.isArray(menu) &&
                     (menu).map((item, index) => (
-                        <MenuItem key={index} sx={{ fontFamily: fontFamily.Kanit }} onClick={() => handleClose(item.href)}>
+                        <MenuItem key={index} sx={{ fontFamily: fontFamily.Kanit }} onClick={() => item.function && item.function()}>
                             {item.label}
                         </MenuItem>
                     ))}

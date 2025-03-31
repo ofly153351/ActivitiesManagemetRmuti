@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/th';
 import BasicButtons from './BasicButtons';
 import width from '../Utils/textfieldWidth';
-import { ErrorAlert, SuccessAlert } from './Alert';
+import { ErrorAlert, SuccessAlert } from './AlertShow';
 import { useStore } from '@/store/useStore';
 
 function Activity({ searchQuery, inEvent }) {
@@ -17,6 +17,8 @@ function Activity({ searchQuery, inEvent }) {
     const [eventsInside, setEventsInside] = useState([]);
     const [loading, setLoading] = useState(true);
     dayjs.locale('th');
+
+
 
     // Improved filtering with null checks
     const filteredActivities = useMemo(() => {
@@ -66,7 +68,6 @@ function Activity({ searchQuery, inEvent }) {
                 setLoading(false);
             }
         };
-
         fetchData();
     }, [myEventList]);
 

@@ -11,7 +11,7 @@ import BasicButtons from '@/app/Components/BasicButtons';
 import { getBranches, getFaculties, updateTeacher, updateUser } from '@/app/Utils/api';
 import Loading from '@/app/Components/Loading';
 import { handleValidationThai, handleCodeValidation, handlePhoneValidation } from '@/app/Utils/validation';
-import { SuccessAlert } from '@/app/Components/Alert';
+import { SuccessAlert } from '@/app/Components/AlertShow';
 import { blockNulluser } from '@/app/Utils/block';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 

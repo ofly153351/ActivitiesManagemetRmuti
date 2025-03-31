@@ -548,4 +548,49 @@ export const unJoinEvent = async (eventID) => {
       console.error(error);
     }
   }
-} 
+}
+
+export const CreateEventsOutSide = async (payload) => {
+  if (payload) {
+
+    try {
+      const response = await axios.post('http://localhost:8080/protected/student/outside', payload, {
+        withCredentials: true
+      })
+      return response
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
+}
+
+export const downloadFileEvents = async (eventID) => {
+  if (!eventID) return;
+
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/protected/student/download/${eventID}`,
+      {
+        withCredentials: true,
+        responseType: "blob", // สำคัญ! ให้ Axios รู้ว่ากำลังรับไฟล์
+      }
+    );
+
+    // สร้าง Blob URL สำหรับไฟล์ที่ได้รับ
+    const blob = new Blob([response.data], { type: "application/pdf" });
+    const url = window.URL.createObjectURL(blob);
+
+    // สร้างลิงก์ดาวน์โหลด
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `event_${eventID}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+
+    // ล้างหน่วยความจำหลังจากดาวน์โหลดเสร็จ
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("เกิดข้อผิดพลาดในการดาวน์โหลดไฟล์:", error);
+  }
+};

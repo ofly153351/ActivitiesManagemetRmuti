@@ -19,7 +19,7 @@ import BasicButtons from './BasicButtons';
 import { CreateEvent, getBranches, getFaculties } from '../Utils/api';
 import CheckboxButtonLabel from './CheckbokButton';
 import width from '../Utils/textfieldWidth';
-import { ErrorAlert, SuccessAlert } from './Alert';
+import { ErrorAlert, SuccessAlert } from './AlertShow';
 
 
 function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], branchesList = [] }) {

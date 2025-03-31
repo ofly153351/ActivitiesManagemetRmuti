@@ -13,7 +13,8 @@ function page() {
     const title = 'กิจกรรมของฉัน'
     const [loading, setLoading] = useState(false)
     const [myEvent, setMyEvent] = useState([])
-    const [selectedEvent, setSelectedEvent] = useState([])
+    const [insideEvents, setInsideEvents] = useState([])
+    const [outSideEvents, setOutsideEvents] = useState([])
     const d = new Date()
     let year = d.getFullYear()
     let currentThaiYear = year + 543
@@ -27,10 +28,16 @@ function page() {
             try {
                 const response = await getMyEventStudent(currentThaiYear)
                 setMyEvent(response.data)
+                console.log(response.data);
+
                 // Only set selectedEvent once, initially
-                if (!selectedEvent.length && response.data.inside_events) {
-                    setSelectedEvent(response.data.inside_events)
-                    console.log('Selected inside events set.')
+                if (!insideEvents.length && response.data.inside_events) {
+                    setInsideEvents(response.data.inside_events)
+                    console.log('inside has been set')
+                }
+                if (!outSideEvents.length && response.data.outside_events) {
+                    setOutsideEvents(response.data.outside_events)
+                    console.log('inside has been set');
                 }
             } catch (error) {
                 console.log(error)
@@ -42,8 +49,10 @@ function page() {
         fetchData()
     }, []) // Empty dependency array, so it runs only once on initial load
 
-    // console.log(alignment);
-    // console.log(selectedEvent);
+    console.log(myEvent);
+    console.log(insideEvents);
+    console.log(outSideEvents);
+
 
 
 
@@ -60,14 +69,23 @@ function page() {
                             </div>
                         </div>
                     ) : (
-                        <div className='w-full' >
-                            <HorizontalCard myevent={selectedEvent} />
-                        </div>
-
+                        <>
+                            <div className='w-full px-4' >
+                                <div className=' border-b-2 border-slate-200 ' >
+                                    <p className=' text-md py-2 border-b-1' >กิจกรรมภายในมหาวิทยาลัย :</p>
+                                </div>
+                                <HorizontalCard eventsInside={insideEvents} />
+                            </div>
+                            <div className='w-full px-4' >
+                                <div className=' border-b-2 border-slate-200 ' >
+                                    <p className=' text-md py-2 border-b-1' >กิจกรรมภายในมหาวิทยาลัย :</p>
+                                </div>
+                                <HorizontalCard eventOutside={outSideEvents} />
+                            </div>
+                        </>
                     )}
                 </div>
             </div>
-
         </div>
 
 

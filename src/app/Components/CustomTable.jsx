@@ -15,7 +15,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import { SuccessAlert, ErrorAlert } from './Alert';
+import { SuccessAlert, ErrorAlert } from './AlertShow';
 import { deleteEventByAdmin, deleteEventByTeacher, editStatusEvent, getBranches } from '../Utils/api';
 import { useStore } from '@/store/useStore';
 import AccordionBranchList from './AccordionBranch';

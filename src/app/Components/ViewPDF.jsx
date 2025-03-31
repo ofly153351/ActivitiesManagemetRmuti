@@ -4,7 +4,7 @@ import CustomTextfield from './Textfield';
 import BasicButtons from './BasicButtons';
 import { useStore } from '@/store/useStore';
 import { checkFileStudent } from '../Utils/api';
-import { ErrorAlert, SuccessAlert } from './Alert';
+import { ErrorAlert, SuccessAlert } from './AlertShow';
 
 const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
     const [status, setStatus] = useState(null); // เก็บสถานะ (ผ่าน/ไม่ผ่าน)

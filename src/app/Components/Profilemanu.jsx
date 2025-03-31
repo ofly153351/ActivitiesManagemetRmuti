@@ -129,7 +129,6 @@ function ProfileMenu() {
                                     </MenuItem>
                                     <MenuItem onClick={() => handleMenuItemClick('/Information/MyEvent')}>
                                         <p className='font-kanit' >กิจกรรมของฉัน</p>
-
                                     </MenuItem>
                                     <MenuItem onClick={() => handleMenuItemClick('/logout')}>
                                         <p className='font-kanit' >Logout</p>

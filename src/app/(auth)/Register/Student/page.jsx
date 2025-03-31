@@ -13,6 +13,8 @@ import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import { useRouter } from 'next/navigation'
 import { colorsCode } from "@/app/Utils/color";
 import { useStore } from "@/store/useStore";
+import { checkUserAuth } from "@/app/Utils/block";
+
 
 function Page() {
   const router = useRouter();
@@ -43,10 +45,8 @@ function Page() {
   const [branches, setBranches] = useState([]);
 
   useEffect(() => {
-    if (user) {
-      
-      router.push('/Home');
-    }
+    checkUserAuth();
+
     const fetchData = async () => {
       try {
         const [branchResponse, facultiesResponse] = await Promise.all([

@@ -13,6 +13,7 @@ import CustomMenu from './CustomManu';
 import BasicButtons from './BasicButtons';
 import useStore from '@/store/useStore';
 import StudentNavmenu from './StudentNavmenu';
+import CreateEventOutside from './Outside/CreateEventOutside';
 
 
 function Nav() {
@@ -20,8 +21,11 @@ function Nav() {
     const router = useRouter();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-    // const { userData } = useStore();
-    // console.log(userData);
+    const [openDialog, setOpenDialog] = useState(false)
+    const [creatEventoutSide, setCreatEventOutside] = useState(true)
+
+
+
 
     useEffect(() => {
         const token = Cookies.get('token');
@@ -34,6 +38,33 @@ function Nav() {
         }
     }, []);
 
+    console.log(openDialog);
+
+
+    const commonLinks = [
+        { href: '/Home', label: 'รายชื่อกิจกรรม' }
+    ];
+
+
+    const registerPath = [
+        { href: '/Login', label: 'เข้าสู่ระบบ' }
+    ];
+
+    const userLinks = [
+        { function: () => setOpenDialog(true), label: 'สร้างแปบฟอร์มกิจกรรมภายนอก' },
+        { function: null, label: '-' },
+        { function: null, label: '-' }
+    ];
+
+    const isRegistrationPage = pathname === '/Register/Student' || pathname === '/Register/Teacher';
+
+    const handleDialogClose = (value) => {
+        setOpenDialog(value); // เปลี่ยนค่า openDialog ให้เป็น false เมื่อ dialog ถูกปิด
+        setCreatEventOutside(value)
+    };
+
+
+
     if (loading) {
         return (
             <div className=" xs:w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-end px-10 items-center fixed z-10">
@@ -44,33 +75,11 @@ function Nav() {
         );
     }
 
-    const commonLinks = [
-        { href: '/Home', label: 'รายชื่อกิจกรรม' }
-    ];
 
-    const loginPath = [
-        { href: '/Register', label: 'ลงทะเบียน' }
-    ];
-
-    const registerPath = [
-        { href: '/Login', label: 'เข้าสู่ระบบ' }
-    ];
-
-    const authLinks = [
-        { href: '/Register', label: 'ลงทะเบียน' }
-    ];
-
-    const userLinks = [
-        { href: '/', label: 'ขอเพิ่มกิจกรรมนอกสถานที่' },
-        { href: '/', label: '-' },
-        { href: '/', label: '-' }
-    ];
-
-    const isRegistrationPage = pathname === '/Register/Student' || pathname === '/Register/Teacher';
 
     return (
 
-        <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex  lg:justify-between xs:justify-end  xs:items-center z-10 fixed top-0">
+        <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex  lg:justify-between xs:justify-end  xs:items-center z-10  top-0">
             {(user?.role === 'teacher' || user?.role === 'admin') && (
                 <div className='flex justify-between items-center  lg:mx-20 w-screen'>
                     <div className='flex justify-between items-center w-full'>
@@ -143,14 +152,14 @@ function Nav() {
                     <div className='flex ' >
                         {userLinks.map((link, index) => (
                             <div key={index} className="p-2 flex xs:hidden lg:flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] font-kanit">
-                                <Link href={link.href}>
+                                <button onClick={link.function}>
                                     <span>{link.label}</span>
-                                </Link>
+                                </button>
                             </div>
                         ))}
                     </div>
                     <div className='flex justify-center items-center lg:hidden' >
-                        <StudentNavmenu buttonName="เมนู" menu={userLinks} />
+                        <StudentNavmenu buttonName="เมนู" menu={userLinks} onClick={(e) => console.log('11')} />
                     </div>
                     <div className="min-w-fit mr-20">
                         <Profilemanu user={user} />
@@ -158,6 +167,10 @@ function Nav() {
                 </div>
 
             )}
+
+            {openDialog ? (
+                <CreateEventOutside isOpen={openDialog} isClose={handleDialogClose} />
+            ) : null}
 
             {pathname === '/Home' && !user && (
                 <div className='flex gap-5 xs:mr-5'>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { colorsCode } from '../Utils/color'
 import CustomTextfield from './Textfield'
 import BasicButtons from './BasicButtons'
-import { unJoinEvent, uploadFileMyEvent } from '../Utils/api'
+import { downloadFileEvents, unJoinEvent, uploadFileMyEvent } from '../Utils/api'
 import Loading from './Loading'
 import { useRouter } from 'next/navigation'
 
@@ -104,7 +104,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                     </div>
                     <div className='grid '>
                         <p className='text-sm px-2'>หน่วยกิจกรรม:</p>
-                        <CustomTextfield label={selectedEvent?.start_date} disabled={true} />
+                        <CustomTextfield label={selectedEvent?.working_hour} disabled={true} />
                     </div>
                 </div>
                 <div className='grid '>
@@ -113,28 +113,43 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                             <p className='text-sm px-2'>ความคิดเห็น:</p>
                             <CustomTextfield width={'98%'} label={selectedEvent?.comment} disabled={true} />
                         </div>
+                    ) : (!selectedEvent?.comment) ? (
+                        <div className='ml-2' >
+                            < button className='underline text-lg text-green-800' label={"ดาวน์โหลดเอกสาร"} onClick={(e) => downloadFileEvents(Number(selectedEvent.event_id))}>
+                                ดาวน์โหลดเอกสาร
+                            </button>
+
+                        </div>
                     ) : (
                         <div>
                             <p className='text-sm px-2'>ความคิดเห็น:</p>
                             <CustomTextfield placeholder={'ไม่มีความคิดเห็น'} width={'98%'} label={selectedEvent?.comment} disabled={true} />
                         </div>
                     )}
-
                 </div>
-                <div className='xs:grid lg:flex justify-end items-center p-2'>
+                <div className=' lg:flex lg:justify-end items-center p-2'>
                     {
                         !selectedEvent.file_pdf && !selectedEvent.status ? (
-                            <div className='xs:grid sm:flex justify-end items-center gap-2'>
+                            <div className=' lg:flex lg:justify-end lg:items-center  gap-2'>
                                 <input
                                     type="file"
                                     accept=".pdf"
                                     onChange={(e) => setFile(e.target.files[0])} // ✅ บันทึกไฟล์ที่เลือก
-                                    className=" border p-2 rounded-md xs:w-[312px] w-[400px]"
+                                    className=" border p-2 rounded-md border-none xs:w-[312px] w-[400px]"
                                 />
-                                <div className="flex gap-2 justify-end xs:mt-2">
-                                    <p className='p-2.5 text-white bg-[#e90000d9] rounded-sm shadow-md'>ยังไม่ส่งเอกสาร</p>
-                                    <BasicButtons color={'#e90000d9'} hover={"#E90000"} label={'ยกเลิกการเข้าร่วม'} onClick={() => handleCanclejoinEvent(selectedEvent.event_id)} />
-                                    <BasicButtons label={'อัพโหลดเอกสาร'} onClick={handleUpload} />
+                                <div className="lg:flex w-full gap-2 justify-end xs:mt-2 lg:mt-0">
+                                    <div>
+                                        <p className='p-2.5 xs:text-center lg:text-wrap text-white bg-[#e90000d9] rounded-sm shadow-md'>ยังไม่ส่งเอกสาร</p>
+                                    </div>
+                                    <div className='xs:flex xs:mt-2 lg:mt-0 xs:justify-end xs:items-end gap-2 lg:mb-4' >
+                                        <div className='flex justify-center items-center '>
+                                            <BasicButtons color={'#e90000d9'} hover={"#E90000"} label={'ยกเลิกการเข้าร่วม'} onClick={() => handleCanclejoinEvent(selectedEvent.event_id)} />
+                                        </div>
+                                        <div className='flex justify-center items-center' >
+                                            <BasicButtons label={'อัพโหลดเอกสาร'} onClick={handleUpload} />
+
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -173,7 +188,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                     ) : null}
                 </div>
 
-            </div>
+            </div >
 
         </div >
     )

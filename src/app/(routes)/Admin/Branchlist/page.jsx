@@ -1,5 +1,5 @@
 'use client'
-import { ErrorAlert, SuccessAlert } from '@/app/Components/Alert';
+import { ErrorAlert, SuccessAlert } from '@/app/Components/AlertShow';
 import CreatBranch from '@/app/Components/CreateBranch';
 import CustomTable from '@/app/Components/CustomTable';
 import EditPopup from '@/app/Components/editPopup';

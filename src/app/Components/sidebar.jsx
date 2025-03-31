@@ -19,7 +19,7 @@ import Creatfaculty from './Createfaculty';
 import CreatBranch from './CreateBranch';
 import AddIcon from '@mui/icons-material/Add';
 import ListIcon from '@mui/icons-material/List';
-import { ErrorAlert, SuccessAlert } from './Alert';
+import { ErrorAlert, SuccessAlert } from './AlertShow';
 import { useStore } from '@/store/useStore';
 import { getFaculties, getBranches } from '../Utils/api';
 
@@ -112,7 +112,7 @@ export default function Sidebar() {
                 icon: <HomeIcon />,
             },
             {
-                name: 'รายชื่อ นักศึกษา/ครู',
+                name: 'รายชื่อ นักศึกษา/อาจารย์',
                 icon: submenuUser ? <ExpandLess /> : <ExpandMore />,
                 action: toggleSubmenuUser,
                 Children: [
@@ -221,7 +221,7 @@ export default function Sidebar() {
                                     </ListItemButton>
                                 )}
                             </ListItem>
-                            {item.Children && item.name === 'รายชื่อ นักศึกษา/ครู' && submenuUser && (
+                            {item.Children && item.name === 'รายชื่อ นักศึกษา/อาจารย์' && submenuUser && (
                                 <List component="div" disablePadding>
                                     {item.Children.map((subItem, subIndex) => (
                                         <ListItem key={subIndex} disablePadding>

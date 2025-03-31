@@ -1,5 +1,5 @@
 'use client'
-import { ErrorAlert, SuccessAlert } from '@/app/Components/Alert';
+import { ErrorAlert, SuccessAlert } from '@/app/Components/AlertShow';
 import Nav from '@/app/Components/Nav';
 import SelectedMyEvent from '@/app/Components/SelectedMyEvent';
 import { useParams, useSearchParams } from 'next/navigation';

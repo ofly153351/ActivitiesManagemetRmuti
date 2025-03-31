@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import { colorsCode } from "@/app/Utils/color";
 import { useStore } from "@/store/useStore";
+import { checkUserAuth } from "@/app/Utils/block";
 
 function Page() {
     const router = useRouter();
@@ -22,9 +23,8 @@ function Page() {
 
 
     useEffect(() => {
-        if (user) {
-            router.push('/Home');
-        }
+        checkUserAuth()
+
         register('nameTitle', {
             required: "กรุณาใส่คำนำหน้า",
         });

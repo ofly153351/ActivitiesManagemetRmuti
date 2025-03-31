@@ -13,7 +13,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { creatBranch, getFaculties } from '../Utils/api';
 import { checkValidationfacuiltiesAndbraches, handleKeyDown } from '../Utils/onkeyDown';
-import { ErrorAlert, SuccessAlert } from './Alert';
+import { ErrorAlert, SuccessAlert } from './AlertShow';
 import { fontFamily } from '../Utils/font';
 import { useStore } from '@/store/useStore';
 

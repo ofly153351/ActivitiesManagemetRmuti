@@ -30,12 +30,12 @@ export function middleware(request) {
         }
     }
     // ตรวจสอบเส้นทาง '/home'
-    if (request.nextUrl.pathname.startsWith('/Home/Information')) {
-        if (role === null) {
-            console.log('User role is null, redirecting to unauthorized');
-            return NextResponse.redirect(homeUrl);
-        }
-    }
+    // if (request.nextUrl.pathname.startsWith('/Home/Information')) {
+    //     if (role === null) {
+    //         console.log('User role is null, redirecting to unauthorized');
+    //         return NextResponse.redirect(homeUrl);
+    //     }
+    // }
 
     // สร้าง response
     return NextResponse.next();

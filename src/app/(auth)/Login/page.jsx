@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 import { useStore } from '@/store/useStore';
+import { checkUserAuth } from "@/app/Utils/block";
 
 function Page() {
   const login = useStore((state) => state.login);
@@ -20,9 +21,7 @@ function Page() {
   const { user } = useStore();
 
   useEffect(() => {
-    if (user) {
-      router.push('/Home');
-    }
+    checkUserAuth()
   }, []);
 
   const onSubmit = async (data) => {
