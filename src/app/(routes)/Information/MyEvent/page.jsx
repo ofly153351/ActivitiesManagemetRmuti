@@ -72,13 +72,13 @@ function page() {
                         <>
                             <div className='w-full px-4' >
                                 <div className=' border-b-2 border-slate-200 ' >
-                                    <p className=' text-md py-2 border-b-1' >กิจกรรมภายในมหาวิทยาลัย :</p>
+                                    <p className=' text-2xl py-2 border-b-1' >กิจกรรมภายในมหาวิทยาลัย :</p>
                                 </div>
                                 <HorizontalCard eventsInside={insideEvents} />
                             </div>
                             <div className='w-full px-4' >
                                 <div className=' border-b-2 border-slate-200 ' >
-                                    <p className=' text-md py-2 border-b-1' >กิจกรรมภายในมหาวิทยาลัย :</p>
+                                    <p className=' text-2xl py-2 border-b-1' >กิจกรรมภายในมหาวิทยาลัย :</p>
                                 </div>
                                 <HorizontalCard eventOutside={outSideEvents} />
                             </div>

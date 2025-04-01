@@ -113,12 +113,11 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                             <p className='text-sm px-2'>ความคิดเห็น:</p>
                             <CustomTextfield width={'98%'} label={selectedEvent?.comment} disabled={true} />
                         </div>
-                    ) : (!selectedEvent?.comment) ? (
+                    ) : (!selectedEvent?.comment && selectedEvent?.comment !== '') ? (
                         <div className='ml-2' >
                             < button className='underline text-lg text-green-800' label={"ดาวน์โหลดเอกสาร"} onClick={(e) => downloadFileEvents(Number(selectedEvent.event_id))}>
                                 ดาวน์โหลดเอกสาร
                             </button>
-
                         </div>
                     ) : (
                         <div>

@@ -64,54 +64,85 @@ function ViewTable({ columns, rows }) {
                     <TableBody>
                         {rows.map((row, rowIndex) => (
                             <TableRow key={rowIndex} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                {columns.map((column, colIndex) => (
-                                    <TableCell sx={{ fontFamily: fontFamily.Kanit }} key={colIndex} align="center">
-                                        {column.field === 'status' ? (
-                                            row['status'] ? (
-                                                <span className="p-1 bg-green-500 rounded-md text-white">ผ่านกิจกรรมแล้ว</span>
-                                            ) : (
-                                                <span className="p-1 bg-red-500 rounded-md text-white">ยังไม่ผ่าน</span>
-                                            )
-                                        ) : column.field === 'file_pdf' ? (
-                                            row['file_pdf']  ? (
-                                                <button
-                                                    className="p-1 bg-[#f6df78] rounded-md text-black hover:underline"
-                                                    onClick={() => handleSelectedFile(
-                                                        row['file_pdf'],
-                                                        row['event_id'],
-                                                        row['user_id'],
-                                                        row['status'],
-                                                        row['first_name'],
-                                                        row['last_name']
-                                                    )}
-                                                >
-                                                    ตรวจสอบไฟล์
-                                                </button>
-                                            ) : (
-                                                <span className="p-1 bg-red-500 rounded-md text-white">ยังไม่ส่งเอกสาร</span>
-                                            )
-                                        ) : (
-                                            row[column.field] ?? '-' // ป้องกัน undefined
-                                        )}
-                                    </TableCell>
-                                ))}
+                                {columns.map((column, colIndex) => {
+                                    const value = row[column.field]; // ค่าของเซลล์
+                                    if (column.field === 'status') {
+                                        return (
+                                            <TableCell sx={{ fontFamily: fontFamily.Kanit }} key={colIndex} align="center">
+                                                {value ? (
+                                                    <span className="p-1 bg-green-500 rounded-md text-white">ผ่านกิจกรรม</span>
+                                                ) : (
+                                                    <span className="p-1 bg-red-500 rounded-md text-white">ไม่ผ่าน</span>
+                                                )}
+                                            </TableCell>
+                                        );
+                                    }
+
+                                    if (column.field === 'file_pdf') {
+                                        return (
+                                            <TableCell sx={{ fontFamily: fontFamily.Kanit }} key={colIndex} align="center">
+                                                {value && row['status'] === false ? (
+                                                    <button
+                                                        className="p-1 bg-[#f6df78] rounded-md text-black hover:underline"
+                                                        onClick={() => handleSelectedFile(
+                                                            row['file_pdf'],
+                                                            row['event_id'],
+                                                            row['user_id'],
+                                                            row['status'],
+                                                            row['first_name'],
+                                                            row['last_name']
+                                                        )}
+                                                    >
+                                                        ตรวจสอบไฟล์
+                                                    </button>
+                                                ) : row['status'] === true ? (
+
+                                                    <button
+                                                        className="p-1 bg-green-500 rounded-md text-white hover:underline"
+                                                        onClick={() => handleSelectedFile(
+                                                            row['file_pdf'],
+                                                            row['event_id'],
+                                                            row['user_id'],
+                                                            row['status'],
+                                                            row['first_name'],
+                                                            row['last_name']
+                                                        )}
+                                                    >
+                                                        ตรวจสอบแล้ว
+                                                    </button>
+                                                ) : (
+                                                    <span className="p-1 bg-red-500 rounded-md text-white">ยังไม่ส่งเอกสาร</span>
+                                                )}
+                                            </TableCell>
+                                        );
+                                    }
+
+                                    return (
+                                        <TableCell sx={{ fontFamily: fontFamily.Kanit }} key={colIndex} align="center">
+                                            {value ?? '-'}
+                                        </TableCell>
+                                    );
+                                })}
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
-            )}
+            )
+            }
 
-            {openDialog && (
-                <ViewPDFdialog open={open} onClose={handleCloseDialog}
-                    filePath={selectedFile}
-                    userID={selectedUser}
-                    eventID={selectedEvent}
-                    firstName={selectedFirstName}
-                    lastName={selectedLastName}
-                    status={selectedStatus}
-                />
-            )}
-        </TableContainer>
+            {
+                openDialog && (
+                    <ViewPDFdialog open={open} onClose={handleCloseDialog}
+                        filePath={selectedFile}
+                        userID={selectedUser}
+                        eventID={selectedEvent}
+                        firstName={selectedFirstName}
+                        lastName={selectedLastName}
+                        status={selectedStatus}
+                    />
+                )
+            }
+        </TableContainer >
     )
 }
 export default ViewTable;

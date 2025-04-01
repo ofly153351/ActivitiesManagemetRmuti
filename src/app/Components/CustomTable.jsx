@@ -28,6 +28,7 @@ import ShowDialogTable from './ShowDialogTable';
 import Loading from './Loading';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import UploadPopup from './Uploadpopup';
+import { fontFamily } from '../Utils/font';
 
 
 function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, ToggleButtonState, alignment }) {
@@ -51,6 +52,8 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
     const [isUpload, setIsUpload] = useState(false);
     const [eventUploadName, setEventUploadName] = useState('')
     const [eventUploadID, setEventUploadID] = useState('')
+
+
     // ฟังก์ชันสำหรับเปลี่ยนสถานะของ Switch
     const handleStatusChange = async (itemId, field, newStatus) => {
         try {
@@ -98,6 +101,8 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
         setTableRows(rows);
 
     }, [rows]);
+
+
 
 
     const handleOpenUserInEvent = (eventId) => {
@@ -421,9 +426,8 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                             className='p-2 w-10 border-[1px] border-gray-200 rounded-md'
                             onChange={(e) => {
                                 // Only update if the input is a valid number
-                                if (!isNaN(e.target.value) && e.target.value.trim() !== '') {
-                                    setRowperpage(Number(e.target.value));
-                                }
+                                setRowperpage(Number(e.target.value));
+
                             }}
                             inputMode="numeric"
                             pattern="[0-9]*"
@@ -486,15 +490,22 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                                 <p>สถานที่: {selectedRowDetails.location}</p>
                             </div>
                             <p className='text-[20px] px-4 py-1 flex gap-10' >รายละเอียด: {selectedRowDetails.detail}</p>
+                            {pathName === '/Admin/EventList' ? (
+                                null
+                            ) : (
+                                <>
+                                    <p className='text-[20px] px-4 py-1 flex gap-10' >ปีการศึกษาที่รับ: {selectedRowDetails.years.join(', ')}</p>
+                                    <div className='text-[20px] px-4 py-1 flex gap-5'>
+                                        <AccordionBranchList selectedRowDetails={selectedRowDetails} branches={branches} />
+                                    </div>
+                                </>
 
-                            <p className='text-[20px] px-4 py-1 flex gap-10' >ปีการศึกษาที่รับ: {selectedRowDetails.years.join(', ')}</p>
-                            <div className='text-[20px] px-4 py-1 flex gap-5'>
-                                <AccordionBranchList selectedRowDetails={selectedRowDetails} branches={branches} />
-                            </div>
+                            )}
+
                             <div className='px-4 py-1 flex gap-10 text-[20px]  ' >สถานะ: {selectedRowDetails.status ? (
                                 <p className=' text-green-400 pl-2' >เปิด</p>
                             ) : (
-                                <p className=' text-red-500 pl-2' >ปิด</p>
+                                <p className=' text-red-500 pl-2  ' >ปิด</p>
 
                             )}</div>
                         </div>
@@ -503,7 +514,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseDetails} color="primary">ปิด</Button>
+                    <Button onClick={handleCloseDetails} sx={{ fontFamily: fontFamily.Kanit, fontSize: 'large' }} color="primary">ปิด</Button>
                 </DialogActions>
             </Dialog>
             {isUpload && (

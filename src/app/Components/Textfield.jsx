@@ -26,7 +26,7 @@ const CustomTextfield = React.forwardRef(
           fontFamily: 'Kanit, sans-serif',
           '& > :not(style)': {
             m: 1,
-            width: { xs: '20ch', sm: '25ch', lg: width },
+            width: { xs: '25ch', sm: '25ch', lg: width },
           },
         }}
       >

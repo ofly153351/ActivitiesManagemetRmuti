@@ -34,7 +34,7 @@ function Page() {
     return (
         <div>
             <Nav />
-            <div className='min-h-screen w-screen flex justify-center items-center' >
+            <div className=' w-screen flex justify-center items-center' >
                 <div className='grid ' >
                     <SelectedMyEvent selectedEvent={parsedEvent} showAlert={handleShowAlert} />
                     <div className='absolute z-10 bottom-4 right-4' >

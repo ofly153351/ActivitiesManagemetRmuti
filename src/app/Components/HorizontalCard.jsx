@@ -78,7 +78,7 @@ function HorizontalCard({ eventsInside, eventOutside }) {
                             ) : (!item.status && item.file_pdf && item.comment !== '') ? (
                                 <div className='w-fit xs:gap-1 sm:gap-2 flex' >
                                     <div className='xs:pl-0 sm:pl-2  ' >
-                                        <div className='truncate p-2 bg-yellow-500 rounded-md text-shadow-md shadow-md text-white xs:border-[0px] sm:border-l-[1px]' >
+                                        <div className='truncate p-2 bg-orange-500 rounded-md text-shadow-md shadow-md text-white xs:border-[0px] sm:border-l-[1px]' >
                                             สถานะ : ส่งเอกสารใหม่
                                         </div>
                                     </div>
@@ -132,7 +132,7 @@ function HorizontalCard({ eventsInside, eventOutside }) {
                                                 </div>
                                             </div>
                                         </div>
-                                    ) :(
+                                    ) : (
                                         <div className='w-fit flex xs:gap-1 sm:gap-2 ' >
                                             <div className='xs:pl-0 sm:pl-2 xs:border-[0px] ' >
                                                 <div className='truncate p-2 bg-red-500 rounded-md text-shadow-md shadow-md text-white border-l-[1px]'>
@@ -147,8 +147,8 @@ function HorizontalCard({ eventsInside, eventOutside }) {
                         </button>
                     ))}
                 </>
-            ) : (Array.isArray(eventOutside).length <= 0) ? (
-                <div>ไม่มีข้อมูล</div>
+            ) : (eventOutside?.length === 0) ? (
+                <div className='flex justify-center items-center p-10 text-lg '>ไม่มีข้อมูล</div>
             ) : null}
         </div >
 

@@ -108,39 +108,44 @@ function Page() {
     };
 
     return (
-        <div className=" bg-gray-50 flex justify-center items-center">
+        <>
             <Nav />
-            <div className="w-screen min-h-screen flex justify-center items-center bg-gray-50">
-                <div className="w-[80%] bg-white rounded-md mt-10 font-kanit shadow-md">
-                    <h1 className="min-w-full  text-[52px] text-shadow-md p-10">{title}</h1>
-                    {loading ? (
-                        <div className="flex justify-center items-center">
-                            <div className="mt-40 px-10 h-[400px]">
-                                <Loading />
-                            </div>
-                        </div>
-                    ) : (
-                        <CustomTable
-                            columns={columns}
-                            rows={selectedEvent}
-                            entity="กิจกรรม"
-                            ToggleButtonState={changeState}
-                            alignment={alignment}
-                            onEdit={handleEdit}
-                        />
-                    )}
-                </div>
-            </div>
+            <div className=" bg-gray-50 flex justify-center items-center">
 
-            {/* แสดง EditPopup เฉพาะเมื่อ selectedEditEvent มีค่า */}
-            {selectedEditEvent && (
-                <EditPopup
-                    closeModal={() => setSelectedEditEvent(null)} // ปิดเมื่อคลิกปุ่ม
-                    fields={fields}
-                    selectedEditItem={selectedEditEvent} // ส่งข้อมูลกิจกรรมที่เลือกไปยัง EditPopup
-                />
-            )}
-        </div>
+                <div className="w-screen min-h-screen flex justify-center items-center bg-gray-50">
+                    <div className="w-[80%] bg-white rounded-md mt-10 font-kanit shadow-md">
+                        <h1 className="min-w-full  text-[52px] text-shadow-md p-10">{title}</h1>
+                        {loading ? (
+                            <div className="flex justify-center items-center">
+                                <div className="mt-40 px-10 h-[400px]">
+                                    <Loading />
+                                </div>
+                            </div>
+                        ) : (
+                            <CustomTable
+                                columns={columns}
+                                rows={selectedEvent}
+                                entity="กิจกรรม"
+                                ToggleButtonState={changeState}
+                                alignment={alignment}
+                                onEdit={handleEdit}
+                            />
+                        )}
+                    </div>
+                </div>
+
+                {/* แสดง EditPopup เฉพาะเมื่อ selectedEditEvent มีค่า */}
+                {selectedEditEvent && (
+                    <EditPopup
+                        closeModal={() => setSelectedEditEvent(null)} // ปิดเมื่อคลิกปุ่ม
+                        fields={fields}
+                        selectedEditItem={selectedEditEvent} // ส่งข้อมูลกิจกรรมที่เลือกไปยัง EditPopup
+                    />
+                )}
+            </div>
+        </>
+
+
     );
 }
 
