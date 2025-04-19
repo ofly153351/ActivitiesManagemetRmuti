@@ -24,11 +24,11 @@ export const useStore = create((set) => ({
             const response = await axios.post('http://localhost:8080/login', payload, {
                 withCredentials: true,
             });
-            console.log('Login response:', response.data);
+            // console.log('Login response:', response.data);
 
             // 2. Get token from cookies
             const token = Cookies.get('token');
-            console.log('Token from cookies:', token);
+            // console.log('Token from cookies:', token);
 
             if (!token) {
                 throw new Error('Token not found in Cookies.');
@@ -48,7 +48,8 @@ export const useStore = create((set) => ({
             try {
                 // 5. Fetch user data
                 const userResponse = await getUserbyClaim();
-                console.log('User data response:', userResponse.data);
+                // console.log('User data response:', userResponse.data);
+
 
                 const userData = {
                     role: decodedJwt.role || '',
@@ -58,9 +59,10 @@ export const useStore = create((set) => ({
                     last_name: userResponse.data.last_name,
                     phone: userResponse.data.phone,
                     code: userResponse.data.code,
-                    branch: userResponse.data.branch || '',
+                    branch: userResponse.data.branch_name || '',
                     email: userResponse.data.email || '',
                     year: userResponse.data.year || '',
+                    superUser: userResponse.data.super_user,
                 };
 
                 // 6. Set user data

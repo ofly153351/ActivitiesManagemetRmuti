@@ -19,7 +19,7 @@ function StudentNavmenu({ buttonName, menu = [] }) {
         setAnchorEl(null);
     };
 
-    console.log(menu);
+    // console.log(menu);
 
     return (
         <div >

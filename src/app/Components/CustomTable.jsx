@@ -16,7 +16,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { SuccessAlert, ErrorAlert } from './AlertShow';
-import { deleteEventByAdmin, deleteEventByTeacher, editStatusEvent, getBranches } from '../Utils/api';
+import { ChangeHeaderOffaculty, deleteEventByAdmin, deleteEventByTeacher, editRoleByadmin, editStatusEvent, getBranches } from '../Utils/api';
 import { useStore } from '@/store/useStore';
 import AccordionBranchList from './AccordionBranch';
 import SwitchOnOff from './SwitchOnOff';
@@ -29,9 +29,13 @@ import Loading from './Loading';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import UploadPopup from './Uploadpopup';
 import { fontFamily } from '../Utils/font';
+import Customselect from './Customselect';
+import FindInPageIcon from '@mui/icons-material/FindInPage';
+import { colorsCode } from '../Utils/color';
+import TeacherSelect from './TeacherSelect';
 
 
-function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, ToggleButtonState, alignment }) {
+function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, ToggleButtonState, alignment, setOpenEvidence, setUserID, setYears, teacherList = [] }) {
     const [inputValue, setInputValue] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [openCreateDialog, setOpenCreateDialog] = useState(false);
@@ -42,7 +46,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
     const { branches, setBranches } = useStore()
     const path = usePathname();
     const pathName = usePathname()
-    const { user } = useStore()
+    const { user, setUser } = useStore()
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('');
     const [viewUserInEvent, setViewUserInEvent] = useState(false)
@@ -52,7 +56,9 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
     const [isUpload, setIsUpload] = useState(false);
     const [eventUploadName, setEventUploadName] = useState('')
     const [eventUploadID, setEventUploadID] = useState('')
-
+    const [selectedRoles, setSelectedRoles] = useState({});
+    const [teacherOptions, setTeacherOptions] = useState([]);
+    const [selectedTeacher, setSelectedTeacher] = useState({});
 
     // ฟังก์ชันสำหรับเปลี่ยนสถานะของ Switch
     const handleStatusChange = async (itemId, field, newStatus) => {
@@ -87,23 +93,60 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
             setLoading(false);
         }
 
-        if (pathName === '/Admin/EventList' && branches <= 0 || branches === null) {
+        if ((pathName === '/Admin/EventList' && branches <= 0) || branches === null) {
             const fetchData = async () => {
                 try {
-                    const response = await getBranches()
-                    setBranches(response.data)
+                    const response = await getBranches();
+                    setBranches(response.data);
                 } catch (error) {
                     console.log(error);
                 }
-            }
+            };
             fetchData();
         }
+
+        if (Array.isArray(teacherList) && teacherList.length > 0 && pathName === '/Admin/Facultylist') {
+            const formattedTeacherOptions = teacherList.map(teacher => ({
+                label: `${teacher.first_name} ${teacher.last_name}`,
+                value: teacher.user_id
+            }));
+            setTeacherOptions(formattedTeacherOptions); // ✅ ใช้ข้อมูลใหม่ ไม่ลูป
+        }
+
         setTableRows(rows);
+    }, [rows, teacherList, pathName]); // ✅ เปลี่ยน dependency เป็น teacherList
 
-    }, [rows]);
+    const handleTeacherChange = (itemUserId, newTeacherId, facultyId, facultyname, facultyCode) => {
+        console.log("เปลี่ยนครู:", itemUserId, "เป็น:", newTeacherId, facultyId); // เพิ่ม log เพื่อดีบัก
+        setSelectedTeacher(prev => {
+            const updated = { ...prev, [itemUserId]: newTeacherId };
+            console.log("State ใหม่:", updated); // ดู state ที่จะอัพเดท
+            return updated;
+        });
+        try {
+            const payload = {
+                faculty_code: facultyCode,
+                faculty_name: facultyname,
+                super_user: Number(newTeacherId),
+            };
 
 
+            const response = ChangeHeaderOffaculty(facultyId, payload);
+            console.log(response);
+            if (response && response.status === 200) {
+                setAlertMessage('อัพเดทเจ้าหน้าที่ประจำคณะสำเร็จ');
+                setAlertType('success');
+                setAlertOpen(true);
+                setTimeout(() => {
+                    setAlertOpen(false);
+                    setAlertMessage('');
+                    setAlertType('');
+                }, 3000);
+            }
+        } catch (error) {
 
+        }
+    };
 
     const handleOpenUserInEvent = (eventId) => {
 
@@ -206,9 +249,9 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
 
         try {
             let response;
-            if (user.role === 'admin') {
+            if (user?.role === 'admin') {
                 response = await deleteEventByAdmin(selectedItem.event_id);
-            } else if (user.role === 'teacher') {
+            } else if (user?.role === 'teacher') {
                 response = await deleteEventByTeacher(selectedItem.event_id);
             }
 
@@ -231,7 +274,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
         } catch (error) {
             console.error("❌ API Error:", error.response?.data || error.message);
 
-            if (error.response?.status === 400) {
+            if (error.response?.status === 400 || error.response?.status === 404) {
                 setAlertMessage('การลบข้อมูลล้มเหลว เนื่องจากมีผู้อยู่ในกิจกรรมแล้ว');
                 setAlertOpen(false);
                 setTimeout(() => {
@@ -252,6 +295,39 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
     };
 
 
+    const rolelsit = [
+        { label: 'admin', value: 'admin' },
+        { label: 'teacher', value: 'teacher' },
+    ]
+
+    const handleRoleChange = async (user_id, newValue) => {
+        console.log(user_id, newValue);
+
+        setSelectedRoles((prevState) => ({
+            ...prevState,
+            [user_id]: newValue, // ✅ อัปเดต state สำหรับ user_id นั้น
+        }));
+
+        if (user_id && newValue) {
+            const payload = {
+                user_id: user_id,
+                role: newValue,
+            };
+
+            try {
+                const response = await editRoleByadmin(payload);
+                console.log(response);
+            } catch (error) {
+                console.error("Failed to update role:", error);
+            }
+        }
+    };
+
+    const handleOpenEnvidence = (userID, userYear) => {
+        setOpenEvidence(true)
+        setUserID(userID)
+        setYears(userYear)
+    }
 
 
     if (loading) {
@@ -265,10 +341,10 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
 
     return (
         <div className='' >
-            <div className=' flex justify-end items-center  gap-4 p-2 overflow-auto'>
+            <div className='xs:grid md:flex justify-end items-center  gap-4 p-2 overflow-auto'>
                 <div>
                     {pathName === '/Admin/EventList' ? (
-                        <div className='flex gap-2' >
+                        <div className=' flex gap-2' >
                             <ToggleButtonGroup
                                 sx={{ fontFamily: 'Kanit, sans-serif', }}
                                 color="primary"
@@ -310,31 +386,41 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                 ) : null}
             </div>
 
-            <div className='flex justify-center items-center w-full h-[full] rounded-b-md overflow-auto'>
-                <table className='w-full rounded-2 border-[1px] rounded-xl border-slate-200'>
+            <div className="w-full max-h-[500px] overflow-x-auto ">
+                <table className='w-full min-w-[800px] border-[1px] rounded-xl border-slate-200'>
                     <thead className='w-fit p-4 bg-[#F5F5F5] shadow-t-xl rounded-xl'>
                         <tr className='font-kanit'>
-                            {columns.map((item, index) => (
-                                <th className='p-4 border-x-[1px] border-slate-200' key={index}>
-                                    {item.headerName}
-                                </th>
-
-                            ))}
+                            {columns.map((item, index) => {
+                                { (item.headerName === 'ระดับ' && user?.role === 'teacher') && null }
+                                return (
+                                    <th className='p-4 border-x-[1px] border-slate-200' key={index}>
+                                        {item.headerName}
+                                    </th>
+                                );
+                            })}
+                            {pathName === '/Admin/Branchlist' || pathName === '/Admin/Facultylist' || pathName === '/Admin/MyEvent' ? (
+                                <th>การจัดการ</th>
+                            ) : null}
                             {pathName === '/Admin/EventList' ? (
                                 <th className='p-4 border-x-[1px] border-slate-200'>เรียกดู</th>
                             ) : user?.role !== 'student' ? (
-                                <th className='p-4 border-x-[1px] border-slate-200'>การจัดการ</th>
+                                null
+                                // <th className='p-4 border-x-[1px] border-slate-200'>การจัดการ</th>
                             ) : null}
                         </tr>
                     </thead>
                     <tbody>
+                        {console.log("currentRows", currentRows)}
+
                         {currentRows.length > 0 ? (
                             currentRows.map((item, index) => (
-                                <tr key={index}>
+                                <tr key={index} className='hover:bg-[#f5f5f5] ' >
+
                                     {columns.map((column, colIndex) => (
-                                        <td key={colIndex} className='p-2 border-x-[1px] border-slate-100 hover:bg-[#f5f5f5] duration-50'>
+                                        <td key={colIndex} className="p-2  text-center border-x-[1px] border-slate-100 hover:bg-[#f5f5f5] duration-50">
+
                                             {column.field === 'status' ? (
-                                                <div className="flex justify-center">
+                                                <div className="flex justify-center items-center">
                                                     {item[column.field] !== undefined ? (
                                                         <SwitchOnOff
                                                             status={item[column.field]}
@@ -346,7 +432,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                                                     ) : null}
                                                 </div>
                                             ) : column.field === 'userList' ? (
-                                                <div className='flex justify-center items-center'>
+                                                <div className="flex justify-center items-center">
                                                     <button onClick={() => handleOpenUserInEvent(item.event_id)}>
                                                         <RecentActorsIcon sx={{ fontSize: 35, color: blue[800] }} />
                                                     </button>
@@ -354,57 +440,94 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                                                         <ShowDialogTable
                                                             isOpen={viewUserInEvent}
                                                             onClose={handleCloseUserInEvent}
-                                                            id={selectedEventId} // Send event_id
+                                                            id={selectedEventId} // ส่ง event_id
                                                         />
                                                     )}
+                                                </div>
+                                            ) : column.field === 'level' && (user?.role === 'admin' || user?.role === 'superadmin') ? (
+                                                <div className="flex justify-center items-center">
+                                                    <Customselect
+                                                        key={item.user_id}
+                                                        options={rolelsit}
+                                                        label={'เลือกระดับ'}
+                                                        width="18ch"
+                                                        value={selectedRoles[item.user_id] || item.role} // ใช้ selectedRoles ถ้ามี ถ้าไม่มีใช้ item.role
+                                                        field="label"
+                                                        onChange={(newValue) => handleRoleChange(item.user_id, newValue)}// ✅ ส่งค่าใหม่ให้ฟังก์ชัน handleRoleChange
+                                                    />
+                                                </div>
+                                            ) : column.field === 'evidence' ? (
+                                                <div className='flex justify-center items-center' >
+                                                    <button onClick={(e) => handleOpenEnvidence(item.user_id, item.year)} >
+                                                        <FindInPageIcon sx={{ color: colorsCode.blue }} />
+                                                    </button>
+                                                </div>
+                                            ) : column.field === 'teacher' && user?.role === 'admin' ? (
+                                                <div className="flex justify-center items-center">
+                                                    <TeacherSelect
+                                                        options={teacherList}
+                                                        label="เจ้าหน้าที่ประจำคณะ"
+                                                        value={selectedTeacher[item.super_user] || item.teacher.user_id} // ใช้ค่าที่เลือกใหม่ ถ้าไม่มีให้ใช้ค่าเดิม
+                                                        onChange={(newValue) => handleTeacherChange(
+                                                            item.super_user,
+                                                            newValue,
+                                                            item.faculty_id,
+                                                            item.faculty_name,
+                                                            item.faculty_code)}
+                                                        field="user_id"
+                                                        displayField="full_name"
+                                                        width="300px"
+                                                    />
                                                 </div>
                                             ) : (
                                                 column.valueGetter ? column.valueGetter({ data: item }) : item[column.field]
                                             )}
                                         </td>
                                     ))}
-
-                                    {(pathName === '/Admin/EventList' || pathName === '/Admin/MyEvent') && (
-                                        <td className='p-2 border-x-[1px] border-slate-200'>
-                                            <div className='flex justify-center items-center gap-4 p-2'>
-                                                <button onClick={() => handleViewDetails(item)}>
-                                                    <PageviewIcon
-                                                        sx={{
-                                                            color: '#1976D2',
-                                                            "&:hover": { color: '#1565c0' },
-                                                        }}
-                                                    />
-                                                </button>
-
-                                                {!(path === '/Admin/EventList' || path === '/Information/MyEvent') && (
-                                                    <button onClick={() => onEdit(item)}>
-                                                        <EditIcon
-                                                            sx={{
-                                                                color: '#32CD32',
-                                                                "&:hover": { color: 'green' },
+                                    {(pathName === '/Admin/EventList' || pathName === '/Admin/MyEvent'
+                                        || pathName === '/Admin/Branchlist' || pathName === '/Admin/Facultylist') && (
+                                            <td className='p-2 border-x-[1px] border-slate-200'>
+                                                <div className='flex justify-center items-center gap-4 p-2'>
+                                                    {pathName === "/Admin/Facultylist" || pathName === '/Admin/Branchlist' ? (
+                                                        null
+                                                    ) : (
+                                                        <button onClick={() => handleViewDetails(item)}>
+                                                            <PageviewIcon
+                                                                sx={{
+                                                                    color: '#1976D2',
+                                                                    "&:hover": { color: '#1565c0' },
+                                                                }}
+                                                            />
+                                                        </button>
+                                                    )}
+                                                    {!(path === '/Admin/EventList' || path === '/Information/MyEvent') && (
+                                                        <button onClick={() => onEdit(item)}>
+                                                            <EditIcon
+                                                                sx={{
+                                                                    color: '#32CD32',
+                                                                    "&:hover": { color: 'green' },
+                                                                }}
+                                                            />
+                                                        </button>
+                                                    )}
+                                                    {!(path === '/Admin/EventList' || path === '/Information/MyEvent') && (
+                                                        <button
+                                                            onClick={() => {
+                                                                setSelectedItem(item);
+                                                                setAlertOpen(true);
                                                             }}
-                                                        />
-                                                    </button>
-                                                )}
-
-                                                {!(path === '/Admin/EventList' || path === '/Information/MyEvent') && (
-                                                    <button
-                                                        onClick={() => {
-                                                            setSelectedItem(item);
-                                                            setAlertOpen(true);
-                                                        }}
-                                                    >
-                                                        <DeleteIcon
-                                                            sx={{
-                                                                color: '#FA8072',
-                                                                "&:hover": { color: 'red' },
-                                                            }}
-                                                        />
-                                                    </button>
-                                                )}
-                                            </div>
-                                        </td>
-                                    )}
+                                                        >
+                                                            <DeleteIcon
+                                                                sx={{
+                                                                    color: '#FA8072',
+                                                                    "&:hover": { color: 'red' },
+                                                                }}
+                                                            />
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </td>
+                                        )}
                                 </tr>
                             ))
                         ) : (
@@ -433,14 +556,16 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                             pattern="[0-9]*"
                         />
                     </div>
-                    <Pagination
-                        totalPages={Math.ceil(filteredRows.length / rowsPerPage)}
-                        currentPage={currentPage}
-                        onPageChange={handlePageChange}
-                    />
+                    <div className='w-[500px]' >
+                        <Pagination
+                            totalPages={Math.ceil(filteredRows.length / rowsPerPage)}
+                            currentPage={currentPage}
+                            onPageChange={handlePageChange}
+                        />
+                    </div>
+
                 </div>
             </div>
-
             {
 
                 selectedItem && (
@@ -454,12 +579,9 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                             ? `กิจกรรม ${selectedItem?.[columns[0].field]}`
                             : selectedItem?.[columns[1].field]
                             } ?`}
-
                     />
                 )
             }
-
-
             <Dialog sx={{}} open={viewDetailsOpen} onClose={handleCloseDetails} maxWidth="sm" fullWidth>
                 <DialogTitle
                     sx={{
@@ -475,40 +597,52 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                 </DialogTitle>
                 <DialogContent>
                     {selectedRowDetails ? (
-                        <div className='grid justify-center items-center' >
-                            <div className=' justify-around text-[20px] px-4 py-2 flex gap-10' >
-                                <p>ชื่ออกิจกรรม: {selectedRowDetails.event_name}</p>
+                        <div className="grid grid-cols-1 gap-4 p-4">
+                            {/* ชื่อกิจกรรมและวันที่เริ่ม */}
+                            <div className="flex justify-between text-[20px]">
+                                <p>ชื่อกิจกรรม: {selectedRowDetails.event_name}</p>
                                 <p>วันที่เริ่ม: {selectedRowDetails.start_date}</p>
-
                             </div>
-                            <div className=' text-[20px] px-4 py-1 flex gap-10' >
+
+                            {/* เวลาและจำนวนคน */}
+                            <div className="flex justify-between text-[20px]">
                                 <p>เวลา: {selectedRowDetails.start_time}</p>
                                 <p>จำนวน: {selectedRowDetails.free_space} / {selectedRowDetails.limit}</p>
-
                             </div>
-                            <div className=' text-[20px] px-4 py-1 flex gap-10' >
+
+                            {/* สถานที่ */}
+                            <div className="text-[20px]">
                                 <p>สถานที่: {selectedRowDetails.location}</p>
                             </div>
-                            <p className='text-[20px] px-4 py-1 flex gap-10' >รายละเอียด: {selectedRowDetails.detail}</p>
-                            {pathName === '/Admin/EventList' ? (
-                                null
-                            ) : (
+
+                            {/* รายละเอียด */}
+                            <div className="text-[20px]">
+                                <p>รายละเอียด: {selectedRowDetails.detail}</p>
+                            </div>
+
+                            {/* ปีการศึกษาและสาขา (ซ่อนในหน้า Admin) */}
+                            {!(pathName === '/Admin/MyEvent' || pathName === '/Admin/EventList') && (
                                 <>
-                                    <p className='text-[20px] px-4 py-1 flex gap-10' >ปีการศึกษาที่รับ: {selectedRowDetails.years.join(', ')}</p>
-                                    <div className='text-[20px] px-4 py-1 flex gap-5'>
+                                    <div className="text-[20px]">
+                                        <p>ปีการศึกษาที่รับ: {selectedRowDetails.years.join(', ')}</p>
+                                    </div>
+                                    <div className="text-[20px]">
                                         <AccordionBranchList selectedRowDetails={selectedRowDetails} branches={branches} />
                                     </div>
                                 </>
-
                             )}
 
-                            <div className='px-4 py-1 flex gap-10 text-[20px]  ' >สถานะ: {selectedRowDetails.status ? (
-                                <p className=' text-green-400 pl-2' >เปิด</p>
-                            ) : (
-                                <p className=' text-red-500 pl-2  ' >ปิด</p>
-
-                            )}</div>
+                            {/* สถานะของกิจกรรม */}
+                            <div className="flex items-center text-[20px]">
+                                <span>สถานะ:</span>
+                                {selectedRowDetails.status ? (
+                                    <p className="text-green-400 pl-2">เปิด</p>
+                                ) : (
+                                    <p className="text-red-500 pl-2">ปิด</p>
+                                )}
+                            </div>
                         </div>
+
                     ) : (
                         <p>ไม่มีข้อมูล</p>
                     )}

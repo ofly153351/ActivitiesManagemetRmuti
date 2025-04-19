@@ -3,9 +3,9 @@ import Badge from '@mui/material/Badge';
 import MailIcon from '@mui/icons-material/Mail';
 
 
-function MailNotification() {
+function MailNotification({ newCount }) {
     return (
-        <Badge badgeContent={1} color="primary">
+        <Badge badgeContent={newCount > 0 ? newCount : 0} color="primary">
             <MailIcon color="action" />
         </Badge>
     );

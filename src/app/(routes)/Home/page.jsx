@@ -18,19 +18,19 @@ import { useStore } from '@/store/useStore';
 function Page() {
     const [searchQuery, setSearchQuery] = useState(''); // เพิ่ม state สำหรับคำค้นหา
     const [loading, setLoading] = useState(true);
-    const { myEventList, setMyEventList , user } = useStore()
+    const { myEventList, setMyEventList, user } = useStore()
+    const [selectedValue, setSelectedValue] = useState('');
 
     const Manu = [
-        { selectName: "เวลา", SelectValue: "เวลา" },
-        { selectName: "วันที่", SelectValue: "วันที่" },
-        { selectName: "ชั่วโมง", SelectValue: "ชั่วโมง" },
+        { selectName: "วันที่ไกล้เริ่ม", SelectValue: "date" },
+        { selectName: "ชั่วโมงกิจกรรม(มาก-นอย)", SelectValue: "hour" },
     ]
 
     const d = new Date();
     let year = d.getFullYear();
 
     useEffect(() => {
-        if  (user?.role === 'student') {
+        if (user?.role === 'student') {
             const fetchData = async () => {
                 try {
                     const response = await getMyEventStudent(year + 543);
@@ -49,6 +49,8 @@ function Page() {
     // console.log(myEventList);
     // console.log(searchQuery);
 
+    console.log(selectedValue);
+
 
 
     if (loading) {
@@ -64,7 +66,7 @@ function Page() {
                         <h1 className='font-kanit lg:text-[45px] md:text-[40px] text-shadow-sm border-b-[2px] xs:w-fit xs:text-[22px] lg:mx-4'>กิจกรรมที่สามารถลงทะเบียนได้</h1>
                     </div>
                     <div className='xs:mx-2  border-b-2 lg:p-4 xs:p-3 flex justify-end  lg:items-end lg:mx-6'>
-                        <form className="flex lg:justify-end lg:items-center lg:mr-[60px] xs:mr-0 gap-3">
+                        <form className="flex lg:justify-end lg:items-center  xs:mr-0 gap-3">
                             <div className='flex' >
                                 <button className="border-b-[1px] border-l-[1px] border-t-[1px] w-10 rounded-tl-lg rounded-bl-lg hover:bg-gray-100">
                                     <SearchIcon fontSize='' />
@@ -77,23 +79,22 @@ function Page() {
                                     placeholder='ค้าหาชื่อกิจกรรม'
                                     className='w-[400px] xs:w-[190px] border-[1px] p-1.5 font-kanit rounded-br-lg rounded-tr-lg' />
                             </div>
-                            <Select>
-                                <SelectTrigger className="xs:w-[100px]  w-[180px]">
+                            <Select value={selectedValue} onValueChange={setSelectedValue}>
+                                <SelectTrigger className="xs:w-[100px] md:w-[180px]">
                                     <SelectValue placeholder="เรียงตาม" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {
-                                        Manu.map((item, index) => (
-                                            <SelectItem key={index} value={item.SelectValue}>{item.selectName}</SelectItem>
-                                        ))
-                                    }
+                                    {Manu.map((item, index) => (
+                                        <SelectItem key={index} value={item.SelectValue}>
+                                            {item.selectName}
+                                        </SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                         </form>
                     </div>
                     <div className='xs:mx-2' >
-                        <Activity searchQuery={searchQuery} inEvent={myEventList} />
-
+                        <Activity searchQuery={searchQuery} inEvent={myEventList} selectedValue={selectedValue} />
                     </div>
                 </div>
             </div>

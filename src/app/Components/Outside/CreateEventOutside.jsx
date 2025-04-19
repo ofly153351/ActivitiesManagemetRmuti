@@ -162,7 +162,7 @@ function CreateEventOutside({ isOpen, isClose }) {
                 setIsAlert({ status: true, message: "สร้างกิจกรรมสำเร็จ" });
                 setTimeout(() => {
                     window.location.reload()
-                },1000)
+                }, 1000)
             } catch (error) {
                 console.error(error);
                 setIsAlert({ status: false, message: "ไม่สามารถสร้างกิจกรรมได้" });
@@ -219,15 +219,14 @@ function CreateEventOutside({ isOpen, isClose }) {
                 isAlert={isAlert}
             />
             {isAlert.status !== null && isAlert.status === true ? (
-                <div className='absolute bottom-4 right-4 z-20' >
+                <div className='fixed bottom-4 right-4 z-20 ' >
                     <SuccessAlert label={isAlert.message} />
                 </div>
             ) : (isAlert.status !== null && isAlert.status === false) ? (
-                <div className='absolute bottom-4 right-4' >
+                <div className='fixed bottom-4 right-4 z-20 ' >
                     <ErrorAlert label={isAlert.message} />
                 </div>
             ) : null}
-
         </>
 
     );

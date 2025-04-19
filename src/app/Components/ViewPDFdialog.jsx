@@ -6,14 +6,18 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import { AlertCircle } from 'lucide-react';
 import ViewPDF from './ViewPDF'; // Your PDF viewer component
+import { usePathname } from 'next/navigation';
 
 const ViewPDFdialog = ({ open, onClose, filePath, eventID, userID, status, firstName, lastName }) => {
+
+    const pathName = usePathname()
+
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
 
             <DialogContent>
-                {filePath ? (
+                {filePath && pathName === '/Admin/MyEvent' ? (
                     <div className="">
                         <div className='px-4 text-xl' >
                             <div>
@@ -26,7 +30,11 @@ const ViewPDFdialog = ({ open, onClose, filePath, eventID, userID, status, first
                         <ViewPDF filePath={filePath} eventID={eventID} userID={userID} selectedStatus={status} />
 
                     </div>
+                ) : (filePath && pathName.startsWith('/Information/MyEvent/selectedEvent')) ? (
+                    <ViewPDF filePath={filePath} eventID={eventID} userID={userID} selectedStatus={status} />
 
+                ) : (filePath && pathName.startsWith('/Admin/StudentEvidence') || pathName.startsWith('/Admin/AllDonesEvidence')) ? (
+                    <ViewPDF filePath={filePath} eventID={eventID} userID={userID} selectedStatus={status} />
                 ) : (
                     <div className="flex items-start gap-4 border rounded-lg p-4 bg-red-50">
                         <AlertCircle className="h-5 w-5 text-red-600 mt-1 flex-shrink-0" />
@@ -36,10 +44,11 @@ const ViewPDFdialog = ({ open, onClose, filePath, eventID, userID, status, first
                         </div>
                     </div>
                 )}
+
             </DialogContent>
             <DialogActions>
             </DialogActions>
-        </Dialog>
+        </Dialog >
     );
 };
 

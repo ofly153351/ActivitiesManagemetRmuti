@@ -11,8 +11,8 @@ import BasicButtons from '@/app/Components/BasicButtons';
 import { getBranches, getFaculties, updateTeacher, updateUser } from '@/app/Utils/api';
 import Loading from '@/app/Components/Loading';
 import { handleValidationThai, handleCodeValidation, handlePhoneValidation } from '@/app/Utils/validation';
-import { SuccessAlert } from '@/app/Components/AlertShow';
-import { blockNulluser } from '@/app/Utils/block';
+import { ErrorAlert, SuccessAlert } from '@/app/Components/AlertShow';
+import { blockNulluser, checkUserAuth } from '@/app/Utils/block';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 
 function Page() {
@@ -35,10 +35,12 @@ function Page() {
     const [faculties, setFaculties] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [validationMessage, setValidationMessage] = useState({});
-    const [isopen, setIsopen] = useState(false);
+    const [isopen, setIsopen] = useState(null);
     const [isOpenEdit, setIsOpenEdit] = useState(true);
 
     // ตรวจสอบว่าเราอยู่ในฝั่ง client
+
+
     useEffect(() => {
         setIsClient(true);
     }, []);
@@ -47,9 +49,10 @@ function Page() {
         if (!isClient) return; // ไม่ทำงานถ้ายังไม่ใช่ฝั่ง client
 
         // ป้องกัน user ที่เป็น null
-        if (user) {
+        if (!user) {
             blockNulluser(user);
         }
+
 
         const fetchData = async () => {
             try {
@@ -64,6 +67,8 @@ function Page() {
             }
         };
 
+        console.log(user);
+
         // ตรวจสอบว่า user มีค่าและยังไม่ได้ตั้งค่าเริ่มต้น
         if (user && !isInitialized) {
             setSelectedTitle(user.title_name || '');
@@ -71,8 +76,8 @@ function Page() {
             setLastName(user.last_name || '');
             setCode(user.code || '');
             setPhone(user.phone || '');
-            setBranch(user.branch?.branch_name || '');
-            setFaculty(user.branch?.faculty?.faculty_name || '');
+            setBranch(user.branch || '');
+            setFaculty(user.faculty_name || '');
             setYear(user.year || '');
             setRole(user.role || '');
             setEmail(user.email || ''); // ตั้งค่า email จาก user
@@ -81,6 +86,9 @@ function Page() {
 
         fetchData();
     }, [user, isClient, isInitialized]); // เพิ่ม dependencies
+
+
+
 
     const showSuccessAlert = () => {
         setIsopen(true)
@@ -184,6 +192,10 @@ function Page() {
                 window.location.reload()
             }, 1000);
         } catch (error) {
+            setIsopen(false)
+            setTimeout(() => {
+                setIsopen(null)
+            }, 2000);
             console.error('Error updating data:', error);
         }
     };
@@ -221,6 +233,8 @@ function Page() {
         setIsOpenEdit(prev => !prev);
     }
 
+
+    console.log("branch" + branch);
     // ถ้าอยู่ฝั่ง server หรือยังโหลดข้อมูลไม่เสร็จ ให้แสดง loading
     if (!isClient || isLoading || !user) {
         return (
@@ -300,18 +314,7 @@ function Page() {
                                             <span className="text-red-500 text-sm pl-3">{validationMessage.code}</span>
                                         )}
                                     </div>
-                                    <div className='grid'>
-                                        <Customselect
-                                            readOnly={true}
-                                            width={width.md}
-                                            label={label.faculties}
-                                            options={faculties}
-                                            field="faculty_name"
-                                            value={faculty}
-                                            onChange={(value) => handleChange(value, 'faculty')}
-                                        />
 
-                                    </div>
                                 </div>
                                 <div className="flex">
                                     <div className='xs:grid md:grid-cols-2'>
@@ -370,6 +373,7 @@ function Page() {
                                             <span className="text-red-500 text-sm pl-3">{validationMessage.lastName}</span>
                                         )}
                                     </div>
+
                                 </div>
                                 <div className="grid">
                                     <div className='grid'>
@@ -411,9 +415,13 @@ function Page() {
                         </div>
                     </div>
                 </div>
-                {isopen && (
-                    <div className='absolute bottom-12 right-12'>
+                {isopen !== null && isopen === true ? (
+                    <div className='fixed bottom-4 right-4'>
                         <SuccessAlert label='อัพเดทข้อมูลเรียบร้อย' />
+                    </div>
+                ) : isopen !== null && isopen === false && (
+                    <div className='fixed bottom-4 right-4'>
+                        <ErrorAlert label='เกิดข้อผิดพลาดในการแก้ไขข้อมูล' />
                     </div>
                 )}
             </div>

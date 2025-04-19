@@ -5,19 +5,36 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Cookies from 'js-cookie';
 import { useStore } from '@/store/useStore';
 import MailNotification from './MailNotification';
+import { getNews } from '../Utils/api';
+
 function ProfileMenu() {
     const { user, clearAll, userRole, setUser, setUserRole } = useStore();
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
     const router = useRouter();
+    const [openMail, setOpenMail] = useState(false);
+    const [news, setNews] = useState([])
 
     // ✅ ให้ React เรียก useEffect เสมอ
     useEffect(() => {
         if (user && userRole) {
-            // console.log(user);
+            try {
+                const fetchData = async () => {
+                    const response = await getNews();
+                    setNews(response.data)
+                    console.log(response.data);
+                }
+                fetchData();
+            } catch (error) {
+                console.log(error);
+
+            }
         }
     }, [user, userRole]);
+
+    console.log(news);
+
 
     const handleClick = (event) => {
         // if (window.innerWidth <= 430) return;
@@ -52,11 +69,41 @@ function ProfileMenu() {
     };
 
     const mailClick = () => {
-        let count = 0;
-        console.log('click', count);
-        count++;
+        setOpenMail((prev) => !prev)
     }
+    const parseMessage = (msg) => {
+        // กิจกรรมใหม่ เช่น "กิจกรรม'testMail' '19 เมษายน 2568' '10:22'"
+        const newEventRegex = /กิจกรรม'(.*?)'\s+'(.*?)'\s+'(.*?)'/;
+        const newMatch = msg.match(newEventRegex);
 
+        // กิจกรรมที่ถูกลบ เช่น "กิจกรรม 'testmail' ที่คุณเข้าร่วมถูกลบแล้ว."
+        const deleteEventRegex = /กิจกรรม\s+'(.*?)'\s+ที่คุณเข้าร่วมถูกลบแล้ว/;
+        const deleteMatch = msg.match(deleteEventRegex);
+
+        if (newMatch) {
+            const [, name, date, time] = newMatch;
+            return (
+                <>
+                    กิจกรรม: <span className="font-kanit text-green-500">{name}</span><br />
+                    วันที่: <span className="font-kanit text-green-500">{date}</span><br />
+                    เวลา: <span className="font-kanit text-green-500">{time}</span>
+                </>
+            );
+        }
+
+        if (deleteMatch) {
+            const [_, name] = deleteMatch;
+            return (
+                <>
+                    กิจกรรม: <span className="font-kanit text-red-500">{name}</span><br />
+                    สถานะ: <span className="font-kanit text-red-500">ถูกยกเลิก</span>
+                </>
+            );
+        }
+
+        // ถ้าไม่ตรง format ให้คืนข้อความปกติ
+        return <>{msg}</>;
+    };
     // ✅ ให้ return UI ด้านล่าง แต่แสดงสถานะการโหลด
     let content;
     if (isLoggingOut) {
@@ -76,8 +123,37 @@ function ProfileMenu() {
             <div className="xs:flex xs:items-center xs:gap-2 xs:mr-5">
                 <div className='mx-5' >
                     <button type="button" onClick={mailClick} >
-                        <MailNotification />
+                        <MailNotification newCount={news?.length || []} />
                     </button>
+                    {openMail && (
+                        <div className='mt-3 absolute z-50 translate-y-2 duration-300' >
+                            <div class=" mx-2 w-0 h-0 
+                                border-l-[10px] border-l-transparent
+                                border-b-[12px] border-b-gray-200
+                                border-r-[12px] border-r-transparent">
+                            </div>
+                            <div className="absolute xs:w-52 lg:w-80 bg-white border border-gray-200 shadow-md rounded-lg z-50">
+                                <div className="p-2">
+                                    <h4 className="text-lg font-kanit px-1">แจ้งเตือน</h4>
+                                    <div>
+                                        {news?.length > 0 ? (
+                                            news.map((item, index) => (
+                                                <div key={index} className="py-1 rounded-sm px-1 border-y-1  border-gray-200 hover:bg-gray-100 ">
+                                                    <p className="text-sm font-kanit">{item.title}</p>
+                                                    <p className="text-sm font-kanit">{parseMessage(item.message)}</p>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className="p-2">
+                                                <p className="text-sm font-kanit">ไม่มีการแจ้งเตือนใหม่</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    )}
                 </div>
 
                 <div className="relative flex justify-center items-center rounded-full border border-gray">
@@ -110,7 +186,6 @@ function ProfileMenu() {
                                 <div className="font-kanit">
                                     <MenuItem onClick={() => handleMenuItemClick('/Admin')}>
                                         <p className='font-kanit' >Dashboard</p>
-
                                     </MenuItem>
                                     <MenuItem onClick={() => handleMenuItemClick('/Information')}>
                                         <p className='font-kanit' >แก้ไขข้อมูลส่วนตัว</p>

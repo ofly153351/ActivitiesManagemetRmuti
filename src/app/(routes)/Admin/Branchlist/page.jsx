@@ -23,12 +23,13 @@ function page() {
       headerName: 'คณะ',
       field: 'faculty.faculty_name',
       valueGetter: (params) => params.data.faculty?.faculty_name || ''
-    }
+    },
   ];
 
   const fields = [
     { name: 'branch_name', label: 'ชื่อสาขา', placeholder: 'กรุณากรอกชื่อสาขา' },
     { name: 'branch_code', label: 'รหัสสาขา', placeholder: 'กรุณากรอกรหัสสาขา' },
+
   ];
 
   const title = 'รายชื่อสาขาทั้งหมด'
@@ -81,7 +82,7 @@ function page() {
 
 
   const handleDelete = async (item) => {
-    console.log("item" , item);
+    console.log("item", item);
     try {
       const response = await DeleteBranchbyID(item.branch_id);
       console.log("handleDeleteBranch :", response.status);

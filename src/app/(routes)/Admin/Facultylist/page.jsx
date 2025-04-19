@@ -4,8 +4,12 @@ import CustomTable from "@/app/Components/CustomTable";
 import Nav from "@/app/Components/Nav";
 import EditPopup from "@/app/Components/editPopup";
 import Creatfaculty from "@/app/Components/Createfaculty";
-import { deleteFacultybtID, getFaculties } from "@/app/Utils/api";
+import { deleteFacultybtID, getAllteacher, getFaculties } from "@/app/Utils/api";
 import { SuccessAlert, ErrorAlert } from '@/app/Components/AlertShow';
+import { useStore } from "@/store/useStore";
+import { usePathname } from "next/navigation";
+
+
 
 
 function Page() {
@@ -14,6 +18,11 @@ function Page() {
     const [openCreateDialog, setOpenCreateDialog] = useState(false);
     const [alertMessage, setAlertMessage] = useState(null);
     const [alertType, setAlertType] = useState("success");
+    const [allteacher, setAllTeacehr] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const { user } = useStore()
+    const path = usePathname();
+
 
     const title = 'รายชื่อคณะทั้งหมด';
 
@@ -21,24 +30,45 @@ function Page() {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setLoading(true); // เริ่มโหลด
                 const response = await getFaculties();
                 const dataWithId = response.data.map((faculty) => ({
                     ...faculty,
                     id: faculty.faculty_id,
                 }));
                 setFacultiesList(dataWithId);
+
+                if (path === '/Admin/Facultylist' && user.role === 'admin') {
+                    const teacherResponse = await getAllteacher();
+                    setAllTeacehr(teacherResponse.data);
+                }
             } catch (error) {
                 console.error(error);
+            } finally {
+                setLoading(false); // จบการโหลด ไม่ว่าจะสำเร็จหรือ error
             }
         };
         fetchData();
     }, []);
+
+    console.log(facultiesList);
+    console.log(allteacher);
+    
+
 
 
 
     const columns = [
         { headerName: 'รหัสคณะ', field: 'faculty_code' },
         { headerName: 'ชื่อคณะ', field: 'faculty_name' },
+        {
+            headerName: 'เจ้าหน้าที่ประจำคณะ',
+            valueGetter: (params) => {
+                const teacher = params.data.teacher;
+                return teacher ? `${teacher.first_name} ${teacher.last_name}` : '-';
+            },
+            field: 'teacher',
+        },
     ];
 
     const fields = [
@@ -53,6 +83,10 @@ function Page() {
             setAlertMessage(null);
         }, 3000); // ปิด Alert อัตโนมัติหลัง 3 วินาที
     };
+
+
+
+
 
 
     // ฟังก์ชันแก้ไขคณะ
@@ -103,7 +137,7 @@ function Page() {
                     )}
                 </div>
             )}
-            <div className='flex justify-center items-center bg-gray-50'>
+            <div className='flex justify-center items-center bg-gray-50 min-h-screen'>
                 <div className="w-[80%] bg-white rounded-md mt-10 font-kanit shadow-md">
                     <h1 className='text-[52px] text-shadow-md p-10'>{title}</h1>
                     <CustomTable
@@ -113,6 +147,7 @@ function Page() {
                         onEdit={handleEdit}
                         onDelete={handleDelete}
                         onClick={() => setOpenCreateDialog(true)}
+                        teacherList={allteacher}
                     />
                     <EditPopup
                         selectedEditItem={selectedItem}

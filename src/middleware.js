@@ -24,7 +24,13 @@ export function middleware(request) {
 
     // ตรวจสอบเส้นทาง '/Admin' และเส้นทางอื่นๆ
     if (request.nextUrl.pathname.startsWith('/Admin')) {
-        if (role !== 'admin' && role !== 'teacher') {  // ตรวจสอบว่า role เป็น admin หรือ teacher เท่านั้น
+        if (role !== 'admin' && role !== 'teacher' && role !== 'superadmin') {  // ตรวจสอบว่า role เป็น admin หรือ teacher เท่านั้น
+            console.log('User does not have the correct role, redirecting to /home');
+            return NextResponse.redirect(homeUrl); // เปลี่ยนเส้นทางไปที่ /home
+        }
+    }
+    if (request.nextUrl.pathname.startsWith('/Information')) {
+        if (!accessToken) {  // ตรวจสอบว่า role เป็น admin หรือ teacher เท่านั้น
             console.log('User does not have the correct role, redirecting to /home');
             return NextResponse.redirect(homeUrl); // เปลี่ยนเส้นทางไปที่ /home
         }

@@ -22,6 +22,7 @@ import ListIcon from '@mui/icons-material/List';
 import { ErrorAlert, SuccessAlert } from './AlertShow';
 import { useStore } from '@/store/useStore';
 import { getFaculties, getBranches } from '../Utils/api';
+import SelectedAllDones from './AllDonesList/SelectedAllDones';
 
 export default function Sidebar() {
     const { user, branchesList, facultiesList, setBranchesList, setFacultiesList } = useStore();
@@ -38,6 +39,7 @@ export default function Sidebar() {
     // const [facultiesList, setFacultiesList] = useState([]);
     // const [branchesList, setBranchesList] = useState([]);
     // const [faculties, setFaculties] = useState(null);
+    const [openSelectedAllDones, setSelectedAllDones] = useState(false);
 
     const toggleDrawer = useCallback((newOpen) => () => {
         setOpen(newOpen);
@@ -80,11 +82,14 @@ export default function Sidebar() {
                 }
                 setOpenCreatBranchDialog(state);
                 break;
-
+            case "AllDones":
+                setSelectedAllDones(state);
+                break;
             default:
                 break;
         }
     }, [facultiesList]);
+
     const toggleSubmenuFaculty = useCallback(() => {
         setSubmenuFaculty((prev) => !prev);
     }, []);
@@ -111,18 +116,19 @@ export default function Sidebar() {
                 link: '/Home',
                 icon: <HomeIcon />,
             },
+
             {
                 name: 'รายชื่อ นักศึกษา/อาจารย์',
                 icon: submenuUser ? <ExpandLess /> : <ExpandMore />,
                 action: toggleSubmenuUser,
                 Children: [
                     {
-                        name: 'ดูรายชื่อนักศึกษา',
+                        name: 'รายชื่อนักศึกษา',
                         link: '/Admin/Userlist',
                         icon: <ListIcon sx={{ color: 'gray' }} />,
                     },
                     {
-                        name: 'ดูรายชื่ออาจารย์',
+                        name: 'รายชื่ออาจารย์',
                         link: '/Admin/TeacherList',
                         icon: <ListIcon sx={{ color: 'gray' }} />,
                     },
@@ -150,6 +156,14 @@ export default function Sidebar() {
                     }
                 ],
             },
+            ...(user?.superUser ? [
+                {
+                    name: 'นักศึกษาที่ส่งหลักฐานกิจกรรมภายในคณะ',
+                    link: '/Admin/StudentEvidence',
+                    icon: <ListIcon sx={{ color: 'gray' }} />,
+                },
+            ] : []),
+
 
             // เพิ่มเฉพาะถ้า role ไม่ใช่ teacher
             ...(user.role === 'admin'
@@ -187,6 +201,12 @@ export default function Sidebar() {
                                 icon: <AddIcon sx={{ color: 'gray' }} />,
                             },
                         ],
+                    },
+                    {
+                        name: 'สรุปผลการทำกิจกรรม',
+                        // link: '/Admin/AllDonesEvidence',
+                        icon: <ListIcon sx={{ color: 'gray' }} />,
+                        action: () => setSelectedAllDones('break', true),
                     },
                 ]
                 : []
@@ -358,6 +378,14 @@ export default function Sidebar() {
                 openDialog={openCreatBranchDialog}
                 handleCloseDialog={() => handleDialogToggle('createBranch', false,)}
                 facultiesList={facultiesList} />
+            {openSelectedAllDones && (
+                <SelectedAllDones
+                    facultiesList={facultiesList}
+                    setOpen={setSelectedAllDones}
+                    open={openSelectedAllDones}
+                />
+            )}
+
         </div>
     );
 }

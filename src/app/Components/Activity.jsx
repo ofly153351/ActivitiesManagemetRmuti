@@ -9,7 +9,7 @@ import width from '../Utils/textfieldWidth';
 import { ErrorAlert, SuccessAlert } from './AlertShow';
 import { useStore } from '@/store/useStore';
 
-function Activity({ searchQuery, inEvent }) {
+function Activity({ searchQuery, inEvent, selectedValue }) {
     const [activities, setActivities] = useState([]);
     const { user, branchesList, setBranchesList, myEventList } = useStore();
     const [errorMessage, setErrorMessage] = useState(false);
@@ -21,27 +21,19 @@ function Activity({ searchQuery, inEvent }) {
 
 
     // Improved filtering with null checks
-    const filteredActivities = useMemo(() => {
-        const filtered = filterActivities(activities, searchQuery);
-        return filtered || [];
-    }, [activities, searchQuery]);
+    const sortedActivities = useMemo(() => {
+        let filtered = filterActivities(activities, searchQuery) || [];
 
-    // Robust matching event calculation
-    const matchingEvent = useMemo(() => {
-        // Ensure we have safe arrays to work with
-        const safeActivities = filteredActivities || [];
-        const safeEventsInside = eventsInside || [];
+        if (selectedValue === "date") {
+            return [...filtered].sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
+        }
 
-        // Map and filter with additional safety checks
-        return safeActivities
-            .map(activity =>
-                safeEventsInside.find(event =>
-                    event && activity && event.event_id === activity.event_id
-                )
-            )
-            .filter(event => event !== undefined);
-    }, [filteredActivities, eventsInside]);
+        if (selectedValue === "hour") {
+            return [...filtered].sort((a, b) => b.working_hour - a.working_hour);
+        }
 
+        return filtered;
+    }, [activities, searchQuery, selectedValue]);
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -105,6 +97,22 @@ function Activity({ searchQuery, inEvent }) {
         }
     };
 
+    // Robust matching event calculation
+    const matchingEvent = useMemo(() => {
+        // ตรวจสอบให้แน่ใจว่าข้อมูลปลอดภัยก่อนใช้
+        const safeActivities = sortedActivities || [];
+        const safeEventsInside = eventsInside || [];
+
+        // หา event ที่ตรงกัน
+        return safeActivities
+            .map(activity =>
+                safeEventsInside.find(event =>
+                    event && activity && event.event_id === activity.event_id
+                )
+            )
+            .filter(event => event !== undefined);
+    }, [sortedActivities, eventsInside]);
+
     // Loading state
     if (loading) {
         return <div>กำลังโหลด...</div>;
@@ -112,12 +120,12 @@ function Activity({ searchQuery, inEvent }) {
 
     return (
         <div>
-            {filteredActivities.length === 0 ? (
+            {sortedActivities.length === 0 ? (
                 <div className="h-12 flex justify-center items-center text-center text-gray-500">
                     <div>ยังไม่มีกิจกรรมที่เปิดลงทะเบียน</div>
                 </div>
             ) : (
-                filteredActivities.map((activity, index) => (
+                sortedActivities.map((activity, index) => (
                     <div
                         key={activity.id || index}
                         className="lg:mx-4 p-4 items-center hover:bg-stone-100 border-b border-gray-200"

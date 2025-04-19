@@ -12,7 +12,7 @@ const Searchbox = ({ label, value, onChange }) => {
                 value={value}
                 onChange={onChange}
                 className="px-2 py-3 border-spacing-1 border-[1px] 
-                border-gray-150 rounded-r-md border-l-0  "
+                border-gray-150 rounded-r-md border-l-0 xs:w-full "
             />
         </div>
     );

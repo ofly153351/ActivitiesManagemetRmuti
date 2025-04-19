@@ -29,7 +29,7 @@ function ShowDialogTable({ isOpen, onClose, id }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getUserInEvent(user.role, Number(EventID))
+                const response = await getUserInEvent(Number(EventID))
                 setUserListInEvent(response.data)
 
             } catch (error) {
@@ -46,7 +46,7 @@ function ShowDialogTable({ isOpen, onClose, id }) {
         { headerName: 'ชื่อจริง', field: 'first_name' },
         { headerName: 'นามสกุล', field: 'last_name' },
         { headerName: 'สถานะ', field: 'status' },
-        { headerName: 'ตรวจสอบหลักฐาน', field: 'file_pdf' }
+        { headerName: 'ตรวจสอบหลักฐาน', field: 'file' }
     ]
 
 

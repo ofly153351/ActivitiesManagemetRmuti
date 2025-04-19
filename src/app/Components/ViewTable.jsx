@@ -78,14 +78,14 @@ function ViewTable({ columns, rows }) {
                                         );
                                     }
 
-                                    if (column.field === 'file_pdf') {
+                                    if (column.field === 'file') {
                                         return (
                                             <TableCell sx={{ fontFamily: fontFamily.Kanit }} key={colIndex} align="center">
                                                 {value && row['status'] === false ? (
                                                     <button
                                                         className="p-1 bg-[#f6df78] rounded-md text-black hover:underline"
                                                         onClick={() => handleSelectedFile(
-                                                            row['file_pdf'],
+                                                            row['file'],
                                                             row['event_id'],
                                                             row['user_id'],
                                                             row['status'],
@@ -100,7 +100,7 @@ function ViewTable({ columns, rows }) {
                                                     <button
                                                         className="p-1 bg-green-500 rounded-md text-white hover:underline"
                                                         onClick={() => handleSelectedFile(
-                                                            row['file_pdf'],
+                                                            row['file'],
                                                             row['event_id'],
                                                             row['user_id'],
                                                             row['status'],
@@ -116,7 +116,6 @@ function ViewTable({ columns, rows }) {
                                             </TableCell>
                                         );
                                     }
-
                                     return (
                                         <TableCell sx={{ fontFamily: fontFamily.Kanit }} key={colIndex} align="center">
                                             {value ?? '-'}

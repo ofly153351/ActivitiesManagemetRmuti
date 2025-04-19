@@ -98,7 +98,7 @@ function Creatfaculty({ openDialog, handleCloseDialog, onSave = () => { }, showA
                         ยกเลิก
                     </Button>
                     <Button type="submit" color="primary" sx={{ fontFamily: 'Kanit' }}>
-                        สร้างกิจกรรม
+                        ยืนยัน
                     </Button>
                 </DialogActions>
             </form>

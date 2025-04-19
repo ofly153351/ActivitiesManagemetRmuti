@@ -5,6 +5,8 @@ import BasicButtons from './BasicButtons';
 import { useStore } from '@/store/useStore';
 import { checkFileStudent } from '../Utils/api';
 import { ErrorAlert, SuccessAlert } from './AlertShow';
+import { usePathname } from 'next/navigation';
+
 
 const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
     const [status, setStatus] = useState(null); // เก็บสถานะ (ผ่าน/ไม่ผ่าน)
@@ -12,8 +14,9 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
     const [comment, setComment] = useState(''); // State เก็บความคิดเห็น
     const [successMessage, setSuccessMessage] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
-    console.log(selectedStatus);
 
+
+    const pathName = usePathname()
     if (!filePath) {
         return (
             <div className="w-full max-w-3xl mx-auto p-4">
@@ -31,9 +34,7 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
     }
 
     // Ensure the path starts with /Admin/uploads/
-    const pdfUrl = filePath.startsWith('/Admin/uploads/')
-        ? filePath
-        : `/Admin/uploads${filePath.startsWith('/') ? filePath : '/' + filePath}`;
+
 
     // Function เมื่อกรอกความคิดเห็น
     const handleCommentChange = (e) => {
@@ -51,11 +52,13 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
         };
 
         try {
-            const response = await checkFileStudent(user.role, Number(eventID), Number(userID), payload)
+            const response = await checkFileStudent(Number(eventID), Number(userID), payload)
             setSuccessMessage('ตรวจสอบกิจกรรมเรียบร้อยแล้ว')
             setTimeout(() => {
                 window.location.reload();
             }, 500)
+            console.log(response);
+
             return response
         } catch (error) {
             console.log(error.message);
@@ -68,64 +71,74 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
 
     };
 
+    const pdfUrl = filePath.startsWith('./uploads')
+        ? `http://localhost:8080${filePath.replace('./', '/')}`
+        : filePath;
+
+    console.log(pdfUrl, 'dwadwa');
+
     return (
         <div className="w-full max-w-5xl mx-auto p-4">
             <div className="flex flex-col gap-3">
                 {/* PDF Viewer */}
                 <iframe
                     src={pdfUrl}
-                    className="w-[100%] h-[500px] border rounded-lg"
-                    frameBorder="0"
+                    className={`w-[100%] ${pathName === '/Admin/StudentEvidence' ? 'h-[700px]' : 'h-[500px]'}  border rounded-lg`}
                 />
-
-                <span className='text-red-500 mx-2 w-full' >*กรณีที่ไม่ผ่านกรุณาใส่ความคิดเห็น</span>
-                <CustomTextfield
-                    label={'แสดงความคิดเห็น'}
-                    width={'100%'}
-                    onChange={handleCommentChange} // ส่ง callback เพื่ออัปเดต state
-                    type={'text'}
-                    value={comment} // ผูกกับ state 'comment'
-                />
-                <div className="flex justify-end gap-5">
-                    <div className='flex gap-2 ' >
-                        {selectedStatus ? (
-                            <div>
-                                <BasicButtons
-                                    hover={'#de0a26'}
-                                    color={'#f94449'}
-                                    label={'ไม่ผ่าน'}
-                                    onClick={() => handleButtonClick(false)} // เมื่อกดปุ่ม 'ไม่ผ่าน'
-                                />
+                {/* Display comment and buttons only if not on selectedEvent page */}
+                {(!pathName.startsWith('/Information/MyEvent/selectedEvent/') && !pathName.startsWith('/Admin/StudentEvidence') && !pathName.startsWith('/Admin/AllDonesEvidence')) ? (
+                    <>
+                        <span className="text-red-500 mx-2 w-full">
+                            *กรณีที่ไม่ผ่านกรุณาใส่ความคิดเห็น ({'ส่งไฟล์ใหม่'})
+                        </span>
+                        <CustomTextfield
+                            label={'แสดงความคิดเห็น'}
+                            width={'100%'}
+                            onChange={handleCommentChange}
+                            type={'text'}
+                            value={comment}
+                        />
+                        <div className="flex justify-end gap-5">
+                            <div className="flex gap-2">
+                                {selectedStatus ? (
+                                    <BasicButtons
+                                        hover={'#de0a26'}
+                                        color={'#f94449'}
+                                        label={'ไม่ผ่าน'}
+                                        onClick={() => handleButtonClick(false)}
+                                    />
+                                ) : (
+                                    <>
+                                        <BasicButtons
+                                            hover={'#de0a26'}
+                                            color={'#f94449'}
+                                            label={'ไม่ผ่าน'}
+                                            onClick={() => handleButtonClick(false)}
+                                        />
+                                        <BasicButtons
+                                            label={'ผ่าน'}
+                                            onClick={() => handleButtonClick(true)}
+                                        />
+                                    </>
+                                )}
                             </div>
-                        ) : (
-                            <div className='flex gap-2'> 
-                                <BasicButtons
-                                    hover={'#de0a26'}
-                                    color={'#f94449'}
-                                    label={'ไม่ผ่าน'}
-                                    onClick={() => handleButtonClick(false)} // เมื่อกดปุ่ม 'ไม่ผ่าน'
-                                />
-                                <BasicButtons
-                                    label={'ผ่าน'}
-                                    onClick={() => handleButtonClick(true)} // เมื่อกดปุ่ม 'ผ่าน'
-                                />
-                            </div>
-                        )}
-                    </div>
-                </div>
-
+                        </div>
+                    </>
+                ) : null}
             </div>
+
+            {/* Success or error messages */}
             {successMessage && (
-                <div className='fixed right-4 bottom-4' >
+                <div className="fixed right-4 bottom-4">
                     <SuccessAlert label={successMessage} />
                 </div>
             )}
+
             {errorMessage && (
-                <div className='fixed right-4 bottom-4' >
-                    <SuccessAlert label={errorMessage} />
+                <div className="fixed right-4 bottom-4">
+                    <ErrorAlert label={errorMessage} /> {/* Use ErrorAlert for error message */}
                 </div>
             )}
-
         </div>
     );
 };

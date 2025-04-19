@@ -9,6 +9,7 @@ export const blockNulluser = (user) => {
 
 export const checkUserAuth = () => {
     const cookies = document.cookie;
+
     if (cookies) {
         redirect('/Home')
     }

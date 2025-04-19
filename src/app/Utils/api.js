@@ -1,15 +1,18 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { Cookie } from 'next/font/google';
+// import { Cookie } from 'next/font/google';
 import { jwtDecodeToken } from './function';
 import { useStore } from '@/store/useStore';
-
 //register function api
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL;
+
+
 export const registerUser = async (payload) => {
   try {
     console.log('Payload being sent:', payload);  // Log the payload
 
-    const response = await axios.post('http://localhost:8080/register/student', payload, {
+    const response = await axios.post(`${API_BASE}/register/student`, payload, {
       headers: {
         'Content-Type': 'application/json',
       }, withCredentials: true,
@@ -26,7 +29,7 @@ export const registerTeacher = async (payload) => {
   try {
     console.log('Payload being sent:', payload);  // Log the payload
 
-    const response = await axios.post('http://localhost:8080/register/teacher', payload, {
+    const response = await axios.post(`${API_BASE}/register/teacher`, payload, {
       headers: {
         'Content-Type': 'application/json',
       }, withCredentials: true,
@@ -42,7 +45,7 @@ export const registerTeacher = async (payload) => {
 export const loginUser = async (payload) => {
   try {
     // 1. Login API call
-    const response = await axios.post('http://localhost:8080/login', payload, {
+    const response = await axios.post(`${API_BASE}:8080/login`, payload, {
       withCredentials: true,
     });
 
@@ -251,13 +254,13 @@ export const updateTeacher = async (payload) => {
   }
 }
 
-export const CreateEvent = async (role, payload) => {
+export const CreateEvent = async (payload) => {
 
-  const url = role === 'teacher' ? 'http://localhost:8080/protected/teacher/event' : 'http://localhost:8080/protected/admin/event'
+  console.log(payload);
 
 
   try {
-    const response = await axios.post(url, payload,
+    const response = await axios.post('http://localhost:8080/protected/teacher/event', payload,
       {
         withCredentials: true, // ส่ง cookie ไปพร้อมกับคำขอ
       }
@@ -323,7 +326,7 @@ export const getAllUser = async () => {
 
 export const getAllteacher = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/protected/admin/teachers', {
+    const response = await axios.get('http://localhost:8080/protected/teacher/allteacher', {
       withCredentials: true
     })
     return response
@@ -335,7 +338,7 @@ export const getAllteacher = async () => {
 
 export const deleteEventByAdmin = async (id) => {
   try {
-    const response = await axios.delete(`http://localhost:8080/admin/event/${Number(id)}`, {
+    const response = await axios.delete(`http://localhost:8080/protected/admin/event/${Number(id)}`, {
       withCredentials: true,
       headers: { "Content-Type": "application/json" }
     },)
@@ -374,7 +377,7 @@ export const getMyEventTeacher = async () => {
 
 export const getMyEventAdmin = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/protected/admin/myevents', {
+    const response = await axios.get('http://localhost:8080/protected/teacher/myevents', {
       withCredentials: true
     })
     return response
@@ -463,7 +466,7 @@ export const joinEvent = async (eventId) => {
 
   try {
     const response = await axios.post(
-      `http://localhost:8080/protected/student/join/${Number(eventId)}`,
+      `http://localhost:8080/protected/student/joinevent/${Number(eventId)}`,
       {},  // ไม่มี body ในการส่ง (ถ้า API ต้องการข้อมูลเพิ่มเติมใน body ให้ใส่)
       {
         headers: {
@@ -483,10 +486,8 @@ export const joinEvent = async (eventId) => {
   }
 };
 
-export const getUserInEvent = async (role, id) => {
-  const url = role === 'admin' ?
-    `http://localhost:8080/protected/admin/checklist/${id}` :
-    `http://localhost:8080/protected/teacher/checklist/${id}`
+export const getUserInEvent = async (id) => {
+  const url = `http://localhost:8080/protected/teacher/checklist/${id}`
 
   try {
     const response = await axios.get(url, {
@@ -498,10 +499,8 @@ export const getUserInEvent = async (role, id) => {
   } throw error
 }
 
-export const checkFileStudent = async (role, eventID, userID, payload) => {
-  const url = role === 'admin' ?
-    `http://localhost:8080/protected/admin/check/${(eventID)}/${userID}` :
-    `http://localhost:8080/protected/teacher/check/${eventID}/${userID}`
+export const checkFileStudent = async (eventID, userID, payload) => {
+  const url = `http://localhost:8080/protected/teacher/check/${eventID}/${userID}`
 
   try {
     const response = await axios.put(url, payload, {
@@ -527,9 +526,22 @@ export const getMyEventStudent = async (currentYear) => {
 
 export const uploadFileMyEvent = async (eventID, file) => {
   try {
-    const response = await axios.post(`http://localhost:8080/protected/student/upload/${Number(eventID)}`, file, {
+    const response = await axios.put(`http://localhost:8080/protected/student/upload/${Number(eventID)}`, file, {
       withCredentials: true
     })
+    console.log(response);
+    return response
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const uploadFileMyEventOustide = async (eventID, file) => {
+  try {
+    const response = await axios.put(`http://localhost:8080/protected/student/upload-outside/${Number(eventID)}`, file, {
+      withCredentials: true
+    })
+    console.log(response);
     return response
   } catch (error) {
     console.log(error);
@@ -594,3 +606,116 @@ export const downloadFileEvents = async (eventID) => {
     console.error("เกิดข้อผิดพลาดในการดาวน์โหลดไฟล์:", error);
   }
 };
+
+export const sendSummaryToTeacher = async (year) => {
+
+
+  const token = Cookies.get('token');
+
+  try {
+    const response = await axios.post(
+      `http://localhost:8080/protected/student/send-event/${year}`,
+      {}, // ไม่มี body ก็ส่ง empty object
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        withCredentials: true
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error("Error from API:", error);
+    return { error };
+  }
+};
+
+
+export const editRoleByadmin = async (payload) => {
+  try {
+    const response = await axios.put(`http://localhost:8080/protected/admin/role/`, payload, {
+      withCredentials: true
+    })
+    return response
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const deleteEventOutside = async (eventID) => {
+  try {
+    const response = await axios.delete(`http://localhost:8080/protected/student/outside/${eventID}`, {
+      withCredentials: true
+    })
+    return response
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const getStudentEvidence = async () => {
+  try {
+    const response = await axios.get(`http://localhost:8080/protected/teacher/superuser-check`, {
+      withCredentials: true
+    })
+    return response
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const getStudentEvidenceByID = async (userID, year) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/protected/teacher/all-event/${userID}/${year}`, {
+      withCredentials: true
+    })
+    return response
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const updatedStatusDonestudent = async (userID, payload) => {
+  try {
+    const response = await axios.put(`http://localhost:8080/protected/teacher/check-all-event/${userID}`, payload, {
+      withCredentials: true
+    })
+    return response
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const getAllStudentDonesEvidence = async (year, status, facultyID) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/protected/admin/done?year=${year}&status=${status}&faculty_id=${facultyID}`, {
+      withCredentials: true
+    })
+    return response
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+export const getNews = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/protected/news', {
+      withCredentials: true
+    })
+    return response
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const ChangeHeaderOffaculty = async (facultyId, payload) => {
+  try {
+    const response = await axios.put(`http://localhost:8080/protected/admin/faculty/${Number(facultyId)}`, payload, {
+      withCredentials: true
+    })
+    return response
+  } catch (error) {
+    console.log(error);
+  }
+}

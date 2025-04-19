@@ -6,11 +6,11 @@ import { getAllUser } from '@/app/Utils/api'
 import Loading from '@/app/Components/Loading'
 import useStore from '@/store/useStore'
 
+
 function page() {
     const title = 'รายชื่อนักศึกษาในระบบ'
     const [allUser, setAlluser] = useState([])
     const [loading, setLoading] = useState(true)
-    const { faculties } = useStore()
 
     useEffect(() => {
         const fetchData = async () => {

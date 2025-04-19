@@ -103,7 +103,6 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
         setFilteredBranches(
             branchesList.filter(branch => branch.faculty.faculty_id === selectedFaculty?.faculty_id)
         );
-
     };
 
     const handleOnchangeDate = (key, newValue) => {
@@ -136,11 +135,11 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
     };
 
 
-    const startDate = selectedDate
+    const startDate = dayjs(selectedDate)
         .set('hour', selectedTime.hour())
         .set('minute', selectedTime.minute())
-        .set('second', 0) // ตั้งค่า seconds ให้เป็น 0
-        .format('YYYY-MM-DD HH:mm:ss'); // กำหนดรูปแบบที่ต้องการ
+        .set('second', 0)
+        .format('YYYY-MM-DD HH:mm:ss');
 
     const handleChangeYears = (label) => {
         setSelectedYears((prevSelectedYears) => {
@@ -153,10 +152,6 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
             }
         });
     };
-
-
-
-
 
     const handleSubmit = async () => {
 
@@ -183,8 +178,10 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
                 school_year: Number(selectedSchoolYear)
             };
 
+            console.log('Start date format:', dayjs(payload.start_date).format('YYYY-MM-DD HH:MM:00:00.000'));
 
-            const response = await CreateEvent(user.role, payload);
+
+            const response = await CreateEvent(payload);
             console.log("CreateEvent response:", response); // Debug log
 
             if (response) {

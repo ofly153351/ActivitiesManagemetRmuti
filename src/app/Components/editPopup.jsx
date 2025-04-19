@@ -5,10 +5,13 @@ import Modal from '@mui/material/Modal';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 import ErrorIcon from '@mui/icons-material/Error';
-import { EditBranchbyID, editEventById, editFacultybyID, getFaculties } from '../Utils/api';
+import { EditBranchbyID, editEventById, editFacultybyID, getAllteacher, getFaculties } from '../Utils/api';
 import Customselect from './Customselect';
 import { usePathname } from 'next/navigation';
 import { useStore } from '@/store/useStore';
+import CustomTextfield from './Textfield';
+
+
 
 const style = {
     position: 'absolute',
@@ -35,17 +38,6 @@ export default function EditPopup({ selectedEditItem, closeModal, onSave, fields
             setFormData(selectedEditItem);
         }
 
-        if (path === '/Admin/Branchlist') {
-            const fetchFaculties = async () => {
-                try {
-                    const response = await getFaculties();
-                    setFacultiesList(response.data);
-                } catch (error) {
-                    console.error('Error fetching faculties:', error);
-                }
-            };
-            fetchFaculties();
-        }
     }, [selectedEditItem, path]);
 
     const handleSubmit = async (event) => {
@@ -115,11 +107,13 @@ export default function EditPopup({ selectedEditItem, closeModal, onSave, fields
                                     placeholder={field.placeholder}
                                     value={formData[field.name] || ''}
                                     onChange={handleChange}
-                                    className="w-full border p-2 mt-2"
+                                    className="w-full border p-4 mt-2"
                                     name={field.name}
                                 />
                             </div>
+
                         ))}
+                       
                     </div>
                     <div className="flex justify-end items-center mt-4">
                         <button

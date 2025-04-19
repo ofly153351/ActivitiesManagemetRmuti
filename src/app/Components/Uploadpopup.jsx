@@ -41,7 +41,7 @@ export default function UploadPopup({ isOpen, onClose, eventName, eventID }) {
             alert("อัปโหลดสำเร็จ: " + response.data.filePath);
             setFile(null);
             onClose(); // ปิด popup เมื่ออัปโหลดเสร็จ
-            window.location.reload()
+            // window.location.reload()
         } catch (error) {
             console.error("Upload error:", error);
             alert("อัปโหลดล้มเหลว");

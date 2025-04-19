@@ -27,7 +27,7 @@ function page() {
 
             try {
                 if (user?.role === 'admin') {
-                    const response = await getMyEventAdmin();
+                    const response = await getMyEventTeacher();
                     setMyEvent(response.data);
                 } else if (user?.role === 'teacher') {
                     const response = await getMyEventTeacher();
@@ -97,9 +97,9 @@ function page() {
 
             {EditPopupOpen && (
                 <EditPopup
-                    closeModal={() => setEditPopupOpen(false)} 
+                    closeModal={() => setEditPopupOpen(false)}
                     fields={fields}
-                    selectedEditItem={selectedRow} 
+                    selectedEditItem={selectedRow}
                 />
             )}
         </div>
