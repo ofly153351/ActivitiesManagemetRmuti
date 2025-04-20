@@ -1,4 +1,4 @@
-name: Build and deploy Node.js app to Azure Web App - acvitiesmanagement
+name: Build and deploy Next.js to Azure Web App - acvitiesmanagement
 
 on:
   push:
@@ -9,8 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -20,19 +18,17 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Install dependencies and build
-        run: |
-          npm install
-          npm run build
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Zip production build files only
+      - name: Build app
+        run: npm run build
+
+      - name: Prepare release package
         run: |
-          mkdir build-artifact
-          cp -r .next build-artifact/
-          cp -r public build-artifact/
-          cp -r package.json build-artifact/
-          cp -r next.config.js build-artifact/ || true
-          cd build-artifact && zip -r ../release.zip .
+          mkdir release
+          cp -r .next public package.json next.config.js release/
+          cd release && zip -r ../release.zip .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -46,9 +42,6 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write
-      contents: read
 
     steps:
       - name: Download artifact
@@ -57,19 +50,18 @@ jobs:
           name: node-app
 
       - name: Unzip artifact
-        run: unzip release.zip
+        run: unzip release.zip -d .
 
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_FFA98554D1AC4AC1B2DE7A78AF4199A6 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_3DCB1BD082DE46DCA07F2F6AB7D205D8 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4833863416884F65AAF3E6DA0533CBE2 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_... }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_... }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_... }}
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'acvitiesmanagement'
           slot-name: 'Production'
-          package: release.zip
+          package: .
