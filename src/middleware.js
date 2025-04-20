@@ -1,49 +1,29 @@
-import { NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
+import { jwtVerify } from 'jose'
 
-// ตัวแปรลับสำหรับ decode (ถ้าต้องการ verify จริงจัง ให้ใช้ secret จาก env)
+export async function middleware(req) {
+  const token = req.cookies.get('token')?.value;
+  const url = req.nextUrl.clone()
+  if (!token) {
+    url.pathname = '/Home'
+    return NextResponse.redirect(url)
+  }
 
-
-export function middleware(request) {
-    const token = request.cookies.get('token')?.value;
-    const homeUrl = new URL('/Home', request.url);
-    console.log(token);
-
-    let role = null;
-
-    // แกะ token
-    if (token) {
-        try {
-            const decoded = jwt.decode(token); // ใช้ decode แบบไม่ verify
-            role = decoded?.role;
-            console.log(role);
-
-        } catch (err) {
-            console.error('Error decoding token:', err);
-        }
+  try {
+    const secret = new TextEncoder().encode('your-secret')
+    const { payload } = await jwtVerify(token, secret)
+    if (!['admin', 'teacher'].includes(payload.role)) {
+      url.pathname = '/Home'
+      return NextResponse.redirect(url)
     }
+  } catch (e) {
+    console.error(e)
+    url.pathname = '/Home'
+    return NextResponse.redirect(url)
+  }
 
-    const path = request.nextUrl.pathname;
-
-    // เช็คสิทธิ์เส้นทาง /Admin
-    if (path.startsWith('/Admin')) {
-        if (!['admin', 'teacher', 'superadmin'].includes(role)) {
-            console.log('❌ ไม่มีสิทธิ์เข้า /Admin -> redirect ไป /Home');
-            return NextResponse.redirect(homeUrl);
-        }
-    }
-
-    // เช็คสิทธิ์เส้นทาง /Information (ต้อง login อย่างน้อย)
-    if (path.startsWith('/Information')) {
-        if (!role) {
-            console.log('❌ ไม่พบ role -> redirect ไป /Home');
-            return NextResponse.redirect(homeUrl);
-        }
-    }
-
-    return NextResponse.next(); // ให้ผ่านปกติ
+  return NextResponse.next()
 }
 
-// export const config = {
-//     matcher: ['/Admin/:path*', '/Information/:path*'], // ระบุเส้นทางที่ middleware ใช้งาน
-// };
+export const config = {
+  matcher: ['/Admin/:path*', '/Information/:path*']
+}
