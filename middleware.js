@@ -8,30 +8,30 @@ export async function middleware(req) {
     console.log(token);
 
 
-      if (!token) {
+    if (!token) {
         console.log("No token found in cookies")
         url.pathname = '/Home'
         return NextResponse.redirect(url)
-      }
+    }
 
-      try {
+    try {
         const secret = new TextEncoder().encode(process.env.JWT_SECRET)
         const { payload } = await jwtVerify(token, secret)
 
         if (!['admin', 'teacher'].includes(payload.role)) {
-          console.log("Unauthorized role:", payload.role)
-          url.pathname = '/Home'
-          return NextResponse.redirect(url)
+            console.log("Unauthorized role:", payload.role)
+            url.pathname = '/Home'
+            return NextResponse.redirect(url)
         }
-      } catch (e) {
+    } catch (e) {
         console.error("JWT Verify Error:", e)
         url.pathname = '/Home'
         return NextResponse.redirect(url)
-      }
+    }
 
-      return NextResponse.next()
+    return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/Admin/:path*', '/Information/:path*']
+    matcher: ['/Admin/:path*', '/Information/:path*']
 }

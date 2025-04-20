@@ -191,9 +191,11 @@ function ProfileMenu() {
                                         <p className='font-kanit' >แก้ไขข้อมูลส่วนตัว</p>
 
                                     </MenuItem>
-                                    <MenuItem onClick={() => handleMenuItemClick('/logout')}>
-                                        <p className='font-kanit' >Logout</p>
-                                    </MenuItem>
+                                    {user?.role === 'teacher' || user?.role === 'admin' || user?.role === 'superadmin' && (
+                                        <MenuItem onClick={() => handleMenuItemClick('/logout')}>
+                                            <p className='font-kanit' >Logout</p>
+                                        </MenuItem>
+                                    )}
                                 </div>
                             ) : user.role === 'student' ? (
                                 <div className="font-kanit">
