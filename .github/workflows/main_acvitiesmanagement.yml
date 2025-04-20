@@ -1,4 +1,4 @@
-name: Build and deploy Next.js to Azure Web App - acvitiesmanagement
+name: Build and deploy Node.js app to Azure Web App - aczazazaza
 
 on:
   push:
@@ -9,9 +9,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # Required for actions/checkout
+      id-token: write # Required for federated credentials (OIDC)
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -24,13 +28,10 @@ jobs:
       - name: Build app
         run: npm run build
 
-      - name: Prepare release package
+      - name: Zip artifact for deployment
         run: |
-          mkdir -p release
-          cp -r .next/standalone release/
-          cp -r public release/
-          cp -r .next/static release/.next/
-          cp next.config.mjs package.json release/
+          mkdir release
+          cp -r .next public package.json next.config.mjs release/
           cd release && zip -r ../release.zip .
 
       - name: Upload artifact
@@ -46,7 +47,7 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write       # ✅ สำคัญ!
+      id-token: write # Required for requesting OIDC token
       contents: read
 
     steps:
@@ -56,18 +57,19 @@ jobs:
           name: node-app
 
       - name: Unzip artifact
-        run: unzip release.zip -d .
+        run: unzip release.zip
 
-      - name: Login to Azure
+      - name: Login to Azure using OIDC
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_FFA98554D1AC4AC1B2DE7A78AF4199A6 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_3DCB1BD082DE46DCA07F2F6AB7D205D8 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4833863416884F65AAF3E6DA0533CBE2 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_8E14B4139546408C87947D333F526721 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8108868B8BD84977B6A5737A2A1BCE7B }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F4C30D2E5B1640F2AECC9FF33452A087 }}
 
       - name: Deploy to Azure Web App
+        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'acvitiesmanagement'
+          app-name: 'aczazazaza'
           slot-name: 'Production'
           package: .
