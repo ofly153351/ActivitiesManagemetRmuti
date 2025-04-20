@@ -1,7 +1,7 @@
 // /app/api/debug-token/route.ts
 import { jwtVerify } from 'jose'
 
-export async function GET(request: Request) {
+export async function GET(request) {
   const token = request.headers.get('cookie')?.split('token=')[1]?.split(';')[0]
   const secret = new TextEncoder().encode(process.env.JWT_SECRET)
 
