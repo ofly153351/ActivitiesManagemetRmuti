@@ -79,7 +79,7 @@ export const loginUser = async (payload) => {
 
 export const creatFaculties = async (payload) => {
   try {
-    const response = await axios.post('http://localhost:8080/protected/admin/faculty', payload, {
+    const response = await axios.post('${API_BASE}/protected/admin/faculty', payload, {
       withCredentials: true,
     })
     return response
@@ -93,7 +93,7 @@ export const creatFaculties = async (payload) => {
 
 export const getFaculties = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/faculties')
+    const response = await axios.get('${API_BASE}/faculties')
     // console.log(response.data);
     return response
   } catch (error) {
@@ -106,7 +106,7 @@ export const getFaculties = async () => {
 
 export const deleteFacultybtID = async (id) => {
   try {
-    const response = await axios.delete(`http://localhost:8080/protected/admin/faculty/${id}`, {
+    const response = await axios.delete(`${API_BASE}/protected/admin/faculty/${id}`, {
       withCredentials: true
     })
     return response
@@ -119,7 +119,7 @@ export const deleteFacultybtID = async (id) => {
 
 export const editFacultybyID = async (id, payload) => {
   try {
-    const response = await axios.put(`http://localhost:8080/protected/admin/faculty/${id}`, payload, {
+    const response = await axios.put(`${API_BASE}/protected/admin/faculty/${id}`, payload, {
       withCredentials: true
     })
     return response
@@ -133,7 +133,7 @@ export const editFacultybyID = async (id, payload) => {
 
 export const creatBranch = async (payload) => {
   try {
-    const response = await axios.post('http://localhost:8080/protected/admin/branch', payload, {
+    const response = await axios.post('${API_BASE}/protected/admin/branch', payload, {
       withCredentials: true,
     })
     return response;
@@ -147,7 +147,7 @@ export const creatBranch = async (payload) => {
 
 export const getBranches = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/branches', {
+    const response = await axios.get('${API_BASE}/branches', {
       withCredentials: true,
     })
     return response
@@ -160,7 +160,7 @@ export const getBranches = async () => {
 
 export const EditBranchbyID = async (id, payload) => {
   try {
-    const response = await axios.put(`http://localhost:8080/protected/admin/branch/${id}`, payload, {
+    const response = await axios.put(`${API_BASE}/protected/admin/branch/${id}`, payload, {
       withCredentials: true
     })
     return response
@@ -172,7 +172,7 @@ export const EditBranchbyID = async (id, payload) => {
 
 export const DeleteBranchbyID = async (id) => {
   try {
-    const response = await axios.delete(`http://localhost:8080/protected/admin/branch/${id}`,
+    const response = await axios.delete(`${API_BASE}/protected/admin/branch/${id}`,
       {
         withCredentials: true
       }
@@ -189,7 +189,7 @@ export const DeleteBranchbyID = async (id) => {
 //get ข้อมูลของ user ทุก field
 export const getUserbyClaim = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/protected/userbyclaim', {
+    const response = await axios.get(`${API_BASE}/protected/userbyclaim`, {
       withCredentials: true,
     })
     return response
@@ -217,7 +217,7 @@ export const updateUser = async (payload) => {
   //     "branch_id":1733
   // }
   try {
-    const response = await axios.put('http://localhost:8080/protected/student/personalinfo/', payload, {
+    const response = await axios.put(`${API_BASE}/protected/student/personalinfo/`, payload, {
       withCredentials: true
     })
     console.log(response.status);
@@ -237,7 +237,7 @@ export const updateUser = async (payload) => {
 
 export const updateTeacher = async (payload) => {
   try {
-    const response = await axios.put('http://localhost:8080/protected/teacher/personalinfo', payload, {
+    const response = await axios.put(`${API_BASE}/protected/teacher/personalinfo`, payload, {
       withCredentials: true,
     })
     console.log(response.status);
@@ -260,7 +260,7 @@ export const CreateEvent = async (payload) => {
 
 
   try {
-    const response = await axios.post('http://localhost:8080/protected/teacher/event', payload,
+    const response = await axios.post(`${API_BASE}/protected/teacher/event`, payload,
       {
         withCredentials: true, // ส่ง cookie ไปพร้อมกับคำขอ
       }
@@ -279,7 +279,7 @@ export const CreateEvent = async (payload) => {
 
 export const getAllevent = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/events', {
+    const response = await axios.get(`${API_BASE}/events`, {
       withCredentials: true,
     })
     return response
@@ -290,7 +290,7 @@ export const getAllevent = async () => {
 
 export const getCurrentEvent = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/currentevents', {
+    const response = await axios.get(`${API_BASE}/currentevents`, {
       withCredentials: true
     })
     return response
@@ -301,7 +301,7 @@ export const getCurrentEvent = async () => {
 }
 export const getAllowedEvent = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/allowedevents', {
+    const response = await axios.get(`${API_BASE}/allowedevents`, {
       withCredentials: true
     })
     return response
@@ -313,7 +313,7 @@ export const getAllowedEvent = async () => {
 
 export const getAllUser = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/protected/admin/students', {
+    const response = await axios.get(`${API_BASE}/protected/admin/students`, {
       withCredentials: true
     })
     return response
@@ -326,7 +326,7 @@ export const getAllUser = async () => {
 
 export const getAllteacher = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/protected/teacher/allteacher', {
+    const response = await axios.get(`${API_BASE}/protected/teacher/allteacher`, {
       withCredentials: true
     })
     return response
@@ -338,7 +338,7 @@ export const getAllteacher = async () => {
 
 export const deleteEventByAdmin = async (id) => {
   try {
-    const response = await axios.delete(`http://localhost:8080/protected/admin/event/${Number(id)}`, {
+    const response = await axios.delete(`${API_BASE}/protected/admin/event/${Number(id)}`, {
       withCredentials: true,
       headers: { "Content-Type": "application/json" }
     },)
@@ -352,7 +352,7 @@ export const deleteEventByAdmin = async (id) => {
 export const deleteEventByTeacher = async (id) => {
 
   try {
-    const response = await axios.delete(`http://localhost:8080/protected/teacher/event/${Number(id)}`, {
+    const response = await axios.delete(`${API_BASE}/protected/teacher/event/${Number(id)}`, {
       withCredentials: true,
       headers: { "Content-Type": "application/json" }
     },)
@@ -365,7 +365,7 @@ export const deleteEventByTeacher = async (id) => {
 
 export const getMyEventTeacher = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/protected/teacher/myevents', {
+    const response = await axios.get(`${API_BASE}/protected/teacher/myevents`, {
       withCredentials: true
     })
     return response
@@ -377,7 +377,7 @@ export const getMyEventTeacher = async () => {
 
 export const getMyEventAdmin = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/protected/teacher/myevents', {
+    const response = await axios.get(`${API_BASE}/protected/teacher/myevents`, {
       withCredentials: true
     })
     return response
@@ -389,8 +389,8 @@ export const getMyEventAdmin = async () => {
 
 export const editStatusEvent = async (role, id, statusData, token) => {
   const url = role === 'admin'
-    ? `http://localhost:8080/protected/admin/status/${id}`
-    : `http://localhost:8080/protected/teacher/status/${id}`;
+    ? `${API_BASE}/protected/admin/status/${id}`
+    : `${API_BASE}/protected/teacher/status/${id}`;
 
   try {
     const response = await axios.put(url, statusData, {
@@ -426,8 +426,8 @@ export const editEventById = async (role, id, data) => {
 
   // กำหนด URL ตาม role
   const url = role === 'admin'
-    ? `http://localhost:8080/protected/admin/event/${id}`
-    : `http://localhost:8080/protected/teacher/event/${id}`;
+    ? `${API_BASE}/protected/admin/event/${id}`
+    : `${API_BASE}/protected/teacher/event/${id}`;
 
   try {
     const response = await axios.put(
@@ -466,7 +466,7 @@ export const joinEvent = async (eventId) => {
 
   try {
     const response = await axios.post(
-      `http://localhost:8080/protected/student/joinevent/${Number(eventId)}`,
+      `${API_BASE}/protected/student/joinevent/${Number(eventId)}`,
       {},  // ไม่มี body ในการส่ง (ถ้า API ต้องการข้อมูลเพิ่มเติมใน body ให้ใส่)
       {
         headers: {
@@ -487,7 +487,7 @@ export const joinEvent = async (eventId) => {
 };
 
 export const getUserInEvent = async (id) => {
-  const url = `http://localhost:8080/protected/teacher/checklist/${id}`
+  const url = `${API_BASE}/protected/teacher/checklist/${id}`
 
   try {
     const response = await axios.get(url, {
@@ -500,7 +500,7 @@ export const getUserInEvent = async (id) => {
 }
 
 export const checkFileStudent = async (eventID, userID, payload) => {
-  const url = `http://localhost:8080/protected/teacher/check/${eventID}/${userID}`
+  const url = `${API_BASE}/protected/teacher/check/${eventID}/${userID}`
 
   try {
     const response = await axios.put(url, payload, {
@@ -514,7 +514,7 @@ export const checkFileStudent = async (eventID, userID, payload) => {
 
 export const getMyEventStudent = async (currentYear) => {
   try {
-    const response = await axios.get(`http://localhost:8080/protected/student/myevents/${currentYear}`, {
+    const response = await axios.get(`${API_BASE}/protected/student/myevents/${currentYear}`, {
       withCredentials: true
     })
     return response
@@ -526,7 +526,7 @@ export const getMyEventStudent = async (currentYear) => {
 
 export const uploadFileMyEvent = async (eventID, file) => {
   try {
-    const response = await axios.put(`http://localhost:8080/protected/student/upload/${Number(eventID)}`, file, {
+    const response = await axios.put(`${API_BASE}/protected/student/upload/${Number(eventID)}`, file, {
       withCredentials: true
     })
     console.log(response);
@@ -538,7 +538,7 @@ export const uploadFileMyEvent = async (eventID, file) => {
 
 export const uploadFileMyEventOustide = async (eventID, file) => {
   try {
-    const response = await axios.put(`http://localhost:8080/protected/student/upload-outside/${Number(eventID)}`, file, {
+    const response = await axios.put(`${API_BASE}/protected/student/upload-outside/${Number(eventID)}`, file, {
       withCredentials: true
     })
     console.log(response);
@@ -552,7 +552,7 @@ export const uploadFileMyEventOustide = async (eventID, file) => {
 export const unJoinEvent = async (eventID) => {
   if (eventID) {
     try {
-      const response = await axios.delete(`http://localhost:8080/protected/student/unjoin/${eventID}`, {
+      const response = await axios.delete(`${API_BASE}/protected/student/unjoin/${eventID}`, {
         withCredentials: true
       })
       return response
@@ -566,7 +566,7 @@ export const CreateEventsOutSide = async (payload) => {
   if (payload) {
 
     try {
-      const response = await axios.post('http://localhost:8080/protected/student/outside', payload, {
+      const response = await axios.post('${API_BASE}/protected/student/outside', payload, {
         withCredentials: true
       })
       return response
@@ -582,7 +582,7 @@ export const downloadFileEvents = async (eventID) => {
 
   try {
     const response = await axios.get(
-      `http://localhost:8080/protected/student/download/${eventID}`,
+      `${API_BASE}/protected/student/download/${eventID}`,
       {
         withCredentials: true,
         responseType: "blob", // สำคัญ! ให้ Axios รู้ว่ากำลังรับไฟล์
@@ -614,7 +614,7 @@ export const sendSummaryToTeacher = async (year) => {
 
   try {
     const response = await axios.post(
-      `http://localhost:8080/protected/student/send-event/${year}`,
+      `${API_BASE}/protected/student/send-event/${year}`,
       {}, // ไม่มี body ก็ส่ง empty object
       {
         headers: {
@@ -633,7 +633,7 @@ export const sendSummaryToTeacher = async (year) => {
 
 export const editRoleByadmin = async (payload) => {
   try {
-    const response = await axios.put(`http://localhost:8080/protected/admin/role/`, payload, {
+    const response = await axios.put(`${API_BASE}/protected/admin/role/`, payload, {
       withCredentials: true
     })
     return response
@@ -644,7 +644,7 @@ export const editRoleByadmin = async (payload) => {
 
 export const deleteEventOutside = async (eventID) => {
   try {
-    const response = await axios.delete(`http://localhost:8080/protected/student/outside/${eventID}`, {
+    const response = await axios.delete(`${API_BASE}/protected/student/outside/${eventID}`, {
       withCredentials: true
     })
     return response
@@ -655,7 +655,7 @@ export const deleteEventOutside = async (eventID) => {
 
 export const getStudentEvidence = async () => {
   try {
-    const response = await axios.get(`http://localhost:8080/protected/teacher/superuser-check`, {
+    const response = await axios.get(`${API_BASE}/protected/teacher/superuser-check`, {
       withCredentials: true
     })
     return response
@@ -666,7 +666,7 @@ export const getStudentEvidence = async () => {
 
 export const getStudentEvidenceByID = async (userID, year) => {
   try {
-    const response = await axios.get(`http://localhost:8080/protected/teacher/all-event/${userID}/${year}`, {
+    const response = await axios.get(`${API_BASE}/protected/teacher/all-event/${userID}/${year}`, {
       withCredentials: true
     })
     return response
@@ -677,7 +677,7 @@ export const getStudentEvidenceByID = async (userID, year) => {
 
 export const updatedStatusDonestudent = async (userID, payload) => {
   try {
-    const response = await axios.put(`http://localhost:8080/protected/teacher/check-all-event/${userID}`, payload, {
+    const response = await axios.put(`${API_BASE}/protected/teacher/check-all-event/${userID}`, payload, {
       withCredentials: true
     })
     return response
@@ -688,7 +688,7 @@ export const updatedStatusDonestudent = async (userID, payload) => {
 
 export const getAllStudentDonesEvidence = async (year, status, facultyID) => {
   try {
-    const response = await axios.get(`http://localhost:8080/protected/admin/done?year=${year}&status=${status}&faculty_id=${facultyID}`, {
+    const response = await axios.get(`${API_BASE}/protected/admin/done?year=${year}&status=${status}&faculty_id=${facultyID}`, {
       withCredentials: true
     })
     return response
@@ -700,7 +700,7 @@ export const getAllStudentDonesEvidence = async (year, status, facultyID) => {
 
 export const getNews = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/protected/news', {
+    const response = await axios.get('${API_BASE}/protected/news', {
       withCredentials: true
     })
     return response
@@ -711,7 +711,7 @@ export const getNews = async () => {
 
 export const ChangeHeaderOffaculty = async (facultyId, payload) => {
   try {
-    const response = await axios.put(`http://localhost:8080/protected/admin/faculty/${Number(facultyId)}`, payload, {
+    const response = await axios.put(`${API_BASE}/protected/admin/faculty/${Number(facultyId)}`, payload, {
       withCredentials: true
     })
     return response

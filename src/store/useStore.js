@@ -22,37 +22,38 @@ export const useStore = create((set) => ({
 
             // 1. Login API call
             const response = await axios.post(`${API_BASE}/login`, payload, {
-                withCredentials: true,
+                withCredentials: true, // สำคัญมาก ถ้าใช้ cookie
             });
             // console.log('Login response:', response.data);
 
             // 2. Get token from cookies
-            const token = Cookies.get('token');
-            // console.log('Token from cookies:', token);
+            // const token = Cookies.get('token');
+            // // console.log('Token from cookies:', token);
 
-            if (!token) {
-                throw new Error('Token not found in Cookies.');
-            }
+            // if (!token) {
+            //     throw new Error('Token not found in Cookies.');
+            // }
 
-            // 3. Decode JWT
-            const decodedJwt = jwtDecodeToken(token);
-            console.log('Decoded JWT:', decodedJwt);
+            // // 3. Decode JWT
+            // const decodedJwt = jwtDecodeToken(token);
+            // console.log('Decoded JWT:', decodedJwt);
 
-            if (!decodedJwt) {
-                throw new Error('Invalid token structure.');
-            }
+            // if (!decodedJwt) {
+            //     throw new Error('Invalid token structure.');
+            // }
 
             // 4. Set role from token
-            set({ userRole: { role: decodedJwt.role } });
 
             try {
                 // 5. Fetch user data
                 const userResponse = await getUserbyClaim();
                 // console.log('User data response:', userResponse.data);
+                console.log(userResponse);
+                set({ userRole: { role: userResponse.data.role } });
 
 
                 const userData = {
-                    role: decodedJwt.role || '',
+                    role: userResponse.data.role || '',
                     user_id: userResponse.data.user_id,
                     title_name: userResponse.data.title_name,
                     first_name: userResponse.data.first_name,
