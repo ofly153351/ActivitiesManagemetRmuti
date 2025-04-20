@@ -45,7 +45,7 @@ export const registerTeacher = async (payload) => {
 
 export const creatFaculties = async (payload) => {
   try {
-    const response = await axios.post('${API_BASE}/protected/admin/faculty', payload, {
+    const response = await axios.post(`${API_BASE}/protected/admin/faculty`, payload, {
       withCredentials: true,
     })
     return response
@@ -59,7 +59,7 @@ export const creatFaculties = async (payload) => {
 
 export const getFaculties = async () => {
   try {
-    const response = await axios.get('${API_BASE}/faculties')
+    const response = await axios.get(`${API_BASE}/faculties`)
     // console.log(response.data);
     return response
   } catch (error) {
@@ -99,7 +99,7 @@ export const editFacultybyID = async (id, payload) => {
 
 export const creatBranch = async (payload) => {
   try {
-    const response = await axios.post('${API_BASE}/protected/admin/branch', payload, {
+    const response = await axios.post(`${API_BASE}/protected/admin/branch`, payload, {
       withCredentials: true,
     })
     return response;
