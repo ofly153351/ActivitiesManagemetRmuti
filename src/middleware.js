@@ -1,22 +1,24 @@
 import { NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
+import { useStore } from './store/useStore';
+
 
 export function middleware(request) {
     const accessToken = request.cookies.get('token');
     const homeUrl = new URL('/Home', request.url).href;
-
-    let role = null
+    const { user } = useStore();
+    let role = user?.role
 
     // ตรวจสอบ token
-    if (accessToken) {
-        try {
-            // แยกค่า payload จาก JWT
-            const decoded = jwt.decode(accessToken.value);
-            role = decoded?.role;
-        } catch (error) {
-            console.error('Error decoding JWT:', error);
-        }
-    }
+    // if (accessToken) {
+    //     try {
+    //         // แยกค่า payload จาก JWT
+    //         const decoded = jwt.decode(accessToken.value);
+    //         role = decoded?.role;
+    //     } catch (error) {
+    //         console.error('Error decoding JWT:', error);
+    //     }
+    // }
 
     // console.log(role);
 
