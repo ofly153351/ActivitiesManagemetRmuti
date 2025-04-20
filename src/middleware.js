@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
 import { useStore } from './store/useStore';
 
 
@@ -32,7 +31,7 @@ export function middleware(request) {
         }
     }
     if (request.nextUrl.pathname.startsWith('/Information')) {
-        if (!accessToken) {  // ตรวจสอบว่า role เป็น admin หรือ teacher เท่านั้น
+        if (role) {  // ตรวจสอบว่า role เป็น admin หรือ teacher เท่านั้น
             console.log('User does not have the correct role, redirecting to /home');
             return NextResponse.redirect(homeUrl); // เปลี่ยนเส้นทางไปที่ /home
         }
