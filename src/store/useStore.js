@@ -4,7 +4,7 @@ import { getUserbyClaim, getBranches, getFaculties } from "@/app/Utils/api"; // 
 import { jwtDecodeToken } from "@/app/Utils/function";
 import axios from 'axios';
 import Cookies from 'js-cookie';
-
+const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 // store/useStore.js
 const storedUser = typeof window !== "undefined" ? localStorage.getItem('user') : null;
 const storedUserRole = typeof window !== "undefined" ? localStorage.getItem('userRole') : null;
@@ -21,7 +21,7 @@ export const useStore = create((set) => ({
             console.log('Attempting login with:', payload);
 
             // 1. Login API call
-            const response = await axios.post('http://localhost:8080/login', payload, {
+            const response = await axios.post(`http://${API_BASE}/login`, payload, {
                 withCredentials: true,
             });
             // console.log('Login response:', response.data);
