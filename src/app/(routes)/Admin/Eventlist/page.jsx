@@ -1,5 +1,4 @@
 'use client';
-
 import CustomTable from '@/app/Components/CustomTable';
 import Loading from '@/app/Components/Loading';
 import { getAllevent, getAllowedEvent, getCurrentEvent } from '@/app/Utils/api';
