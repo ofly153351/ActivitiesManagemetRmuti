@@ -10,7 +10,6 @@ import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 import { useStore } from '@/store/useStore';
 import { checkUserAuth } from "@/app/Utils/block";
-import { useStore } from "@/store/useStore";
 
 function Page() {
   const login = useStore((state) => state.login);
