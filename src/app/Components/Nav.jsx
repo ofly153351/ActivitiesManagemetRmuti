@@ -3,25 +3,23 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import Profilemanu from './Profilemanu';
-import Cookies from 'js-cookie';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Sidebar from './sidebar';
 import LogoDevIcon from '@mui/icons-material/LogoDev';
 import CustomMenu from './CustomManu';
 import BasicButtons from './BasicButtons';
-import useStore from '@/store/useStore';
 import StudentNavmenu from './StudentNavmenu';
 import CreateEventOutside from './Outside/CreateEventOutside';
-
+import { useStore } from '@/store/useStore';
 
 function Nav() {
+    const { user } = useStore();
     const pathname = usePathname();
     const router = useRouter();
     const [loading, setLoading] = useState(true);
     const [openDialog, setOpenDialog] = useState(false)
     const [creatEventoutSide, setCreatEventOutside] = useState(true)
-    const { user } = useStore();
 
 
 
@@ -30,7 +28,7 @@ function Nav() {
         if (user) {
             setLoading(false);
         } else {
-            setLoading(false);
+            setLoading(true);
         }
     }, []);
 
