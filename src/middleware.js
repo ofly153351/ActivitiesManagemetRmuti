@@ -1,50 +1,46 @@
 import { NextResponse } from 'next/server'
-import { useStore } from './store/useStore';
+import jwt from 'jsonwebtoken'
+
+// ตัวแปรลับสำหรับ decode (ถ้าต้องการ verify จริงจัง ให้ใช้ secret จาก env)
 
 
 export function middleware(request) {
-    const accessToken = request.cookies.get('token');
-    const homeUrl = new URL('/Home', request.url).href;
-    const { user } = useStore();
-    let role = user?.role
+  const token = request.cookies.get('access_token')?.value;
+  const homeUrl = new URL('/Home', request.url);
 
-    // ตรวจสอบ token
-    // if (accessToken) {
-    //     try {
-    //         // แยกค่า payload จาก JWT
-    //         const decoded = jwt.decode(accessToken.value);
-    //         role = decoded?.role;
-    //     } catch (error) {
-    //         console.error('Error decoding JWT:', error);
-    //     }
-    // }
+  let role = null;
 
-    // console.log(role);
-
-
-
-    // ตรวจสอบเส้นทาง '/Admin' และเส้นทางอื่นๆ
-    if (request.nextUrl.pathname.startsWith('/Admin')) {
-        if (role !== 'admin' && role !== 'teacher' && role !== 'superadmin') {  // ตรวจสอบว่า role เป็น admin หรือ teacher เท่านั้น
-            console.log('User does not have the correct role, redirecting to /home');
-            return NextResponse.redirect(homeUrl); // เปลี่ยนเส้นทางไปที่ /home
-        }
+  // แกะ token
+  if (token) {
+    try {
+      const decoded = jwt.decode(token); // ใช้ decode แบบไม่ verify
+      role = decoded?.role;
+    } catch (err) {
+      console.error('Error decoding token:', err);
     }
-    if (request.nextUrl.pathname.startsWith('/Information')) {
-        if (role) {  // ตรวจสอบว่า role เป็น admin หรือ teacher เท่านั้น
-            console.log('User does not have the correct role, redirecting to /home');
-            return NextResponse.redirect(homeUrl); // เปลี่ยนเส้นทางไปที่ /home
-        }
-    }
-    // ตรวจสอบเส้นทาง '/home'
-    // if (request.nextUrl.pathname.startsWith('/Home/Information')) {
-    //     if (role === null) {
-    //         console.log('User role is null, redirecting to unauthorized');
-    //         return NextResponse.redirect(homeUrl);
-    //     }
-    // }
+  }
 
-    // สร้าง response
-    return NextResponse.next();
+  const path = request.nextUrl.pathname;
+
+  // เช็คสิทธิ์เส้นทาง /Admin
+  if (path.startsWith('/Admin')) {
+    if (!['admin', 'teacher', 'superadmin'].includes(role)) {
+      console.log('❌ ไม่มีสิทธิ์เข้า /Admin -> redirect ไป /Home');
+      return NextResponse.redirect(homeUrl);
+    }
+  }
+
+  // เช็คสิทธิ์เส้นทาง /Information (ต้อง login อย่างน้อย)
+  if (path.startsWith('/Information')) {
+    if (!role) {
+      console.log('❌ ไม่พบ role -> redirect ไป /Home');
+      return NextResponse.redirect(homeUrl);
+    }
+  }
+
+  return NextResponse.next(); // ให้ผ่านปกติ
 }
 
+export const config = {
+  matcher: ['/Admin/:path*', '/Information/:path*'], // ระบุเส้นทางที่ middleware ใช้งาน
+};
