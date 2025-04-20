@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken'
 export function middleware(request) {
     const token = request.cookies.get('token')?.value;
     const homeUrl = new URL('/Home', request.url);
+    console.log(token);
 
     let role = null;
 

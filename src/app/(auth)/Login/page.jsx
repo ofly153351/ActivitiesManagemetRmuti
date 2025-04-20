@@ -20,12 +20,14 @@ function Page() {
   const { user } = useStore();
 
   useEffect(() => {
-    checkUserAuth()
+    checkUserAuth(user)
   }, []);
 
   const onSubmit = async (data) => {
     try {
       await login(data);
+
+      console.log('User:', user);
 
       if (user) {
         setSuccessMessage('Login successful!');

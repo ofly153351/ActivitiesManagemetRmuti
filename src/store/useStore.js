@@ -54,7 +54,6 @@ export const useStore = create((set) => ({
 
                 // เก็บข้อมูลใน localStorage
                 localStorage.setItem('user', JSON.stringify(userData));
-                localStorage.setItem('userRole', JSON.stringify({ role: userData.role }));
 
                 set({ isLoading: false });
                 return response.data;
@@ -73,7 +72,6 @@ export const useStore = create((set) => ({
     clearAll: () => {
         // เคลียร์ข้อมูลจากทั้งใน zustand store และ localStorage
         localStorage.removeItem('user');
-        localStorage.removeItem('userRole');
         set({
             user: null,
             userRole: null,
