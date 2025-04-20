@@ -64,11 +64,10 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_3DCB1BD082DE46DCA07F2F6AB7D205D8 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4833863416884F65AAF3E6DA0533CBE2 }}
 
-      - name: 'Deploy to Azure Web App'
+      - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'acvitiesmanagement'
           slot-name: 'Production'
-          package: .
-          
+          package: release.zip
