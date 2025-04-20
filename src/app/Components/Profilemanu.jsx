@@ -182,16 +182,15 @@ function ProfileMenu() {
                         }}
                     >
                         {user ? (
-                            ['teacher', 'admin'].includes(user.role) ? (
+                            ['teacher', 'admin', 'superadmin'].includes(user.role) ? (
                                 <div className="font-kanit">
                                     <MenuItem onClick={() => handleMenuItemClick('/Admin')}>
                                         <p className='font-kanit' >Dashboard</p>
                                     </MenuItem>
                                     <MenuItem onClick={() => handleMenuItemClick('/Information')}>
                                         <p className='font-kanit' >แก้ไขข้อมูลส่วนตัว</p>
-
                                     </MenuItem>
-                                    {user?.role === 'teacher' || user?.role === 'admin' || user?.role === 'superadmin' && (
+                                    {user?.role === 'superadmin' && (
                                         <MenuItem onClick={() => handleMenuItemClick('/logout')}>
                                             <p className='font-kanit' >Logout</p>
                                         </MenuItem>
