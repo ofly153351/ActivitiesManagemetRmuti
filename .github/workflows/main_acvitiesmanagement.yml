@@ -42,7 +42,10 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
+    permissions:
+      id-token: write       # ✅ สำคัญ!
+      contents: read
+      
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
