@@ -25,15 +25,14 @@ jobs:
           npm install
           npm run build
 
-      - name: Zip production-ready files
+      - name: Zip production build files only
         run: |
-          mkdir package
-          cp -r .next package/
-          cp -r public package/
-          cp -r node_modules package/
-          cp package.json package/
-          cp -r next.config.js package/ || true  # ถ้ามี next.config.js
-          cd package && zip -r ../release.zip .
+          mkdir build-artifact
+          cp -r .next build-artifact/
+          cp -r public build-artifact/
+          cp -r package.json build-artifact/
+          cp -r next.config.js build-artifact/ || true
+          cd build-artifact && zip -r ../release.zip .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
