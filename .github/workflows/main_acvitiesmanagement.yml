@@ -26,8 +26,11 @@ jobs:
 
       - name: Prepare release package
         run: |
-          mkdir release
-          cp -r .next public package.json next.config.mjs release/
+          mkdir -p release
+          cp -r .next/standalone release/
+          cp -r public release/
+          cp -r .next/static release/.next/
+          cp next.config.mjs package.json release/
           cd release && zip -r ../release.zip .
 
       - name: Upload artifact
@@ -45,7 +48,7 @@ jobs:
     permissions:
       id-token: write       # ✅ สำคัญ!
       contents: read
-      
+
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
