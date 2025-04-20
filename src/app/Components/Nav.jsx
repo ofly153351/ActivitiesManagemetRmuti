@@ -28,7 +28,7 @@ function Nav() {
         if (user) {
             setLoading(false);
         } else {
-            setLoading(true);
+            setLoading(false);
         }
     }, []);
 
