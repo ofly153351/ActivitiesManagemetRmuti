@@ -21,7 +21,7 @@ export const useStore = create((set) => ({
             console.log('Attempting login with:', payload);
 
             // 1. Login API call
-            const response = await axios.post(`http://${API_BASE}/login`, payload, {
+            const response = await axios.post(`${API_BASE}/login`, payload, {
                 withCredentials: true,
             });
             // console.log('Login response:', response.data);
