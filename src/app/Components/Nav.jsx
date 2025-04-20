@@ -25,6 +25,7 @@ function Nav() {
 
     useEffect(() => {
 
+
         if (user) {
             setLoading(false);
         } else {

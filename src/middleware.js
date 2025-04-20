@@ -44,6 +44,6 @@ export function middleware(request) {
     return NextResponse.next(); // ให้ผ่านปกติ
 }
 
-export const config = {
-    matcher: ['/Admin/:path*', '/Information/:path*'], // ระบุเส้นทางที่ middleware ใช้งาน
-};
+// export const config = {
+//     matcher: ['/Admin/:path*', '/Information/:path*'], // ระบุเส้นทางที่ middleware ใช้งาน
+// };
