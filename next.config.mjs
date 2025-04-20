@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE
+const API_BASE = process.env.NEXT_PUBLIC_API_URL
 const nextConfig = {
     reactStrictMode: false,
     async rewrites() {
