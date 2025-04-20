@@ -27,7 +27,7 @@ jobs:
       - name: Prepare release package
         run: |
           mkdir release
-          cp -r .next public package.json next.config.js release/
+          cp -r .next public package.json next.config.mjs release/
           cd release && zip -r ../release.zip .
 
       - name: Upload artifact

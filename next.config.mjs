@@ -1,11 +1,12 @@
 /** @type {import('next').NextConfig} */
+const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 const nextConfig = {
     reactStrictMode: false,
     async rewrites() {
         return [
             {
                 source: '/Admin/uploads/:path*',
-                destination: 'http://localhost:8080/:path*'
+                destination: `${API_BASE}/:path*`
             }
         ]
     }
