@@ -148,7 +148,7 @@ export const creatBranch = async (payload) => {
 
 export const getBranches = async () => {
   try {
-    const response = await axios.get('${API_BASE}/branches', {
+    const response = await axios.get(`${API_BASE}/branches`, {
       withCredentials: true,
     })
     return response
@@ -567,7 +567,7 @@ export const CreateEventsOutSide = async (payload) => {
   if (payload) {
 
     try {
-      const response = await axios.post('${API_BASE}/protected/student/outside', payload, {
+      const response = await axios.post(`${API_BASE}/protected/student/outside`, payload, {
         withCredentials: true
       })
       return response
@@ -701,7 +701,7 @@ export const getAllStudentDonesEvidence = async (year, status, facultyID) => {
 
 export const getNews = async () => {
   try {
-    const response = await axios.get('${API_BASE}/protected/news', {
+    const response = await axios.get(`${API_BASE}/protected/news`, {
       withCredentials: true
     })
     return response

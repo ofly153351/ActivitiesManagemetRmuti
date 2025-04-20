@@ -6,7 +6,6 @@ import TextField from '@mui/material/TextField';
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 import { useStore } from '@/store/useStore';
@@ -27,9 +26,8 @@ function Page() {
   const onSubmit = async (data) => {
     try {
       await login(data);
-      const token = Cookies.get('token');
 
-      if (token) {
+      if (user) {
         setSuccessMessage('Login successful!');
         setTimeout(() => router.push('/Home'), 600);
       } else {
