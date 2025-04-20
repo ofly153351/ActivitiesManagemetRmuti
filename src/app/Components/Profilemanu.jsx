@@ -8,7 +8,7 @@ import MailNotification from './MailNotification';
 import { getNews } from '../Utils/api';
 
 function ProfileMenu() {
-    const { user, clearAll, userRole, setUser, setUserRole } = useStore();
+    const { user, clearAll, userRole, setUser } = useStore();
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
@@ -18,7 +18,7 @@ function ProfileMenu() {
 
     // ✅ ให้ React เรียก useEffect เสมอ
     useEffect(() => {
-        if (user && userRole) {
+        if (user) {
             try {
                 const fetchData = async () => {
                     const response = await getNews();
@@ -31,7 +31,7 @@ function ProfileMenu() {
 
             }
         }
-    }, [user, userRole]);
+    }, [user]);
 
     console.log(news);
 
@@ -158,7 +158,7 @@ function ProfileMenu() {
 
                 <div className="relative flex justify-center items-center rounded-full border border-gray">
                     <span className="text-gray-500 px-3 py-1 text-md font-kanit hover:underline">
-                        {user.first_name} {user.last_name} ({userRole?.role || 'ไม่มีข้อมูล'})
+                        {user.first_name} {user.last_name} ({user?.role || 'ไม่มีข้อมูล'})
                     </span>
                     <div className="ml-1 rounded-full flex items-center justify-center">
                         <Button
@@ -181,8 +181,8 @@ function ProfileMenu() {
                             'aria-labelledby': 'profile-menu-button',
                         }}
                     >
-                        {userRole ? (
-                            ['teacher', 'admin'].includes(userRole.role) ? (
+                        {user ? (
+                            ['teacher', 'admin'].includes(user.role) ? (
                                 <div className="font-kanit">
                                     <MenuItem onClick={() => handleMenuItemClick('/Admin')}>
                                         <p className='font-kanit' >Dashboard</p>
@@ -195,7 +195,7 @@ function ProfileMenu() {
                                         <p className='font-kanit' >Logout</p>
                                     </MenuItem>
                                 </div>
-                            ) : userRole.role === 'student' ? (
+                            ) : user.role === 'student' ? (
                                 <div className="font-kanit">
                                     <MenuItem onClick={() => handleMenuItemClick('/Information')}>
                                         <p className='font-kanit' >
