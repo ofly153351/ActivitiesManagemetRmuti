@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 export async function middleware(req) {
     const token = req.cookies.get('token')?.value;
     const url = req.nextUrl.clone()
-
+    const jwt = process.env.JWT_SECRET
     console.log(token);
 
 
@@ -15,7 +15,7 @@ export async function middleware(req) {
     }
 
     try {
-        const secret = new TextEncoder().encode(process.env.JWT_SECRET)
+        const secret = new TextEncoder().encode(jwt)
         const { payload } = await jwtVerify(token, secret)
 
         if (!['admin', 'teacher'].includes(payload.role)) {
