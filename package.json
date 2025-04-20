@@ -14,7 +14,7 @@
     "@material-tailwind/react": "^2.1.9",
     "@mui/icons-material": "^5.16.0",
     "@mui/joy": "^5.0.0-beta.51",
-    "@mui/material": "^6.4.11",
+    "@mui/material": "^5.16.0",
     "@mui/x-data-grid": "^7.23.0",
     "@mui/x-date-pickers": "^7.22.1",
     "@radix-ui/react-dialog": "^1.1.1",
