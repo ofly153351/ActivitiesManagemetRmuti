@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Link from 'next/link';
-import Nav from "../../../components/Nav";
+
 import { getBranches, getFaculties, registerUser } from "@/app/Utils/api";
 import { handleApiError } from "@/app/Utils/errorhandler";
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation'
 import { colorsCode } from "@/app/Utils/color";
 import { useStore } from "@/store/useStore";
 import { checkUserAuth } from "@/app/Utils/block";
+import Nav from "@/app/Components/Nav";
 
 
 function Page() {
