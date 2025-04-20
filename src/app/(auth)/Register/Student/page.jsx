@@ -6,7 +6,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Link from 'next/link';
-
 import { getBranches, getFaculties, registerUser } from "@/app/Utils/api";
 import { handleApiError } from "@/app/Utils/errorhandler";
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';

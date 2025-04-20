@@ -1,7 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 // import { Cookie } from 'next/font/google';
-import { jwtDecodeToken } from './function';
 import { useStore } from '@/store/useStore';
 //register function api
 
@@ -43,40 +42,6 @@ export const registerTeacher = async (payload) => {
 };
 
 
-export const loginUser = async (payload) => {
-  try {
-    // 1. Login API call
-    const response = await axios.post(`${API_BASE}:8080/login`, payload, {
-      withCredentials: true,
-    });
-
-    // 2. Get token from cookies
-    const token = Cookies.get('token');
-    if (!token) {
-      throw new Error('Token not found in Cookies.');
-    }
-
-    // 3. Decode JWT
-    const decodedJwt = jwtDecodeToken(token);
-    if (!decodedJwt) {
-      throw new Error('Invalid token structure.');
-    }
-
-    // 4. Get store actions
-    const { setUser, setUserRole, fetchUserData } = useStore.getState();
-
-    // 5. Set user role from token
-    setUserRole({ role: decodedJwt.role }); // เปลี่ยนเป็นการส่ง object
-
-    // 6. Fetch and set user data
-    await fetchUserData();
-
-    return response.data;
-  } catch (error) {
-    console.error('Login error:', error);
-    throw error;
-  }
-};
 
 export const creatFaculties = async (payload) => {
   try {

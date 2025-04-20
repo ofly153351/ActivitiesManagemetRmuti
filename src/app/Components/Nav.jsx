@@ -6,7 +6,6 @@ import Profilemanu from './Profilemanu';
 import Cookies from 'js-cookie';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import { jwtDecodeToken } from '../Utils/function';
 import Sidebar from './sidebar';
 import LogoDevIcon from '@mui/icons-material/LogoDev';
 import CustomMenu from './CustomManu';
@@ -19,19 +18,16 @@ import CreateEventOutside from './Outside/CreateEventOutside';
 function Nav() {
     const pathname = usePathname();
     const router = useRouter();
-    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [openDialog, setOpenDialog] = useState(false)
     const [creatEventoutSide, setCreatEventOutside] = useState(true)
-
+    const { user } = useStore();
 
 
 
     useEffect(() => {
-        const token = Cookies.get('token');
-        if (token) {
-            const jwtDecoded = jwtDecodeToken(token);
-            setUser(jwtDecoded);
+
+        if (user) {
             setLoading(false);
         } else {
             setLoading(false);
