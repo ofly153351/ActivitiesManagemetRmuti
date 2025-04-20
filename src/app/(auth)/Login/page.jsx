@@ -25,11 +25,11 @@ function Page() {
 
   const onSubmit = async (data) => {
     try {
-      await login(data);
-
-      console.log('User:', user);
-
-      if (user) {
+      const responseUser = await login(data); // <- รับค่ากลับมา
+  
+      console.log('User:', responseUser);
+  
+      if (responseUser) {
         setSuccessMessage('Login successful!');
         setTimeout(() => router.push('/Home'), 600);
       } else {
