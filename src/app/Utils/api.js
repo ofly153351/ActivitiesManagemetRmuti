@@ -42,6 +42,7 @@ export const registerTeacher = async (payload) => {
   }
 };
 
+
 export const loginUser = async (payload) => {
   try {
     // 1. Login API call

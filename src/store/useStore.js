@@ -1,9 +1,7 @@
 // store/useStore.js
 import { create } from "zustand";
 import { getUserbyClaim, getBranches, getFaculties } from "@/app/Utils/api"; // เพิ่ม API สำหรับ branches และ faculties
-import { jwtDecodeToken } from "@/app/Utils/function";
 import axios from 'axios';
-import Cookies from 'js-cookie';
 const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 // store/useStore.js
 const storedUser = typeof window !== "undefined" ? localStorage.getItem('user') : null;
@@ -24,25 +22,9 @@ export const useStore = create((set) => ({
             const response = await axios.post(`${API_BASE}/login`, payload, {
                 withCredentials: true, // สำคัญมาก ถ้าใช้ cookie
             });
-            // console.log('Login response:', response.data);
 
-            // 2. Get token from cookies
-            // const token = Cookies.get('token');
-            // // console.log('Token from cookies:', token);
+            console.log('Login response:', response);
 
-            // if (!token) {
-            //     throw new Error('Token not found in Cookies.');
-            // }
-
-            // // 3. Decode JWT
-            // const decodedJwt = jwtDecodeToken(token);
-            // console.log('Decoded JWT:', decodedJwt);
-
-            // if (!decodedJwt) {
-            //     throw new Error('Invalid token structure.');
-            // }
-
-            // 4. Set role from token
 
             try {
                 // 5. Fetch user data
@@ -72,7 +54,7 @@ export const useStore = create((set) => ({
 
                 // เก็บข้อมูลใน localStorage
                 localStorage.setItem('user', JSON.stringify(userData));
-                localStorage.setItem('userRole', JSON.stringify({ role: decodedJwt.role }));
+                localStorage.setItem('userRole', JSON.stringify({ role: userData.role }));
 
                 set({ isLoading: false });
                 return response.data;
