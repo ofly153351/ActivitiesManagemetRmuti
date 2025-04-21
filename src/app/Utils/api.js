@@ -41,9 +41,7 @@ export const registerTeacher = async (payload) => {
 
 export const handlelogOut = async () => {
   try {
-    const response = await axios.post(`${API_BASE}/logout`, {
-      withCredentials: true,
-    })
+    const response = await axios.post(`${API_BASE}/logout`, {}, { withCredentials: true })
     return response
   } catch (error) {
     console.error('Error during logout:', error);
