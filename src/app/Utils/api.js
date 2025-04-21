@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import { useStore } from '@/store/useStore';
 //register function api
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL;
+const API_BASE = process.env.NEXT_PUBLIC_API_URL; ;
 
 
 export const registerUser = async (payload) => {
