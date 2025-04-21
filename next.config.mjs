@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
-const API_BASE = process.env.NEXT_PUBLIC_API_URL
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+
 const nextConfig = {
     reactStrictMode: false,
     async rewrites() {
