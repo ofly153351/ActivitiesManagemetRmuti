@@ -39,6 +39,18 @@ export const registerTeacher = async (payload) => {
   }
 };
 
+export const logOut = async () => {
+  try {
+    const response = await axios.post(`${API_BASE}/logout`, {
+      withCredentials: true,
+    })
+    return response
+  } catch (error) {
+    console.error('Error during logout:', error);
+    throw error;
+  }
+}
+
 
 
 export const creatFaculties = async (payload) => {

@@ -26,12 +26,12 @@ function Page() {
   const onSubmit = async (data) => {
     try {
       const responseUser = await login(data); // <- รับค่ากลับมา
-  
+
       console.log('User:', responseUser);
-  
+
       if (responseUser) {
         setSuccessMessage('Login successful!');
-        setTimeout(() => router.push('/Home'), 600);
+        router.push('/Home')
       } else {
         throw new Error('No token received after login');
       }

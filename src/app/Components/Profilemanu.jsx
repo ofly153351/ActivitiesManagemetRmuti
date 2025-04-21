@@ -5,7 +5,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Cookies from 'js-cookie';
 import { useStore } from '@/store/useStore';
 import MailNotification from './MailNotification';
-import { getNews } from '../Utils/api';
+import { getNews, logOut } from '../Utils/api';
 
 function ProfileMenu() {
     const { user, clearAll, userRole, setUser } = useStore();
@@ -56,11 +56,12 @@ function ProfileMenu() {
         handleClose();
     };
 
-    const logOut = () => {
+    const logOut = async () => {
+        const logoutUser = await logOut();
+        console.log(logoutUser);
         setIsLoggingOut(true);
         setTimeout(() => {
             clearAll(null);
-            Cookies.remove('token');
             localStorage.removeItem('user');
             sessionStorage.removeItem('user');
             router.push('/Login');
