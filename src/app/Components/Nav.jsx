@@ -22,11 +22,15 @@ function Nav() {
     const [creatEventoutSide, setCreatEventOutside] = useState(true)
 
 
+    console.log(user);
+
 
     useEffect(() => {
 
 
         if (user) {
+
+
             setLoading(false);
         } else {
             setLoading(false);

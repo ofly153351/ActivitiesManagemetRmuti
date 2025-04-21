@@ -27,7 +27,7 @@ function page() {
 
             try {
                 if (user?.role === 'admin') {
-                    const response = await getMyEventTeacher();
+                    const response = await getMyEventAdmin();
                     setMyEvent(response.data);
                 } else if (user?.role === 'teacher') {
                     const response = await getMyEventTeacher();
@@ -69,6 +69,7 @@ function page() {
     ];
 
 
+    
 
     const title = 'รายชื่อกิจกรรมของฉัน';
 

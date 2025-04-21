@@ -10,7 +10,7 @@ import Customselect from './Customselect';
 import { usePathname } from 'next/navigation';
 import { useStore } from '@/store/useStore';
 import CustomTextfield from './Textfield';
-
+import dayjs from 'dayjs';
 
 
 const style = {
@@ -32,6 +32,22 @@ export default function EditPopup({ selectedEditItem, closeModal, onSave, fields
     const [facultiesList, setFacultiesList] = useState([]);
     const path = usePathname();
     const { user } = useStore();
+
+    const monthMapping = {
+        "มกราคม": "01", "กุมภาพันธ์": "02", "มีนาคม": "03", "เมษายน": "04",
+        "พฤษภาคม": "05", "มิถุนายน": "06", "กรกฎาคม": "07", "สิงหาคม": "08",
+        "กันยายน": "09", "ตุลาคม": "10", "พฤศจิกายน": "11", "ธันวาคม": "12"
+    };
+
+
+    const updatedData = {
+        start_date: "22 เมษายน 2568",  // วันที่ในรูปแบบ "22 เมษายน 2568"
+        start_time: "12:00"  // เวลาในรูปแบบ "12:00"
+    };
+
+    const [day, monthTh, year] = updatedData.start_date.split(" ");
+    const monthEn = monthMapping[monthTh];  // แปลงเดือนจากไทยเป็นอังกฤษ
+
 
     useEffect(() => {
         if (selectedEditItem) {
@@ -58,7 +74,8 @@ export default function EditPopup({ selectedEditItem, closeModal, onSave, fields
                     branch_name: updatedData.branch_name,
                 });
             } else if (path === '/Admin/MyEvent') {
-                const formattedStartDate = `${updatedData.start_date} ${updatedData.start_time}`;
+                const formattedStartDate = `${parseInt(year) - 543}-${monthEn}-${day.padStart(2, '0')} ${updatedData.start_time}:00`;
+
                 await editEventById(user.role, Number(updatedData.event_id), {
                     event_name: updatedData.event_name,
                     start_date: formattedStartDate,
@@ -68,10 +85,14 @@ export default function EditPopup({ selectedEditItem, closeModal, onSave, fields
                 });
             }
 
-            onSave(updatedData);
+            // onSave(updatedData);
             setUpdated(true);
             setError(false); // ปิด error
-            setTimeout(() => setUpdated(false), 2000);
+            setTimeout(() => {
+                setUpdated(false)
+                window.location.reload()
+            }, 500);
+
             closeModal();
         } catch (error) {
             console.error('Error updating data:', error);
@@ -99,21 +120,21 @@ export default function EditPopup({ selectedEditItem, closeModal, onSave, fields
                         <span className="font-kanit text-xl text-center">แก้ไขข้อมูล</span>
                     </div>
                     <div className="grid gap-4">
-                        {fields.map((field) => (
-                            <div key={field.name}>
-                                <label>{field.label}</label>
-                                <input
-                                    type="text"
-                                    placeholder={field.placeholder}
-                                    value={formData[field.name] || ''}
-                                    onChange={handleChange}
-                                    className="w-full border p-4 mt-2"
-                                    name={field.name}
-                                />
-                            </div>
-
-                        ))}
-                       
+                        {fields.map((field) =>
+                            (field.name === 'start_date' || field.name === 'start_time') ? null : (
+                                <div key={field.name}>
+                                    <label>{field.label}</label>
+                                    <input
+                                        type="text"
+                                        placeholder={field.placeholder}
+                                        value={formData[field.name] || ''}
+                                        onChange={handleChange}
+                                        className="w-full border p-4 mt-2"
+                                        name={field.name}
+                                    />
+                                </div>
+                            )
+                        )}
                     </div>
                     <div className="flex justify-end items-center mt-4">
                         <button

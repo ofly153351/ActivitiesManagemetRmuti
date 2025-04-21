@@ -21,7 +21,7 @@ export async function middleware(req) {
 
     console.log("✅ JWT Verified:", payload)
 
-    if (!['admin', 'teacher'].includes(payload.role)) {
+    if (!['admin', 'teacher', 'superadmin' , 'student'].includes(payload.role)) {
       console.log("❌ Unauthorized role:", payload.role)
       url.pathname = '/Home'
       return NextResponse.redirect(url)

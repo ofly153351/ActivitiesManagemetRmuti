@@ -64,22 +64,21 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
     const handleStatusChange = async (itemId, field, newStatus) => {
         try {
             // เรียก API เพื่ออัพเดทสถานะ
-            // console.log(itemId, field, newStatus);
+            console.log(itemId, field, newStatus);
 
             // สมมติว่า editStatusEvent ทำการอัพเดทสถานะให้ใน backend
             const response = await editStatusEvent(user.role, itemId, newStatus);
 
             if (response && response.status === 200) {
-                // อัพเดท state ของ table data
+                console.log("Response data:", response.data);  // ดูค่าที่ส่งกลับมาจาก API
                 setTableRows((prevData) =>
                     prevData.map((item) =>
-                        item.event_id === itemId // ตรวจสอบว่า event_id ตรงกับที่เราเลือก
+                        item.event_id === Number(itemId) // ตรวจสอบ event_id
                             ? { ...item, [field]: newStatus } // อัพเดท status
                             : item
                     )
                 );
             }
-
 
         } catch (error) {
             console.error('Error updating status:', error);
@@ -88,6 +87,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
     };
 
     // console.log(tableRows);
+    // โหลดข้อมูลเริ่มต้น
     useEffect(() => {
         if (user.role) {
             setLoading(false);
@@ -104,18 +104,26 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
             };
             fetchData();
         }
+    }, [user.role, pathName, branches]);
 
+    // ใช้แยกกันเพื่อไม่ให้ setTableRows ทับ status ที่เปลี่ยนไปแล้ว
+    useEffect(() => {
+        if (JSON.stringify(rows) !== JSON.stringify(tableRows)) {
+            setTableRows(rows);
+        }
+    }, [rows]);
+
+    // สำหรับจัดการ teacherList
+    useEffect(() => {
         if (Array.isArray(teacherList) && teacherList.length > 0 && pathName === '/Admin/Facultylist') {
             const formattedTeacherOptions = teacherList.map(teacher => ({
                 label: `${teacher.first_name} ${teacher.last_name}`,
                 value: teacher.user_id
             }));
-            setTeacherOptions(formattedTeacherOptions); // ✅ ใช้ข้อมูลใหม่ ไม่ลูป
+            setTeacherOptions(formattedTeacherOptions);
         }
-
-        setTableRows(rows);
-    }, [rows, teacherList, pathName]); // ✅ เปลี่ยน dependency เป็น teacherList
-
+    }, [teacherList, pathName]);
+    
     const handleTeacherChange = (itemUserId, newTeacherId, facultyId, facultyname, facultyCode) => {
         console.log("เปลี่ยนครู:", itemUserId, "เป็น:", newTeacherId, facultyId); // เพิ่ม log เพื่อดีบัก
         setSelectedTeacher(prev => {
@@ -423,7 +431,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                                                 <div className="flex justify-center items-center">
                                                     {item[column.field] !== undefined ? (
                                                         <SwitchOnOff
-                                                            status={item[column.field]}
+                                                            status={Boolean(item[column.field])}  // ตรวจสอบให้แน่ใจว่า item[column.field] เป็นค่าใหม่ที่อัพเดตแล้ว
                                                             onStatusChange={(itemId, newStatus) => handleStatusChange(item.event_id, column.field, newStatus)}
                                                             itemId={item.event_id}
                                                             disabled={pathName !== '/Admin/MyEvent'} // ✅ ล็อคปุ่มถ้าไม่ใช่ '/Admin/MyEvent'

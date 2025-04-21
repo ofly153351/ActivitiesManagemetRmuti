@@ -2,7 +2,9 @@
 import { create } from "zustand";
 import { getUserbyClaim, getBranches, getFaculties } from "@/app/Utils/api"; // เพิ่ม API สำหรับ branches และ faculties
 import axios from 'axios';
+import { jwtDecodeToken } from "@/app/Utils/function";
 const API_BASE = process.env.NEXT_PUBLIC_API_URL;
+
 // store/useStore.js
 const storedUser = typeof window !== "undefined" ? localStorage.getItem('user') : null;
 const storedUserRole = typeof window !== "undefined" ? localStorage.getItem('userRole') : null;

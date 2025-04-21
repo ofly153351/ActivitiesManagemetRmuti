@@ -1,11 +1,9 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 // import { Cookie } from 'next/font/google';
-import { useStore } from '@/store/useStore';
 //register function api
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL; ;
-
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 export const registerUser = async (payload) => {
   try {
@@ -354,12 +352,10 @@ export const getMyEventAdmin = async () => {
 }
 
 export const editStatusEvent = async (role, id, statusData, token) => {
-  const url = role === 'admin'
-    ? `${API_BASE}/protected/admin/status/${id}`
-    : `${API_BASE}/protected/teacher/status/${id}`;
+
 
   try {
-    const response = await axios.put(url, statusData, {
+    const response = await axios.put(`${API_BASE}/protected/teacher/status/${id}`, statusData, {
       headers: {
         Authorization: `Bearer ${token}`, // ส่ง token ใน header
       },
@@ -514,11 +510,10 @@ export const uploadFileMyEventOustide = async (eventID, file) => {
   }
 }
 
-
 export const unJoinEvent = async (eventID) => {
   if (eventID) {
     try {
-      const response = await axios.delete(`${API_BASE}/protected/student/unjoin/${eventID}`, {
+      const response = await axios.delete(`${API_BASE}/protected/student/unjoinevent/${Number(eventID)}`, {
         withCredentials: true
       })
       return response

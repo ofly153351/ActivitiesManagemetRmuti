@@ -49,12 +49,20 @@ function SwitchOnOff({ status: initialStatus, onStatusChange, itemId, pathName }
   const [currentStatus, setCurrentStatus] = useState(Boolean(initialStatus));
   const [error, setError] = useState(null);
 
+
+
+
   useEffect(() => {
     setCurrentStatus(Boolean(initialStatus));
   }, [initialStatus]);
 
+
+
+
   const handleSwitchChange = async (event) => {
     const newStatus = event.target.checked;
+
+    console.log("Switch changed:", newStatus); // Debug log to check value
 
     // Optimistically update the status
     setCurrentStatus(newStatus);
