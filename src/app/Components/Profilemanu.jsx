@@ -5,7 +5,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Cookies from 'js-cookie';
 import { useStore } from '@/store/useStore';
 import MailNotification from './MailNotification';
-import { getNews, logOut as logOutUser } from '../Utils/api';
+import { getNews, handlelogOut, } from '../Utils/api';
 
 function ProfileMenu() {
     const { user, clearAll, userRole, setUser } = useStore();
@@ -49,15 +49,15 @@ function ProfileMenu() {
 
     const handleMenuItemClick = (route) => {
         if (route === '/logout') {
-            logOut();
+            logOutUser();
         } else {
             router.push(route);
         }
         handleClose();
     };
 
-    const logOut = async () => {
-        const logoutUser = await logOutUser(); // ✅ เรียกฟังก์ชันจาก API จริงๆ
+    const logOutUser = async () => {
+        const logoutUser = await handlelogOut(); // ✅ เรียกฟังก์ชันจาก API จริงๆ
         console.log(logoutUser);
         setIsLoggingOut(true);
         setTimeout(() => {

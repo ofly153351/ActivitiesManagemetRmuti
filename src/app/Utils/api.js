@@ -39,7 +39,7 @@ export const registerTeacher = async (payload) => {
   }
 };
 
-export const logOut = async () => {
+export const handlelogOut = async () => {
   try {
     const response = await axios.post(`${API_BASE}/logout`, {
       withCredentials: true,
