@@ -6,6 +6,8 @@ import { deleteEventOutside, downloadFileEvents, unJoinEvent, uploadFileMyEvent,
 import Loading from './Loading'
 import { useRouter } from 'next/navigation'
 import ViewPDFdialog from './ViewPDFdialog'
+import { Input } from 'postcss'
+import InputUploadfile from './InputUploadfile'
 
 
 
@@ -22,19 +24,18 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
         }
     }, [selectedEvent]) // ✅ ใส่ dependency
 
+    console.log(selectedEvent);
+
 
     const handleUpload = async () => {
         if (!file) {
             showAlert(false, "กรุณาเลือกไฟล์ PDF ก่อนอัปโหลด");
-
             return;
         }
 
         const formData = new FormData();
         formData.append("file", file);
         formData.append("event_id", selectedEvent.event_id); // ส่ง event_id ไปด้วย
-
-
 
         try {
             setUploading(true);
@@ -48,9 +49,8 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
             setFile(null);
             showAlert(true, 'อัพโหลดไฟล์สำเร็จ')
             setTimeout(() => {
-                showAlert(false, '')
+                showAlert(null, '')
                 router.push('/Information/MyEvent')
-
             }, 1000)
         } catch (error) {
             console.error("Upload error:", error);
@@ -66,10 +66,8 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
             try {
                 const response = await unJoinEvent(eventID)
                 showAlert(true, 'ยกเลิกสำเร็จ')
-
                 setTimeout(() => {
                     router.push('/Information/MyEvent')
-
                 }, 1000);
                 return response
             } catch (error) {
@@ -117,6 +115,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
 
 
 
+
     return (
         <div className='drop-shadow-md rounded-xl mt-20 xs:mx-2 '
             style={{ backgroundColor: colorsCode.whiteSmoke }} >
@@ -159,7 +158,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                             <p className='text-sm px-2'>ความคิดเห็น:</p>
                             <CustomTextfield width={'98%'} label={selectedEvent?.comment} disabled={true} />
                         </div>
-                    ) : (selectedEvent?.intendent) ? (
+                    ) : (selectedEvent?.intendent !== undefined) ? (
                         <div className='mx-2 flex justify-between items-center' >
                             < button className='underline text-lg text-green-800' label={"ดาวน์โหลดเอกสาร"} onClick={(e) => downloadFileEvents(Number(selectedEvent.event_id))}>
                                 ดาวน์โหลดเอกสาร
@@ -183,25 +182,38 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                 <div className=' lg:flex lg:justify-end items-center p-2'>
                     {
                         !selectedEvent.file && !selectedEvent.status ? (
-                            <div className=' lg:flex lg:justify-end lg:items-center  gap-2'>
-                                <input
-                                    type="file"
-                                    accept=".pdf"
-                                    onChange={(e) => setFile(e.target.files[0])} // ✅ บันทึกไฟล์ที่เลือก
-                                    className=" border p-2 rounded-md border-none xs:w-[312px] w-[400px]"
-                                />
+                            <div className='lg:flex lg:justify-end lg:items-center  gap-2'>
+                                {/* {file && selectedEvent.intendent !== undefined ? (
+                                    <div>
+                                        <BasicButtons label={'อัพโหลดเอกสาร'} onClick={handleUpload} />
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <BasicButtons diasble={true} label={'อัพโหลดเอกสาร'} />
+                                    </div>
+                                )} */}
                                 <div className="lg:flex w-full gap-2 justify-end xs:mt-2 lg:mt-0">
                                     <div>
-                                        <p className='p-2.5 xs:text-center lg:text-wrap text-white bg-[#e90000d9] rounded-sm shadow-md'>ยังไม่ส่งเอกสาร</p>
+                                        <p className='p-2.5 text-[14px] xs:text-center lg:text-wrap text-white bg-[#e90000d9] rounded-sm shadow-md'>ยังไม่ส่งเอกสาร</p>
                                     </div>
                                     <div className='xs:flex xs:mt-2 lg:mt-0 xs:justify-end xs:items-end gap-2 lg:mb-4' >
-                                        {!selectedEvent.intendent && (
+                                        {(!selectedEvent.intendent && selectedEvent.intendent !== undefined) && (
                                             <div className='flex justify-center items-center '>
                                                 <BasicButtons color={'#e90000d9'} hover={"#E90000"} label={'ยกเลิกการเข้าร่วม'} onClick={() => handleCanclejoinEvent(selectedEvent.event_id)} />
                                             </div>
                                         )}
-                                        <div className='flex justify-center items-center' >
-                                            <BasicButtons label={'อัพโหลดเอกสาร'} onClick={handleUpload} />
+                                        <InputUploadfile onFileChange={setFile} />
+                                        <div className="flex gap-2 justify-end items-center  ">
+                                            {file ? (
+                                                <div>
+                                                    <BasicButtons label={'อัพโหลดเอกสาร'} onClick={handleUpload} />
+                                                </div>
+                                            ) : (
+                                                <div>
+                                                    <BasicButtons diasble={true} label={'อัพโหลดเอกสาร'} onClick={handleUpload} />
+                                                </div>
+
+                                            )}
                                         </div>
                                     </div>
 
@@ -212,7 +224,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                             <div className='xs:grid lg:flex justify-end items-center gap-2'>
                                 <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
                                     <div className='flex justify-center items-center'>
-                                        <p className='p-2.5 text-white bg-green-500 rounded-sm shadow-md w-full'>ส่งเอกสารแล้ว</p>
+                                        <p className='p-2.5 text-[14px] text-white bg-green-500 rounded-sm shadow-md w-full'>ส่งเอกสารแล้ว</p>
                                     </div>
                                 </div>
                             </div>
@@ -220,31 +232,31 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                             <div className='xs:grid lg:flex justify-end items-center gap-2'>
                                 <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
                                     <div className='flex justify-center items-center'>
-                                        <p className='p-2.5 text-white bg-yellow-500 rounded-sm shadow-md w-full'>รอตรวจสอบ</p>
+                                        <p className='p-2.5 text-[14px] text-white bg-yellow-500 rounded-sm shadow-md w-full'>รอตรวจสอบ</p>
                                     </div>
                                 </div>
                             </div>
                         ) : selectedEvent.file && !selectedEvent.status && selectedEvent.comment ? (
-                            <div className='xs:grid lg:flex justify-end items-center gap-2'>
-                                <input
-                                    type="file"
-                                    accept=".pdf"
-                                    onChange={(e) => setFile(e.target.files[0])} // ✅ บันทึกไฟล์ที่เลือก
-                                    className="border p-1 rounded-md xs:w-[312px] sm:w-[390px]"
-                                />
-                                <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0 ">
+                            <div className='xs:flex  justify-end items-center gap-2'>
+                                <InputUploadfile onFileChange={setFile} />
+                                <div className="flex gap-2 justify-end items-center  ">
+                                    {file ? (
+                                        <div>
+                                            <BasicButtons label={'อัพโหลดเอกสาร'} onClick={handleUpload} />
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <BasicButtons diasble={true} label={'อัพโหลดเอกสาร'} onClick={handleUpload} />
+                                        </div>
 
-                                    <div>
-                                        <BasicButtons label={'อัพโหลดเอกสาร'} onClick={handleUpload} />
-                                    </div>
+                                    )}
                                 </div>
-
                             </div>
                         ) : null}
                     {selectedEvent.file !== "" && selectedEvent.status == true ? (
                         <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
                             <div className='flex justify-center items-center'>
-                                <p className='p-2.5 text-white bg-green-500 rounded-sm shadow-md w-full'>ผ่านกิจกรรม</p>
+                                <p className='p-2.5 text-[14px] text-white bg-green-500 rounded-sm shadow-md w-full'>ผ่านกิจกรรม</p>
                             </div>
                         </div>
                     ) : null}

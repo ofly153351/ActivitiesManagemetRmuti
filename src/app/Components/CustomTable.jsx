@@ -33,6 +33,7 @@ import Customselect from './Customselect';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import { colorsCode } from '../Utils/color';
 import TeacherSelect from './TeacherSelect';
+import { blockNulluser } from '../Utils/block';
 
 
 function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, ToggleButtonState, alignment, setOpenEvidence, setUserID, setYears, teacherList = [] }) {
@@ -59,6 +60,8 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
     const [selectedRoles, setSelectedRoles] = useState({});
     const [teacherOptions, setTeacherOptions] = useState([]);
     const [selectedTeacher, setSelectedTeacher] = useState({});
+
+
 
     // ฟังก์ชันสำหรับเปลี่ยนสถานะของ Switch
     const handleStatusChange = async (itemId, field, newStatus) => {
@@ -89,7 +92,8 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
     // console.log(tableRows);
     // โหลดข้อมูลเริ่มต้น
     useEffect(() => {
-        if (user.role) {
+        blockNulluser(user)
+        if (user?.role) {
             setLoading(false);
         }
 
@@ -104,7 +108,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
             };
             fetchData();
         }
-    }, [user.role, pathName, branches]);
+    }, [user?.role, pathName, branches]);
 
     // ใช้แยกกันเพื่อไม่ให้ setTableRows ทับ status ที่เปลี่ยนไปแล้ว
     useEffect(() => {
@@ -123,7 +127,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
             setTeacherOptions(formattedTeacherOptions);
         }
     }, [teacherList, pathName]);
-    
+
     const handleTeacherChange = (itemUserId, newTeacherId, facultyId, facultyname, facultyCode) => {
         console.log("เปลี่ยนครู:", itemUserId, "เป็น:", newTeacherId, facultyId); // เพิ่ม log เพื่อดีบัก
         setSelectedTeacher(prev => {
@@ -304,22 +308,23 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
 
 
     const rolelsit = [
-        { label: 'admin', value: 'admin' },
-        { label: 'teacher', value: 'teacher' },
+        { label: 'เจ้าหน้าที่ กยศ.', value: 'admin' },
+        { label: 'อาจารย์', value: 'teacher' },
     ]
-
     const handleRoleChange = async (user_id, newValue) => {
         console.log(user_id, newValue);
 
+        const mappedRole = newValue === 'เจ้าหน้าที่ กยศ.' ? 'admin' : 'teacher';
+
         setSelectedRoles((prevState) => ({
             ...prevState,
-            [user_id]: newValue, // ✅ อัปเดต state สำหรับ user_id นั้น
+            [user_id]: newValue,
         }));
 
-        if (user_id && newValue) {
+        if (user_id && mappedRole) {
             const payload = {
-                user_id: user_id,
-                role: newValue,
+                user_id,
+                role: mappedRole,
             };
 
             try {
@@ -330,7 +335,6 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
             }
         }
     };
-
     const handleOpenEnvidence = (userID, userYear) => {
         setOpenEvidence(true)
         setUserID(userID)
@@ -454,14 +458,17 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                                                 </div>
                                             ) : column.field === 'level' && (user?.role === 'admin' || user?.role === 'superadmin') ? (
                                                 <div className="flex justify-center items-center">
+                                                    {console.log(selectedRoles)}
                                                     <Customselect
                                                         key={item.user_id}
                                                         options={rolelsit}
                                                         label={'เลือกระดับ'}
                                                         width="18ch"
-                                                        value={selectedRoles[item.user_id] || item.role} // ใช้ selectedRoles ถ้ามี ถ้าไม่มีใช้ item.role
+                                                        value={
+                                                            selectedRoles[item.user_id] ?? (item.role === 'admin' ? "เจ้าหน้าที่ กยศ." : "อาจารย์")
+                                                        }
                                                         field="label"
-                                                        onChange={(newValue) => handleRoleChange(item.user_id, newValue)}// ✅ ส่งค่าใหม่ให้ฟังก์ชัน handleRoleChange
+                                                        onChange={(newValue) => handleRoleChange(item.user_id, newValue)}
                                                     />
                                                 </div>
                                             ) : column.field === 'evidence' ? (
@@ -475,7 +482,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                                                     <TeacherSelect
                                                         options={teacherList}
                                                         label="เจ้าหน้าที่ประจำคณะ"
-                                                        value={selectedTeacher[item.super_user] || item.teacher.user_id} // ใช้ค่าที่เลือกใหม่ ถ้าไม่มีให้ใช้ค่าเดิม
+                                                        value={selectedTeacher[item.super_user] || item.teacher.user_id || ''} // ใช้ค่าที่เลือกใหม่ ถ้าไม่มีให้ใช้ค่าเดิม
                                                         onChange={(newValue) => handleTeacherChange(
                                                             item.super_user,
                                                             newValue,

@@ -49,10 +49,10 @@ export default function EvidancedDialog({ open, setOpen, userID, years, setOpenA
 
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = (status) => {
         if (!userID) return;
         const Payload = {
-            status: true,
+            status: status,
             comment: comment
         }
 
@@ -109,7 +109,9 @@ export default function EvidancedDialog({ open, setOpen, userID, years, setOpenA
                             value={comment}
                             onChange={handleChangeComment} // ✅ ส่ง handler ตรงนี้
                         />
-                        <BasicButtons label={'อณุมัติ'} onClick={handleSubmit} />
+                        <BasicButtons label={'ไม่ผนุมัติ'} onClick={() => handleSubmit(true)} />
+                        <BasicButtons label={'อนุมัติ'} onClick={() => handleSubmit(false)} />
+
                     </DialogActions>
 
                 ) : null}

@@ -28,6 +28,7 @@
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "crypto-js": "^4.2.0",
     "dayjs": "^1.11.13",
     "jose": "^6.0.10",
     "js-cookie": "^3.0.5",

@@ -32,10 +32,7 @@ export const useStore = create((set) => ({
                 // 5. Fetch user data
                 const userResponse = await getUserbyClaim();
                 // console.log('User data response:', userResponse.data);
-                set({ userRole: { role: userResponse.data.role } });
-
-
-                console.log("userResponse", userResponse);
+                // set({ userRole: { role: userResponse.data.role } });
 
 
                 const userData = {

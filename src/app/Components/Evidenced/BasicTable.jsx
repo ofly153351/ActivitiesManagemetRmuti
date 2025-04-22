@@ -68,7 +68,7 @@ export default function BasicTable({ column, insideEvents, outsideEvent, showVie
             </Table>
             <div className="flex justify-between items-center w-full">
                 <div className="text-lg p-2 border-t border-[#e0e0e0] w-full">
-                    กิจกรรมภายในมหาวิทยาลัย
+                    กิจกรรมภายนอกมหาวิทยาลัย
                 </div>
                 <div className="text-lg p-2 border-t border-[#e0e0e0] px-4 w-full text-right">
                     รวมชั่วโมงกิจกรรม : {totalOutsideWorkingHour}

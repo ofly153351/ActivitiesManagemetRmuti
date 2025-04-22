@@ -32,8 +32,9 @@ function page() {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const response = await getMyEventStudent(selectedValue);
-                setMyEvent(response.data);
+
+                const response = await getMyEventStudent(String(selectedValue));
+                setMyEvent(response?.data);
 
                 setInsideEvents(response.data.inside_events || []);  // อัปเดตค่าใหม่ทุกครั้ง
                 setOutsideEvents(response.data.outside_events || []);
@@ -52,7 +53,6 @@ function page() {
     };
 
     console.log(myEvent);
-    console.log(myEvent.dones);
 
 
 
@@ -62,6 +62,8 @@ function page() {
         { label: currentThaiYear + 1, Value: currentThaiYear + 1 },
         { label: currentThaiYear - 1, Value: currentThaiYear - 1 },
     ]
+
+
 
     const totalInsideWorkingHours = useMemo(() => {
         return (insideEvents || [])
@@ -141,7 +143,7 @@ function page() {
                             </div>
                         </>
                     )}
-                    {myEvent.dones !== null ? (
+                    {myEvent?.dones !== null ? (
                         <div className='flex justify-end items-center px-4 py-2' >
                             <BasicButtons
                                 diasble

@@ -55,7 +55,11 @@ function page() {
 
 
 
-
+    const sortedByCode = allUser.sort((a, b) => {
+        if (a.code < b.code) return -1;
+        if (a.code > b.code) return 1;
+        return 0;
+    });
 
 
 
@@ -66,7 +70,7 @@ function page() {
         <>
             <Nav />
             <div className='min-h-screen  bg-gray-50' >
-                <div className='flex justify-center items-center bg-gray-50'>
+                <div className='flex min-h-screen justify-center items-center bg-gray-50'>
                     <div className="w-[80%] bg-white rounded-md mt-10 font-kanit shadow-md">
                         <h1 className='text-[52px] text-shadow-md p-10'>{title}</h1>
                         {loading ? (
@@ -76,7 +80,7 @@ function page() {
                                 </div>
                             </div>
                         ) : (
-                            <CustomTable columns={columns} rows={allUser} entity='รายชื่ออาจารย์' />
+                            <CustomTable columns={columns} rows={sortedByCode} entity='รายชื่ออาจารย์' />
                         )}
                     </div>
                 </div>

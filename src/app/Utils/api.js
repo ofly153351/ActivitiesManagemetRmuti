@@ -287,7 +287,7 @@ export const getAllowedEvent = async () => {
 
 export const getAllUser = async () => {
   try {
-    const response = await axios.get(`${API_BASE}/protected/admin/students`, {
+    const response = await axios.get(`${API_BASE}/protected/teacher/allstudent`, {
       withCredentials: true
     })
     return response
@@ -422,41 +422,22 @@ export const editEventById = async (role, id, data) => {
 };
 
 export const joinEvent = async (eventId) => {
-  const getCookie = (cookieName) => {
-    const cookies = document.cookie.split('; ');
-    const cookie = cookies.find((row) => row.startsWith(`${cookieName}=`));
-    return cookie ? cookie.split('=')[1] : null;
-  };
-
-  const token = getCookie('token');  // ดึง token จาก cookie
-  // console.log('Token:', token);  // ตรวจสอบ token
-
-  if (!token) {
-    console.error('Token not found');
-    throw new Error('Authentication token is missing');
-  }
-
   try {
     const response = await axios.post(
       `${API_BASE}/protected/student/joinevent/${Number(eventId)}`,
-      {},  // ไม่มี body ในการส่ง (ถ้า API ต้องการข้อมูลเพิ่มเติมใน body ให้ใส่)
+      {},
       {
-        headers: {
-          Authorization: `Bearer ${token}`,  // ใส่ token ใน header
-        },
-        withCredentials: true,  // ส่ง cookies
+        withCredentials: true, // ✅ สำคัญมาก! เพื่อให้ cookie ติดไปกับ request
       }
     );
     console.log('Event joined successfully:', response);
     return response;
   } catch (error) {
     console.error('Error joining event:', error.response ? error.response.data : error.message);
-    if (error.response) {
-      console.error('Response data:', error.response.data);  // ดูรายละเอียดเพิ่มเติมจาก response
-    }
-    throw error; // หากเกิด error จะโยนออกไป
+    throw error;
   }
 };
+
 
 export const getUserInEvent = async (id) => {
   const url = `${API_BASE}/protected/teacher/checklist/${id}`
@@ -486,12 +467,23 @@ export const checkFileStudent = async (eventID, userID, payload) => {
 
 export const getMyEventStudent = async (currentYear) => {
   try {
-    const response = await axios.get(`${API_BASE}/protected/student/myevents/${currentYear}`, {
+    const response = await axios.get(`${API_BASE}/protected/student/myevents/${Number(currentYear)}`, {
       withCredentials: true
     })
     return response
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
+  }
+}
+
+export const getMyEventStudentWithOutYear = async () => {
+  try {
+    const response = await axios.get(`${API_BASE}/protected/student/myevents`, {
+      withCredentials: true
+    })
+    return response
+  } catch (error) {
+    console.log(error.message);
   }
 }
 

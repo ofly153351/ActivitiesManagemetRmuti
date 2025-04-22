@@ -53,7 +53,7 @@ function Page() {
 
     console.log(facultiesList);
     console.log(allteacher);
-    
+
 
 
 
@@ -125,6 +125,13 @@ function Page() {
         }
     };
 
+    const sortedRows = (facultiesList?.length > 0)
+        ? facultiesList.sort((a, b) => a.faculty_code.localeCompare(b.code))
+        : [];
+
+
+
+
     return (
         <div className='min-h-screen bg-gray-50'>
             <Nav />
@@ -141,7 +148,7 @@ function Page() {
                 <div className="w-[80%] bg-white rounded-md mt-10 font-kanit shadow-md">
                     <h1 className='text-[52px] text-shadow-md p-10'>{title}</h1>
                     <CustomTable
-                        rows={facultiesList}
+                        rows={sortedRows}
                         columns={columns}
                         entity="รายชื่อคณะ"
                         onEdit={handleEdit}

@@ -35,20 +35,25 @@ export default function TeacherSelect({
         <Select
           labelId="custom-select-label"
           id="custom-select"
-          value={value}
+          value={value || ''} // ถ้า value เป็น null/undefined ให้ fallback เป็น ''
           label={label}
           onChange={handleChange}
           sx={{ fontFamily: 'Kanit, sans-serif' }}
           disabled={readOnly}
         >
+          {/* Placeholder เมื่อยังไม่เลือก */}
+          <MenuItem value="">
+            <em> -- นำออก --</em>
+          </MenuItem>
+
           {options.length > 0 ? (
             options.map((option, index) => (
               <MenuItem
                 sx={{ fontFamily: 'Kanit, sans-serif' }}
                 key={index}
-                value={option[field]} // value เป็น ID
+                value={option[field]} // เช่น user_id
               >
-                {getDisplayText(option)} {/* แสดงชื่อเต็ม */}
+                {getDisplayText(option)} {/* เช่น full name */}
               </MenuItem>
             ))
           ) : (

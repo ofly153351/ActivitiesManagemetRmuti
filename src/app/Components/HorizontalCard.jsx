@@ -29,16 +29,14 @@ function HorizontalCard({ eventsInside, eventOutside }) {
     }
 
 
-
-
     if (isLoading)
         return <div className='p-20 flex justify-center items-center min-h-full' ><Loading /></div>
 
     return (
         <div className="">
             {eventsInside?.map((item, index) => (
-                <>
-                    <button className=" py-1 border-md w-full hover:-translate-y-1 hover:duration-75  " key={item.event_id} onClick={() => selectEvent(item.event_id, item)} >
+                <div key={index} >
+                    <button key={index} className=" py-1 border-md w-full hover:-translate-y-1 hover:duration-75  " onClick={() => selectEvent(item.event_id, item)} >
                         <div className="sm:h-[80px] xs:justify-center p-2 m-2 drop-shadow-md  xs:gap-2 bg-white sm:flex sm:justify-between items-center xs:grid  ">
                             <div className='sm:flex gap-2 px-2 xs:gird' >
                                 <p className='truncate xs:border-[0px] sm:border-r-[1px] border-gray-200 px-2' >
@@ -108,13 +106,13 @@ function HorizontalCard({ eventsInside, eventOutside }) {
                             </div>
                         </div>
                     </button>
-                </>
+                </div>
             ))}
 
             {eventOutside && eventOutside.length > 0 ? (
                 <>
                     {eventOutside?.map((item, index) => (
-                        <button className=" py-1 border-md w-full hover:-translate-y-1 hover:duration-75  " key={item.event_id} onClick={() => selectEvent(item.event_id, item)} >
+                        <button key={index} className=" py-1 border-md w-full hover:-translate-y-1 hover:duration-75  " onClick={() => selectEvent(item.event_id, item)} >
                             <div className="sm:h-[80px] xs:justify-center p-2 m-2 drop-shadow-md  xs:gap-2 bg-white sm:flex sm:justify-between items-center xs:grid  ">
                                 <div className='sm:flex gap-2 px-2 xs:gird' >
                                     <p className='truncate xs:border-[0px] sm:border-r-[1px] border-gray-200 px-2' >

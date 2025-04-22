@@ -219,11 +219,11 @@ function CreateEventOutside({ isOpen, isClose }) {
                 isAlert={isAlert}
             />
             {isAlert.status !== null && isAlert.status === true ? (
-                <div className='fixed bottom-4 right-4 z-20 ' >
+                <div className='fixed xs:bottom-2 xs:right-2 lg:bottom-4 lg:right-4 z-20 ' >
                     <SuccessAlert label={isAlert.message} />
                 </div>
             ) : (isAlert.status !== null && isAlert.status === false) ? (
-                <div className='fixed bottom-4 right-4 z-20 ' >
+                <div className='fixed xs:bottom-2 xs:right-2 lg:bottom-4 lg:right-4 z-20 ' >
                     <ErrorAlert label={isAlert.message} />
                 </div>
             ) : null}

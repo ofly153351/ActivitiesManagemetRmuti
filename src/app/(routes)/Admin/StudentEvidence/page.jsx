@@ -43,8 +43,11 @@ function page() {
             setOpenAlert({ status: false, message: '' });
         }, 3000);
     }
-    console.log(openAlert);
 
+
+    const sortedStudentEvidence = (studentEvidence?.length > 0)
+        ? studentEvidence.sort((a, b) => a.code.localeCompare(b.code))
+        : [];
 
 
     const columns = [
@@ -74,7 +77,7 @@ function page() {
                         </div>
                     ) : (
                         <CustomTable
-                            rows={studentEvidence}
+                            rows={sortedStudentEvidence}
                             columns={columns}
                             entity="กิจกรรม"
                             setOpenEvidence={setOpen}

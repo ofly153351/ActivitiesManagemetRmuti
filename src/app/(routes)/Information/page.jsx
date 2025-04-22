@@ -314,19 +314,20 @@ function Page() {
                                             <span className="text-red-500 text-sm pl-3">{validationMessage.code}</span>
                                         )}
                                     </div>
-
+                                    <Customselect
+                                        readOnly={true}
+                                        width={width.md}
+                                        label={label.branch}
+                                        field="branch_name"
+                                        value={branch}
+                                        onChange={(value) => handleChange(value, 'branch')}
+                                        options={branches}
+                                    />
                                 </div>
+                                
                                 <div className="flex">
                                     <div className='xs:grid md:grid-cols-2'>
-                                        <Customselect
-                                            readOnly={true}
-                                            width={width.md}
-                                            label={label.branch}
-                                            field="branch_name"
-                                            value={branch}
-                                            onChange={(value) => handleChange(value, 'branch')}
-                                            options={branches}
-                                        />
+
                                         <CustomTextfield
                                             label={label.phone}
                                             value={phone}

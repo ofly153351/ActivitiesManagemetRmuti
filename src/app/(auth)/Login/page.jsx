@@ -31,7 +31,7 @@ function Page() {
 
       if (responseUser) {
         setSuccessMessage('Login successful!');
-        router.push('/Home')
+        router.push('/')
       } else {
         throw new Error('No token received after login');
       }

@@ -38,7 +38,7 @@ function Nav() {
     }, []);
 
     const commonLinks = [
-        { href: '/Home', label: 'รายชื่อกิจกรรม' }
+        { href: '/', label: 'รายชื่อกิจกรรม' }
     ];
 
 
@@ -81,7 +81,7 @@ function Nav() {
                     <div className='flex justify-between items-center w-full'>
                         <div className='flex justify-center items-center'>
                             <Sidebar />
-                            <Link href="/Home" className='hover:bg-stone-50 xs:hidden lg:block md:block'>
+                            <Link href="/" className='hover:bg-stone-50 xs:hidden lg:block md:block'>
                                 <LogoDevIcon style={{
                                     fontSize: "50px",
                                     color: "#0067B3"
@@ -96,12 +96,12 @@ function Nav() {
             )}
 
             {!user?.role && (
-                <Link href="/Home" className='ml-[50px]  justify-center items-center lg:flex xs:hidden' >
+                <Link href="/" className='ml-[50px]  justify-center items-center lg:flex xs:hidden' >
                     <span className=" font-kanit text-2xl">LOGO</span>
                 </Link>
             )}
             {user?.role === 'student' && (
-                <Link href="/Home" className='ml-[50px]  justify-center items-center lg:flex ' >
+                <Link href="/" className='ml-[50px]  justify-center items-center lg:flex ' >
                     <span className="ml-[50px] font-kanit text-2xl xs:hidden lg:flex ">LOGO</span>
                 </Link>
             )}
@@ -113,7 +113,7 @@ function Nav() {
                         <CustomMenu />
                         <BasicButtons
                             label={'กิจกรรม'}
-                            onClick={() => router.push('/Home')}
+                            onClick={() => router.push('/')}
                         />
                     </div>
                 </div>
@@ -168,7 +168,7 @@ function Nav() {
                 <CreateEventOutside isOpen={openDialog} isClose={handleDialogClose} />
             ) : null}
 
-            {pathname === '/Home' && !user && (
+            {pathname === '/' && !user && (
                 <div className='flex gap-5 xs:mr-5'>
                     <CustomMenu />
                     <BasicButtons label={'เข้าสู่ระบบ'} onClick={(e) => {
