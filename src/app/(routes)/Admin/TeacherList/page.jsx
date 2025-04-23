@@ -12,6 +12,14 @@ function page() {
     const [loading, setLoading] = useState(true)
     const [columns, setColumns] = useState([])
     const { user } = useStore()
+    const { userRoleHash, initUserRoleHash } = useStore()
+    // ตรวจสอบว่าเราอยู่ในฝั่ง client
+
+
+    useEffect(() => {
+        initUserRoleHash()
+    }, [userRoleHash])
+
 
     useEffect(() => {
         if (user) {
@@ -32,7 +40,7 @@ function page() {
                 }
             };
             fetchData()
-            if (user?.role === 'admin' || user?.role === 'superadmin') {
+            if (userRoleHash === 'admin' || userRoleHash === 'superadmin') {
                 setColumns([
                     { headerName: 'รหัส', field: 'code' },
                     { headerName: 'ชื่อจริง', field: 'first_name' },
@@ -41,7 +49,7 @@ function page() {
                     { headerName: 'ระดับ', field: 'level' },
                 ])
             }
-            if (user?.role === 'teacher') {
+            if (userRoleHash === 'teacher') {
                 setColumns([
                     { headerName: 'รหัส', field: 'code' },
                     { headerName: 'ชื่อจริง', field: 'first_name' },

@@ -14,6 +14,14 @@ function page() {
     const { user } = useStore();
     const [selectedRow, setSelectedRow] = useState(null); // Update the state to selectedRow
     const [EditPopupOpen, setEditPopupOpen] = useState(false);
+    const { userRoleHash, initUserRoleHash } = useStore()
+    // ตรวจสอบว่าเราอยู่ในฝั่ง client
+
+    useEffect(() => {
+        initUserRoleHash()
+    }, [userRoleHash])
+
+
 
     const handleEdit = (item) => {
         console.log(item); // For debugging
@@ -26,10 +34,10 @@ function page() {
             setLoading(true);
 
             try {
-                if (user?.role === 'admin') {
+                if (userRoleHash === 'admin') {
                     const response = await getMyEventAdmin();
                     setMyEvent(response.data);
-                } else if (user?.role === 'teacher') {
+                } else if (userRoleHash === 'teacher') {
                     const response = await getMyEventTeacher();
                     setMyEvent(response.data);
                 }
@@ -69,7 +77,7 @@ function page() {
     ];
 
 
-    
+
 
     const title = 'รายชื่อกิจกรรมของฉัน';
 
