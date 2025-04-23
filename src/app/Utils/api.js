@@ -703,3 +703,14 @@ export const adminDashboard = async (year) => {
 
   }
 }
+
+export const closedEvent = async () => {
+  try {
+    const response = await axios.get(`${API_BASE}/protected/admin/event-7day`, {
+      withCredentials: true
+    })
+    return response
+  } catch (error) {
+    console.log(error);
+  }
+}

@@ -15,7 +15,7 @@ const bull = (
     </Box>
 );
 
-function CloseActivitiesCard({ eventName, thaiDate, location, detail, status , space }) {
+function CloseActivitiesCard({ eventName, thaiDate, location, detail, status, space, time }) {
 
     console.log(thaiDate);
 
@@ -26,7 +26,7 @@ function CloseActivitiesCard({ eventName, thaiDate, location, detail, status , s
                     ชื่อกิจกรรม : {eventName}
                 </Typography>
                 <Typography variant="body2">
-                    วันที่ : {thaiDate}
+                    วันที่ : {thaiDate} , เวลา {time} น.
                 </Typography>
                 <Typography variant="body2">
                     สถานที่ : {location}

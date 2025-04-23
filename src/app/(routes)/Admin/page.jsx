@@ -9,10 +9,9 @@ import { useState } from 'react';
 import CloseActivitiesCard from '@/app/Components/Dashbord/CloseActivitiesCard';
 import dayjs from 'dayjs'
 import 'dayjs/locale/th' // โหลด locale ภาษาไทย
-import { adminDashboard } from '@/app/Utils/api';
+import { adminDashboard, closedEvent } from '@/app/Utils/api';
 import { useStore } from '@/store/useStore';
 import { useRouter } from 'next/navigation';
-
 
 function Page() {
     const d = new Date();
@@ -27,6 +26,10 @@ function Page() {
     const [selectedYear, setSelectedYear] = useState(yearOption[0].label)
     const [countofDashBoard, setCountofDashBoard] = useState([])
     const { userRoleHash, initUserRoleHash } = useStore()
+    const [insideCount, setInsideCount] = useState([])
+    const [outsideCount, setOutsideCount] = useState([])
+    const [closedEvents, setClosedEvents] = useState([])
+
     const router = useRouter()
 
 
@@ -36,19 +39,30 @@ function Page() {
 
     useEffect(() => {
         if (userRoleHash === 'teacher') {
-            router.push('/')
+            router.push('/');
+            return; // หยุดการทำงานต่อถ้าไม่ใช่ admin
         }
-        try {
-            const fetchData = async () => {
-                const respon = await adminDashboard(selectedYear)
-                setCountofDashBoard(respon.data.message)
-            }
-            fetchData()
-        } catch (error) {
-            console.log(error);
-        }
-    }, [selectedYear])
 
+        const fetchData = async () => {
+            try {
+                const respon = await adminDashboard(selectedYear);
+                setCountofDashBoard(respon.data.all_count);
+                setInsideCount(respon.data.inside_counts);
+                setOutsideCount(respon.data.outside_counts);
+
+                const closeEventData = await closedEvent();
+                console.log(closeEventData.data.event_7day);
+
+                setClosedEvents(closeEventData.data.event_7day) // เปลี่ยนชื่อให้ไม่ชน
+
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [selectedYear]);
     console.log(countofDashBoard);
 
     //     จำนวนกิจกรรมทั้หมดที่มีในระบบ  = 
@@ -65,36 +79,21 @@ function Page() {
 
     const sumCardTitle = [
         {
-            title: 'จำนวนนักศึกษาที่มีในระบบ', value: countofDashBoard.count_std
+            title: 'จำนวนนักศึกษาที่มีในระบบ', value: countofDashBoard.count_std || 0
         },
         {
-            title: 'จำนวนกิจกรรมทั้งหมดที่มีในระบบ', value: countofDashBoard.count_event
+            title: 'จำนวนกิจกรรมทั้งหมดที่มีในระบบ', value: countofDashBoard.count_event || 0
         },
         {
-            title: 'จำนวนกิจกรรมที่เปิดอยู่ตอน', value: countofDashBoard.count_eventallow
+            title: 'จำนวนกิจกรรมที่เปิดอยู่ตอน', value: countofDashBoard.count_eventallow || 0
         },
         {
-            title: 'จำนวนนักศึกษาที่ผ่านการตรวจสอบจากผู้ดูแลคณะ', value: countofDashBoard.count_done
+            title: 'จำนวนนักศึกษาที่ผ่านการตรวจสอบจากผู้ดูแลคณะ', value: countofDashBoard.count_done || 0
         }
     ]
-    const closeActivitiesData = [
-        { eventName: 'กิจกรรม 1', date: Date.now() + 1 * 24 * 60 * 60 * 1000, location: 'วัด', detail: 'มาดิ', space: 1, status: true },
-        { eventName: 'กิจกรรม 2', date: Date.now() + 2 * 24 * 60 * 60 * 1000, location: 'วัด', detail: 'มาดิ', space: 2, status: false },
-        { eventName: 'กิจกรรม 3', date: Date.now() + 3 * 24 * 60 * 60 * 1000, location: 'วัด', detail: 'มาดิ', space: 3, status: true },
-        { eventName: 'กิจกรรม 4', date: Date.now() + 4 * 24 * 60 * 60 * 1000, location: 'วัด', detail: 'มาดิ', space: 4, status: false },
-        { eventName: 'กิจกรรม 5', date: Date.now() + 5 * 24 * 60 * 60 * 1000, location: 'วัด', detail: 'มาดิ', space: 5, status: true },
-    ];
 
 
-    const toThaiDate = (timestamp) => {
-        return dayjs(timestamp).locale('th').add(543, 'year').format('ddddที่ D MMMM YYYY');
-    }
 
-    const sortedCloseActivities = [...closeActivitiesData]
-        .filter(item => item.date >= Date.now()) // เอาเฉพาะกิจกรรมในอนาคต
-        .sort((a, b) => a.date - b.date); // เรียงจากน้อยไปมาก (ใกล้ขึ้นก่อน)
-
-    console.log(sortedCloseActivities);
 
 
     return (
@@ -109,10 +108,10 @@ function Page() {
                         Dashboard
                     </div>
 
-                    <div className='flex flex-col lg:flex-row-2 justify-center items-stretch p-4 gap-5'>
+                    <div className='flex flex-col lg:flex-row-2 justify-center items-stretch p-4 gap-5 bg-slate-50 '>
                         {/* Card Group */}
-                        <div className='md:flex xs:grid' >
-                            <div className='p-2 w-full md:w-[30%] lg:w-[20%] bg-slate-50 flex flex-wrap lg:flex-col gap-2 shadow-lg rounded-md'>
+                        <div className='md:flex xs:grid bg-slate-50' >
+                            <div className='p-2 w-full xs:h-full md:w-[30%] lg:w-[20%] bg-slate-50 flex flex-wrap lg:flex-col gap-2 shadow-lg rounded-md'>
                                 {sumCardTitle.map((item, index) => (
                                     <div key={index} className='w-full'>
                                         <SumCard title={item.title} value={item.value} />
@@ -134,14 +133,19 @@ function Page() {
                                         onChange={(newValue) => handleOnChangYears(newValue)}
                                     />
                                 </div>
-                                <div className='flex w-[100%] ' >
-                                    <div className='w-[50%]' >
-                                        <span className='px-3' >กิจกรรมภายในมหาวิทยาลัย</span>
-                                        <BarChartBasic />
+                                <div className='flex flex-col lg:flex-row w-full gap-4'>
+                                    <div className='w-full lg:w-1/2 overflow-x-auto'>
+                                        <span className='px-3 block font-semibold mb-2'>กิจกรรมภายในมหาวิทยาลัย</span>
+                                        <div className='xs:min-w-[500px] md:min-w-[500px]'>
+                                            <BarChartBasic insideCounts={insideCount} />
+                                        </div>
                                     </div>
-                                    <div className='w-[50%]' >
-                                        <span className='px-3' >กิจกรรมภายนอกมหาวิทยาลัย</span>
-                                        <BarChartBasic />
+                                    <div className='w-full lg:w-1/2 overflow-x-auto'>
+                                        <span className='px-3 block font-semibold mb-2'>กิจกรรมภายนอกมหาวิทยาลัย</span>
+                                        <div className='xs:min-w-[500px] md:min-w-[500px]'>
+
+                                            <BarChartBasic insideCounts={outsideCount} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -149,14 +153,15 @@ function Page() {
                         <div className='w-full lg:w-full bg-slate-50 shadow-lg rounded-md'>
                             <span className='px-3 text-xl'>กิจกรรมที่ไกล้ถึง</span>
                             <div className='p-2 grid gap-2 md:flex md:overflow-x-auto'>
-                                {sortedCloseActivities.map((item, idx) => (
+                                {closedEvents.map((item, idx) => (
                                     <CloseActivitiesCard
                                         key={idx}
-                                        eventName={item.eventName}
-                                        thaiDate={toThaiDate(item.date)}
+                                        eventName={item.event_name}
+                                        thaiDate={item.start_date}
+                                        time={item.start_time}
                                         location={item.location}
                                         detail={item.detail}
-                                        space={item.space}
+                                        space={item.limit - item.free_space}
                                         status={item.status}
                                     />
                                 ))}
