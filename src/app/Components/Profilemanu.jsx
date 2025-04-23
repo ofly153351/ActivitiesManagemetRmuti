@@ -304,9 +304,7 @@ function ProfileMenu() {
                         {user ? (
                             ['teacher', 'admin', 'superadmin'].includes(userRoleHash) ? (
                                 <div className="font-kanit">
-                                    <MenuItem onClick={() => handleMenuItemClick('/Admin')}>
-                                        <p className='font-kanit' >Dashboard</p>
-                                    </MenuItem>
+                                    
                                     <MenuItem onClick={() => handleMenuItemClick('/Information')}>
                                         <p className='font-kanit' >แก้ไขข้อมูลส่วนตัว</p>
                                     </MenuItem>

@@ -83,7 +83,6 @@ function Page() {
             setBranch(user.branch || '');
             setFaculty(user.faculty_name || '');
             setYear(user.year || '');
-            setRole(user.role || '');
             setEmail(user.email || ''); // ตั้งค่า email จาก user
             setIsInitialized(true);
         }
@@ -261,7 +260,7 @@ function Page() {
                         <h1 className="text-2xl">แก้ไขข้อมูลส่วนตัว</h1>
                     </div>
                     <div className="p-4">
-                        {user.role === 'student' ? (
+                        {userRoleHash === 'student' ? (
                             <div className="">
                                 <div className=" xs:grid md:grid-cols-3">
                                     <Customselect
@@ -344,7 +343,7 @@ function Page() {
                                     </div>
                                 </div>
                             </div>
-                        ) : (user.role === 'teacher' || user.role === 'admin') ? (
+                        ) : (userRoleHash === 'teacher' || userRoleHash === 'admin') ? (
                             <div className="">
                                 <div className="grid">
                                     <Customselect
