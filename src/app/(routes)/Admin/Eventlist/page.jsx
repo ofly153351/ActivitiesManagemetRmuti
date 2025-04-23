@@ -5,6 +5,8 @@ import { getAllevent, getAllowedEvent, getCurrentEvent } from '@/app/Utils/api';
 import React, { useEffect, useState } from 'react';
 import Nav from '@/app/Components/Nav';
 import EditPopup from '@/app/Components/editPopup';
+import { useStore } from '@/store/useStore';
+import { blockNulluser } from '@/app/Utils/block';
 
 function Page() {
     const title = 'รายชื่อกิจกรรม';
@@ -71,6 +73,7 @@ function Page() {
     };
 
     useEffect(() => {
+        blockNulluser(user)
         const fetchData = async () => {
             try {
                 const response = await getAllevent();

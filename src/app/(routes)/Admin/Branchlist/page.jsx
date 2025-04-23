@@ -5,6 +5,8 @@ import CustomTable from '@/app/Components/CustomTable';
 import EditPopup from '@/app/Components/editPopup';
 import Nav from '@/app/Components/Nav'
 import { DeleteBranchbyID, getBranches, getFaculties } from '@/app/Utils/api';
+import { blockNulluser } from '@/app/Utils/block';
+import { useStore } from '@/store/useStore';
 import React, { useEffect, useState } from 'react'
 
 function page() {
@@ -37,6 +39,7 @@ function page() {
 
 
   useEffect(() => {
+    blockNulluser(user)
     const fetchData = async () => {
       try {
         const response = await getBranches();

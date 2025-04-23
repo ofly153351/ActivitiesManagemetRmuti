@@ -8,6 +8,7 @@ import { deleteFacultybtID, getAllteacher, getFaculties } from "@/app/Utils/api"
 import { SuccessAlert, ErrorAlert } from '@/app/Components/AlertShow';
 import { useStore } from "@/store/useStore";
 import { usePathname } from "next/navigation";
+import { blockNulluser } from "@/app/Utils/block";
 
 
 
@@ -28,6 +29,7 @@ function Page() {
 
     // โหลดข้อมูลจาก API 
     useEffect(() => {
+        blockNulluser(user)
         const fetchData = async () => {
             try {
                 setLoading(true); // เริ่มโหลด

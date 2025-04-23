@@ -6,6 +6,8 @@ import CustomTable from '@/app/Components/CustomTable'
 import { getStudentEvidence } from '@/app/Utils/api'
 import EvidancedDialog from '@/app/Components/Evidenced/EvidancedDialog'
 import { SuccessAlert } from '@/app/Components/AlertShow'
+import { blockNulluser } from '@/app/Utils/block'
+import { useStore } from '@mui/x-charts/internals'
 
 function page() {
 
@@ -16,9 +18,10 @@ function page() {
     const [userID, setUserID] = useState('');
     const [years, setYears] = useState('')
     const [openAlert, setOpenAlert] = useState({ status: false, message: '' });
-
+    const { user } = useStore()
 
     useEffect(() => {
+        useStore(user)
         const fetchData = async () => {
             setLoading(true);
             try {

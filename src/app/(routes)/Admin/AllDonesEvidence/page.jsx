@@ -4,6 +4,8 @@ import EvidancedDialog from '@/app/Components/Evidenced/EvidancedDialog';
 import Loading from '@/app/Components/Loading';
 import Nav from '@/app/Components/Nav';
 import { getAllStudentDonesEvidence } from '@/app/Utils/api';
+import { blockNulluser } from '@/app/Utils/block';
+import { useStore } from '@/store/useStore';
 import React, { useEffect, useState } from 'react';
 
 
@@ -18,8 +20,11 @@ export default function page({ searchParams }) {
     const [open, setOpen] = useState(false);
     const [userID, setUserID] = useState('');
     const [years, setYears] = useState('');
-
+    const { user } = useStore()
+    
     useEffect(() => {
+        blockNulluser(user)
+
         const fetchEvidenceData = async () => {
             try {
                 const res = await getAllStudentDonesEvidence(Number(year), status, Number(facultyId));

@@ -6,14 +6,16 @@ import { getAllUser } from '@/app/Utils/api'
 import Loading from '@/app/Components/Loading'
 import useStore from '@/store/useStore'
 import { all } from 'axios'
-
+import { blockNulluser } from '@/app/Utils/block'
+blockNulluser
 
 function page() {
     const title = 'รายชื่อนักศึกษาในระบบ'
     const [allUser, setAlluser] = useState([])
     const [loading, setLoading] = useState(true)
-
+    const { user } = useStore()
     useEffect(() => {
+        blockNulluser(user)
         const fetchData = async () => {
             try {
                 const response = await getAllUser()

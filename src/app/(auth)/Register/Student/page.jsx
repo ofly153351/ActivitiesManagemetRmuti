@@ -45,7 +45,7 @@ function Page() {
   const [branches, setBranches] = useState([]);
 
   useEffect(() => {
-    checkUserAuth();
+    checkUserAuth(user);
 
     const fetchData = async () => {
       try {

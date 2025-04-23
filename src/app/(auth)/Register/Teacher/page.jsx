@@ -23,7 +23,7 @@ function Page() {
 
 
     useEffect(() => {
-        checkUserAuth()
+        checkUserAuth(user)
 
         register('nameTitle', {
             required: "กรุณาใส่คำนำหน้า",
@@ -198,7 +198,7 @@ function Page() {
                                     type="submit"
                                     className="w-full py-3 bg-[#0067B3] text-white font-kanit rounded-lg shadow-xl hover:bg-blue-600"
                                 >
-                                    ลงทะเบียน
+                                    สมัครสมาชิก
                                 </button>
                             </div>
 
