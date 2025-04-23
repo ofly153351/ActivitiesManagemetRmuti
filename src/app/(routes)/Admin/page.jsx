@@ -46,16 +46,14 @@ function Page() {
         const fetchData = async () => {
             try {
                 const respon = await adminDashboard(selectedYear);
-                setCountofDashBoard(respon.data.all_count);
-                setInsideCount(respon.data.inside_counts);
-                setOutsideCount(respon.data.outside_counts);
+                setCountofDashBoard(respon?.data?.all_count || []);
+                setInsideCount(respon?.data?.inside_counts || []);
+                setOutsideCount(respon?.data?.outside_counts || []);
 
                 const closeEventData = await closedEvent();
-                console.log(closeEventData.data.event_7day);
+                console.log(closeEventData?.data?.event_7day || []);
 
-                setClosedEvents(closeEventData.data.event_7day) // เปลี่ยนชื่อให้ไม่ชน
-
-
+                setClosedEvents(closeEventData?.data?.event_7day || []);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
