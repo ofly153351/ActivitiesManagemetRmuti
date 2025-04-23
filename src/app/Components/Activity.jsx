@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { filterActivities } from '../Utils/handler';
 import Accordion from './Acordion';
-import { getAllevent, getBranches, joinEvent } from '../Utils/api';
+import { getAllevent, getBranches, getMyEventStudent, getMyEventStudentWithOutYear, joinEvent } from '../Utils/api';
 import dayjs from 'dayjs';
 import 'dayjs/locale/th';
 import BasicButtons from './BasicButtons';
@@ -130,10 +130,8 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
                     setBranchesList(branchResponse.data || []);
                 }
 
-                // ตั้งค่ากิจกรรมที่เข้าร่วมแล้ว
-                if (myEventList?.inside_events) {
-                    setEventsInside(myEventList.inside_events);
-                }
+                const myEventList = await getMyEventStudentWithOutYear()
+                setEventsInside(myEventList.data.inside_events);
 
                 setLoading(false);
             } catch (error) {
@@ -145,6 +143,9 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
         };
         fetchData();
     }, [myEventList]);
+
+
+    console.log("my", eventsInside);
 
     // ดึงชื่อสาขาอย่างปลอดภัย
     const getBranchNames = (branchIds) => {
@@ -185,13 +186,23 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
         const safeActivities = sortedActivities || [];
         const safeEventsInside = eventsInside || [];
 
-        return safeActivities
-            .map(activity =>
-                safeEventsInside.find(event =>
+        console.log("eventsInside" + eventsInside);
+
+        console.log("safeActivities:", safeActivities);
+        console.log("safeEventsInside:", safeEventsInside);
+
+        const matched = safeActivities
+            .map(activity => {
+                const found = safeEventsInside.find(event =>
                     event && activity && event.event_id === activity.event_id
-                )
-            )
+                );
+                console.log("Matching:", { activity, found });
+                return found;
+            })
             .filter(event => event !== undefined);
+
+        console.log("Final matched:", matched);
+        return matched;
     }, [sortedActivities, eventsInside]);
 
     // แสดงสถานะกำลังโหลด

@@ -8,6 +8,8 @@ import Loading from '@/app/Components/Loading'
 import Nav from '@/app/Components/Nav'
 import ShowDialogTable from '@/app/Components/ShowDialogTable'
 import { getMyEventStudent, sendSummaryToTeacher } from '@/app/Utils/api'
+import { blockNulluser } from '@/app/Utils/block'
+import { useStore } from '@/store/useStore'
 import { Value } from '@radix-ui/react-select'
 import React, { use, useState, useEffect, useMemo } from 'react'
 
@@ -20,7 +22,7 @@ function page() {
     const [insideEvents, setInsideEvents] = useState([])
     const [outSideEvents, setOutsideEvents] = useState([])
     const [showAlert, setShowAlert] = useState({ status: null, message: '' })
-
+    const { user } = useStore()
 
     const d = new Date()
     let year = d.getFullYear()
@@ -29,6 +31,8 @@ function page() {
 
 
     useEffect(() => {
+        blockNulluser(user)
+
         const fetchData = async () => {
             setLoading(true);
             try {

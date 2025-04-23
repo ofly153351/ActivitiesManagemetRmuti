@@ -164,7 +164,7 @@ function Page() {
                                             status={item.status}
                                         />
                                     ))
-                                ) : (
+                                ) : ((!closedEvents || closedEvents === null) &&
                                     <div className='h-36 flex justify-center items-center w-full text-slate-600' >ไม่พบกิจกรรมที่ไกล้จะถึง</div>
                                 )}
 

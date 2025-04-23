@@ -14,7 +14,7 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
     const [comment, setComment] = useState(''); // State เก็บความคิดเห็น
     const [successMessage, setSuccessMessage] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
-
+    const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
     const pathName = usePathname()
     if (!filePath) {
@@ -72,7 +72,7 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
     };
 
     const pdfUrl = filePath.startsWith('./uploads')
-        ? `http://localhost:8080${filePath.replace('./', '/')}`
+        ? `${API_BASE}${filePath.replace('./', '/')}`
         : filePath;
 
     console.log(pdfUrl, 'dwadwa');

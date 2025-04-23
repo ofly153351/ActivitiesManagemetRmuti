@@ -293,7 +293,7 @@ function Page() {
               type="submit"
               className="w-full py-3 bg-[#0067B3] text-white font-kanit rounded-lg shadow-xl hover:bg-blue-600 mt-6"
             >
-              ลงทะเบียน
+              สมัครสมาชิก
             </button>
 
             <div className="mt-4 flex justify-end">

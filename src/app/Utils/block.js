@@ -8,7 +8,6 @@ export const blockNulluser = (user) => {
 }
 
 export const checkUserAuth = (user) => {
-
     if (user) {
         redirect('/')
     }
