@@ -118,7 +118,7 @@ function Page() {
                             </div>
 
                             {/* Chart Section */}
-                            <div className='p-2 w-full lg:w-[80%] bg-slate-50 flex flex-col gap-4 shadow-lg rounded-md'>
+                            <div className='p-2 w-full lg:w-[80%] bg-slate-50 flex flex-col  shadow-lg rounded-md'>
                                 <div className='px-2 flex flex-wrap md:flex-nowrap items-center gap-2 text-lg'>
                                     <span>จำนวนกิจกรรมประจำปี:</span>
                                     <Customselect
@@ -151,18 +151,23 @@ function Page() {
                         <div className='w-full lg:w-full bg-slate-50 shadow-lg rounded-md'>
                             <span className='px-3 text-xl'>กิจกรรมที่ไกล้ถึง</span>
                             <div className='p-2 grid gap-2 md:flex md:overflow-x-auto'>
-                                {closedEvents.map((item, idx) => (
-                                    <CloseActivitiesCard
-                                        key={idx}
-                                        eventName={item.event_name}
-                                        thaiDate={item.start_date}
-                                        time={item.start_time}
-                                        location={item.location}
-                                        detail={item.detail}
-                                        space={item.limit - item.free_space}
-                                        status={item.status}
-                                    />
-                                ))}
+                                {closedEvents ? (
+                                    closedEvents.map((item, idx) => (
+                                        <CloseActivitiesCard
+                                            key={idx}
+                                            eventName={item.event_name}
+                                            thaiDate={item.start_date}
+                                            time={item.start_time}
+                                            location={item.location}
+                                            detail={item.detail}
+                                            space={item.limit - item.fee_space}
+                                            status={item.status}
+                                        />
+                                    ))
+                                ) : (
+                                    <div className='h-36 flex justify-center items-center w-full text-slate-600' >ไม่พบกิจกรรมที่ไกล้จะถึง</div>
+                                )}
+
                             </div>
                         </div>
                     </div>

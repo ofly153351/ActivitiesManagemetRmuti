@@ -109,9 +109,7 @@ function Page() {
               )}
 
               {/* Forgot Password */}
-              <div className="text-right text-gray-700 hover:text-blue-500 mt-2">
-                <Link href='/'>ลืมรหัสผ่าน ?</Link>
-              </div>
+              
             </form>
           </div>
         </div>
