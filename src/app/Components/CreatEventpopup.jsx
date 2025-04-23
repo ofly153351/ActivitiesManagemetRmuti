@@ -164,36 +164,38 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
             return;
         }
 
+        const payload = {
+            event_name: eventName,
+            start_date: startDate,
+            working_hour: Number(hour),
+            free_space: Number(space),
+            location,
+            detail,
+            branches: selectedBranches.map(branch => branch.branch_id),
+            years: selectedYears == null ? [] : selectedYears,  // ใช้ ternary operator
+            school_year: Number(selectedSchoolYear)
+        };
 
         try {
-            const payload = {
-                event_name: eventName,
-                start_date: startDate,
-                working_hour: Number(hour),
-                free_space: Number(space),
-                location,
-                detail,
-                branches: selectedBranches.map(branch => branch.branch_id),
-                years: selectedYears == null ? [] : selectedYears,  // ใช้ ternary operator
-                school_year: Number(selectedSchoolYear)
-            };
-
-            console.log('Start date format:', dayjs(payload.start_date).format('YYYY-MM-DD HH:MM:00:00.000'));
-
-
             const response = await CreateEvent(payload);
-            console.log("CreateEvent response:", response); // Debug log
+            console.log("CreateEvent response:", response);
 
             if (response) {
-                console.log("Event created successfully:", response);
-                setSuccessMessage('สร้างกิจกรรมเรียบร้อย')
-                setTimeout(() => { setSuccessMessage("") }, 3000);
-                handleCloseDialog()
+                setSuccessMessage('สร้างกิจกรรมเรียบร้อย');
+                setTimeout(() => setSuccessMessage(""), 3000);
+                handleCloseDialog();
                 window.location.reload();
-            } else {
-                console.error("Event creation failed. No response received.");
             }
         } catch (error) {
+            console.log("Failed to create event:", error);
+
+            if (error.message === 'event with same name and start date already exists for this creator') {
+                setErrorsMessage('ไม่สามารถสร้างกิจกรรมได้ เนื่องจากมีกิจกรรมที่มีชื่อเดียวกันในวันที่เดียวกัน');
+            } else {
+                setErrorsMessage('ไม่สามารถสร้างกิจกรรมได้');
+            }
+
+            setTimeout(() => setErrorsMessage(""), 3000);
             console.error("Error in handleSubmit:", error);
         }
     };

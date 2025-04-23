@@ -23,9 +23,10 @@ import { ErrorAlert, SuccessAlert } from './AlertShow';
 import { useStore } from '@/store/useStore';
 import { getFaculties, getBranches } from '../Utils/api';
 import SelectedAllDones from './AllDonesList/SelectedAllDones';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 export default function Sidebar() {
-    const { user, branchesList, facultiesList, setBranchesList, setFacultiesList } = useStore();
+    const { user, branchesList, facultiesList, setBranchesList, setFacultiesList, userRoleHash, initUserRoleHash } = useStore();
     const [open, setOpen] = useState(false);
     const [submenuBranch, setSubmenuBranch] = useState(false);
     const [submenuFaculty, setSubmenuFaculty] = useState(false);
@@ -41,9 +42,14 @@ export default function Sidebar() {
     // const [faculties, setFaculties] = useState(null);
     const [openSelectedAllDones, setSelectedAllDones] = useState(false);
 
+    useEffect(() => {
+        initUserRoleHash()
+    }, [userRoleHash])
+
     const toggleDrawer = useCallback((newOpen) => () => {
         setOpen(newOpen);
     }, []);
+
 
     const showAlert = useCallback((message, type = "success") => {
         setAlertMessage(message);
@@ -106,15 +112,21 @@ export default function Sidebar() {
         setSubmenuEvent((prev) => !prev);
     }, []);
 
-    // ย้าย useMemo ให้ทำงานเฉพาะเมื่อมี user และ user.role
+    // ย้าย useMemo ให้ทำงานเฉพาะเมื่อมี user และ userRoleHash
     const menuPath = useMemo(() => {
-        if (!user || !user.role) return [];
+        if (!user || !userRoleHash) return [];
 
+        
         return [
             {
                 name: 'หน้าแรก',
-                link: '/Home',
+                link: '/',
                 icon: <HomeIcon />,
+            },
+            {
+                name: 'Dashboard',
+                link: '/Admin',
+                icon: <DashboardIcon />,
             },
 
             {
@@ -166,7 +178,7 @@ export default function Sidebar() {
 
 
             // เพิ่มเฉพาะถ้า role ไม่ใช่ teacher
-            ...(user.role === 'admin'
+            ...(userRoleHash === 'admin'
                 ? [
                     {
                         name: 'จัดการคณะ',
@@ -214,7 +226,7 @@ export default function Sidebar() {
         ];
     }, [submenuUser, submenuEvent, submenuFaculty, submenuBranch, user, toggleSubmenuUser, toggleSubmenuEvent, toggleSubmenuFaculty, toggleSubmenuBranch, handleDialogToggle]);
 
-    // ย้าย DrawerList ให้ทำงานเฉพาะเมื่อมี menuPath (ซึ่งจะมีค่าก็ต่อเมื่อมี user และ user.role)
+    // ย้าย DrawerList ให้ทำงานเฉพาะเมื่อมี menuPath (ซึ่งจะมีค่าก็ต่อเมื่อมี user และ userRoleHash)
     const DrawerList = useMemo(() => {
         if (!menuPath || menuPath.length === 0) return null;
 
@@ -283,7 +295,7 @@ export default function Sidebar() {
                                     ))}
                                 </List>
                             )}
-                            {item.Children && item.name === 'จัดการคณะ' && submenuFaculty && user && user.role === 'admin' && (
+                            {item.Children && item.name === 'จัดการคณะ' && submenuFaculty && user && userRoleHash === 'admin' && (
                                 <List component="div" disablePadding>
                                     {item.Children.map((subItem, subIndex) => (
                                         <ListItem key={subIndex} disablePadding>
@@ -304,7 +316,7 @@ export default function Sidebar() {
                                     ))}
                                 </List>
                             )}
-                            {item.Children && item.name === 'จัดการสาขา' && submenuBranch && user && user.role === 'admin' && (
+                            {item.Children && item.name === 'จัดการสาขา' && submenuBranch && user && userRoleHash === 'admin' && (
                                 <List component="div" disablePadding>
                                     {item.Children.map((subItem, subIndex) => (
                                         <ListItem key={subIndex} disablePadding>
@@ -333,12 +345,12 @@ export default function Sidebar() {
         );
     }, [menuPath, submenuUser, submenuEvent, submenuFaculty, submenuBranch, toggleDrawer, user]);
 
-    // ถ้าไม่มี user หรือ user.role ให้ return null เลย
-    if (!user || !user.role) {
+    // ถ้าไม่มี user หรือ userRoleHash ให้ return null เลย
+    if (!user || !userRoleHash) {
         return null;
     }
 
-    // Return สุดท้ายเฉพาะเมื่อมี user และ user.role แล้วเท่านั้น
+    // Return สุดท้ายเฉพาะเมื่อมี user และ userRoleHash แล้วเท่านั้น
     return (
         <div className="z-20 w-16">
             {alertMessage && (

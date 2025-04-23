@@ -12,6 +12,7 @@ import BasicButtons from './BasicButtons';
 import StudentNavmenu from './StudentNavmenu';
 import CreateEventOutside from './Outside/CreateEventOutside';
 import { useStore } from '@/store/useStore';
+import { decryptText } from '../Utils/hash';
 
 function Nav() {
     const { user } = useStore();
@@ -20,22 +21,28 @@ function Nav() {
     const [loading, setLoading] = useState(true);
     const [openDialog, setOpenDialog] = useState(false)
     const [creatEventoutSide, setCreatEventOutside] = useState(true)
+    const { userRoleHash, initUserRoleHash } = useStore();
+    const [role, setRole] = useState()
 
-
-    console.log(user);
 
 
     useEffect(() => {
+        // เรียกเมธอดเพื่อดึง role ที่ถอดรหัสแล้วจาก Zustand store
+        initUserRoleHash();
 
+    }, [initUserRoleHash]);
+
+    useEffect(() => {
 
         if (user) {
-
-
             setLoading(false);
         } else {
             setLoading(false);
         }
     }, []);
+
+
+    console.log(role);
 
     const commonLinks = [
         { href: '/', label: 'รายชื่อกิจกรรม' }
@@ -76,7 +83,7 @@ function Nav() {
     return (
 
         <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex  lg:justify-between xs:justify-end  xs:items-center z-10  top-0">
-            {(user?.role === 'teacher' || user?.role === 'admin' || user?.role === 'superadmin') && (
+            {(userRoleHash === 'teacher' || userRoleHash === 'admin' || userRoleHash === 'superadmin') && (
                 <div className='flex justify-between items-center  lg:mx-20 w-screen'>
                     <div className='flex justify-between items-center w-full'>
                         <div className='flex justify-center items-center'>
@@ -95,12 +102,12 @@ function Nav() {
                 </div>
             )}
 
-            {!user?.role && (
+            {!userRoleHash && (
                 <Link href="/" className='ml-[50px]  justify-center items-center lg:flex xs:hidden' >
                     <span className=" font-kanit text-2xl">LOGO</span>
                 </Link>
             )}
-            {user?.role === 'student' && (
+            {userRoleHash === 'student' && (
                 <Link href="/" className='ml-[50px]  justify-center items-center lg:flex ' >
                     <span className="ml-[50px] font-kanit text-2xl xs:hidden lg:flex ">LOGO</span>
                 </Link>
@@ -143,7 +150,7 @@ function Nav() {
             )}
 
             {/* Home page navigation for user role */}
-            {user?.role === 'student' && (
+            {userRoleHash === 'student' && (
                 <div className=" flex  justify-between">
                     <div className='flex ' >
                         {userLinks.map((link, index) => (

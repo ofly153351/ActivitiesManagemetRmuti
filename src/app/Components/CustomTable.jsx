@@ -61,6 +61,12 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
     const [teacherOptions, setTeacherOptions] = useState([]);
     const [selectedTeacher, setSelectedTeacher] = useState({});
 
+    const { initUserRoleHash, userRoleHash } = useStore();
+
+    useEffect(() => {
+        initUserRoleHash()
+    }, [userRoleHash])
+
 
 
     // ฟังก์ชันสำหรับเปลี่ยนสถานะของ Switch
@@ -70,7 +76,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
             console.log(itemId, field, newStatus);
 
             // สมมติว่า editStatusEvent ทำการอัพเดทสถานะให้ใน backend
-            const response = await editStatusEvent(user.role, itemId, newStatus);
+            const response = await editStatusEvent(userRoleHash, itemId, newStatus);
 
             if (response && response.status === 200) {
                 console.log("Response data:", response.data);  // ดูค่าที่ส่งกลับมาจาก API
@@ -93,7 +99,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
     // โหลดข้อมูลเริ่มต้น
     useEffect(() => {
         blockNulluser(user)
-        if (user?.role) {
+        if (userRoleHash) {
             setLoading(false);
         }
 
@@ -108,7 +114,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
             };
             fetchData();
         }
-    }, [user?.role, pathName, branches]);
+    }, [userRoleHash, pathName, branches]);
 
     // ใช้แยกกันเพื่อไม่ให้ setTableRows ทับ status ที่เปลี่ยนไปแล้ว
     useEffect(() => {
@@ -261,9 +267,9 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
 
         try {
             let response;
-            if (user?.role === 'admin') {
+            if (userRoleHash === 'admin') {
                 response = await deleteEventByAdmin(selectedItem.event_id);
-            } else if (user?.role === 'teacher') {
+            } else if (userRoleHash === 'teacher') {
                 response = await deleteEventByTeacher(selectedItem.event_id);
             }
 
@@ -403,7 +409,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                     <thead className='w-fit p-4 bg-[#F5F5F5] shadow-t-xl rounded-xl'>
                         <tr className='font-kanit'>
                             {columns.map((item, index) => {
-                                { (item.headerName === 'ระดับ' && user?.role === 'teacher') && null }
+                                { (item.headerName === 'ระดับ' && userRoleHash === 'teacher') && null }
                                 return (
                                     <th className='p-4 border-x-[1px] border-slate-200' key={index}>
                                         {item.headerName}
@@ -415,7 +421,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                             ) : null}
                             {pathName === '/Admin/EventList' ? (
                                 <th className='p-4 border-x-[1px] border-slate-200'>เรียกดู</th>
-                            ) : user?.role !== 'student' ? (
+                            ) : userRoleHash !== 'student' ? (
                                 null
                                 // <th className='p-4 border-x-[1px] border-slate-200'>การจัดการ</th>
                             ) : null}
@@ -456,7 +462,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                                                         />
                                                     )}
                                                 </div>
-                                            ) : column.field === 'level' && (user?.role === 'admin' || user?.role === 'superadmin') ? (
+                                            ) : column.field === 'level' && (userRoleHash === 'admin' || userRoleHash === 'superadmin') ? (
                                                 <div className="flex justify-center items-center">
                                                     {console.log(selectedRoles)}
                                                     <Customselect
@@ -477,7 +483,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                                                         <FindInPageIcon sx={{ color: colorsCode.blue }} />
                                                     </button>
                                                 </div>
-                                            ) : column.field === 'teacher' && user?.role === 'admin' ? (
+                                            ) : column.field === 'teacher' && userRoleHash === 'admin' ? (
                                                 <div className="flex justify-center items-center">
                                                     <TeacherSelect
                                                         options={teacherList}

@@ -5,35 +5,44 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Cookies from 'js-cookie';
 import { useStore } from '@/store/useStore';
 import MailNotification from './MailNotification';
-import { getNews, handlelogOut, } from '../Utils/api';
+import { getNews, handlelogOut, readNews, } from '../Utils/api';
+import { set } from 'react-hook-form';
 
 function ProfileMenu() {
-    const { user, clearAll, userRole, setUser } = useStore();
+    const { user, clearAll, userRoleHash, initUserRoleHash } = useStore();
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
     const router = useRouter();
     const [openMail, setOpenMail] = useState(false);
     const [news, setNews] = useState([])
+    const [unreadCount, setUnreadCount] = useState(0)
 
     // ✅ ให้ React เรียก useEffect เสมอ
     useEffect(() => {
-        if (user) {
-            try {
-                const fetchData = async () => {
-                    const response = await getNews();
-                    setNews(response.data)
-                    console.log(response.data);
-                }
-                fetchData();
-            } catch (error) {
-                console.log(error);
+        initUserRoleHash()
+    }, [userRoleHash])
 
-            }
+
+
+    useEffect(() => {
+        if (user) {
+            const fetchData = async () => {
+                try {
+                    const response = await getNews();
+                    setNews(response.data);
+                    const unread = (response?.data ?? []).filter(n => !n.is_read).length;
+                    setUnreadCount(unread);
+                } catch (error) {
+                    console.error('Error fetching news:', error);
+                }
+            };
+            fetchData();
         }
     }, [user]);
 
     console.log(news);
+
 
 
     const handleClick = (event) => {
@@ -56,6 +65,33 @@ function ProfileMenu() {
         handleClose();
     };
 
+    const handleReadnews = (header, eventID) => {
+
+        console.log(header, eventID);
+        const replaceHeader = header.split(' ');
+
+        const readNewsData = async () => {
+            try {
+                const response = await readNews(eventID);
+                console.log(response.data);
+                if (header === 'กิจกรรมที่ต้องตรวจสอบ') {
+                    router.push('/Admin/MyEvent');
+                }
+                if (replaceHeader[0] === 'เอกสารกิจกรรม') {
+                    router.push('/Information/MyEvent');
+                }
+                if (header === 'กิจกรรมใหม่') {
+                    router.push('/');
+                }
+            } catch (error) {
+                console.log(error.message);
+
+            }
+        }
+        readNewsData()
+
+    }
+
     const logOutUser = async () => {
         const logoutUser = await handlelogOut(); // ✅ เรียกฟังก์ชันจาก API จริงๆ
         console.log(logoutUser);
@@ -64,7 +100,8 @@ function ProfileMenu() {
             clearAll(null);
             localStorage.removeItem('user');
             sessionStorage.removeItem('user');
-            router.push('/Login');
+            // router.push('/Login');
+            window.location.reload();
             setIsLoggingOut(false);
         }, 100);
     };
@@ -72,14 +109,25 @@ function ProfileMenu() {
     const mailClick = () => {
         setOpenMail((prev) => !prev)
     }
+
     const parseMessage = (msg) => {
-        // กิจกรรมใหม่ เช่น "กิจกรรม'testMail' '19 เมษายน 2568' '10:22'"
         const newEventRegex = /กิจกรรม'(.*?)'\s+'(.*?)'\s+'(.*?)'/;
         const newMatch = msg.match(newEventRegex);
 
-        // กิจกรรมที่ถูกลบ เช่น "กิจกรรม 'testmail' ที่คุณเข้าร่วมถูกลบแล้ว."
         const deleteEventRegex = /กิจกรรม\s+'(.*?)'\s+ที่คุณเข้าร่วมถูกลบแล้ว/;
         const deleteMatch = msg.match(deleteEventRegex);
+
+        const editEventRegex = /กิจกรรม\s+'(.*?)'\s+ที่คุณเข้าร่วมมีการแก้ไขรายละเอียด./;
+        const editMatch = msg.match(editEventRegex);
+
+        const checkEventRegex = /กิจกรรม\s+'(.*?)'\s+ที่คุณต้องตรวจสอบ./;
+        const checkMatch = msg.match(checkEventRegex);
+
+        const alreadyCheckRegex = /เอกสารกิจกรรม\s+'(.*?)'(?:\s+'(.*?)')?/;
+        const alreadyCheckMatch = msg.match(alreadyCheckRegex); // ✅ ใช้ msg
+
+        const finalDoneAll = /เอกสารของคุณถูกประเมินว่า\s+'(.*?)'(?:\s+'(.*?)')?/;
+        const finalDoneAllMatch = msg.match(finalDoneAll); // ✅ ใช้ msg
 
         if (newMatch) {
             const [, name, date, time] = newMatch;
@@ -93,7 +141,7 @@ function ProfileMenu() {
         }
 
         if (deleteMatch) {
-            const [_, name] = deleteMatch;
+            const [, name] = deleteMatch;
             return (
                 <>
                     กิจกรรม: <span className="font-kanit text-red-500">{name}</span><br />
@@ -102,9 +150,64 @@ function ProfileMenu() {
             );
         }
 
-        // ถ้าไม่ตรง format ให้คืนข้อความปกติ
+        if (editMatch) {
+            const [, name] = editMatch;
+            return (
+                <>
+                    กิจกรรม: <span className="font-kanit text-red-500">{name}</span><br />
+                </>
+            );
+        }
+
+        if (checkMatch) {
+            const [, name] = checkMatch;
+            return (
+                <>
+                    กิจกรรม: <span className="font-kanit text-orange-500">{name}</span><br />
+                </>
+            );
+        }
+
+        if (finalDoneAllMatch) {
+            const [, status, name] = finalDoneAllMatch;
+
+            return (
+                <>
+                    {name && (
+                        <>
+                            กิจกรรม: <span className="font-kanit text-red-500">{name}</span><br />
+                        </>
+                    )}
+                    <span className="font-kanit">
+                        สถานะ: <span className={status === 'ไม่ผ่าน' ? 'text-red-500' : 'text-green-500'}>
+                            {status}
+                        </span>
+                    </span>
+                </>
+            );
+        }
+        if (finalDoneAllMatch) {
+            const [, name, status] = finalDoneAllMatch;
+            return (
+                <>
+                    กิจกรรม: <span className="font-kanit text-red-500">{name}</span><br />
+                    {status && status === 'ไม่ผ่าน' ? (
+                        <>
+                            สถานะ: <span className="font-kanit text-red-500">{status}</span>
+                        </>
+                    ) : (
+                        <>
+                            สถานะ: <span className="font-kanit text-green-500">{status}</span>
+                        </>
+                    )}
+                </>
+            );
+        }
+
         return <>{msg}</>;
     };
+
+
     // ✅ ให้ return UI ด้านล่าง แต่แสดงสถานะการโหลด
     let content;
     if (isLoggingOut) {
@@ -124,7 +227,7 @@ function ProfileMenu() {
             <div className="xs:flex xs:items-center xs:gap-2 xs:mr-5">
                 <div className='mx-5' >
                     <button type="button" onClick={mailClick} >
-                        <MailNotification newCount={news?.length || []} />
+                        <MailNotification newCount={unreadCount} />
                     </button>
                     {openMail && (
                         <div className='mt-3 absolute z-50 translate-y-2 duration-300' >
@@ -133,17 +236,33 @@ function ProfileMenu() {
                                 border-b-[12px] border-b-gray-200
                                 border-r-[12px] border-r-transparent">
                             </div>
-                            <div className="absolute xs:w-52 lg:w-80 bg-white border border-gray-200 shadow-md rounded-lg z-50">
+                            <div className="absolute xs:w-52 lg:w-72 bg-white border border-gray-200 shadow-md rounded-lg z-50">
                                 <div className="p-2">
                                     <h4 className="text-lg font-kanit px-1">แจ้งเตือน</h4>
                                     <div>
                                         {news?.length > 0 ? (
-                                            news.map((item, index) => (
-                                                <div key={index} className="py-1 rounded-sm px-1 border-y-1  border-gray-200 hover:bg-gray-100 ">
-                                                    <p className="text-sm font-kanit">{item.title}</p>
-                                                    <p className="text-sm font-kanit">{parseMessage(item.message)}</p>
-                                                </div>
-                                            ))
+                                            news.map((item, index) => {
+                                                const bgClass = item.is_read
+                                                    ? 'bg-gray-100 hover:bg-gray-150'
+                                                    : 'bg-blue-100 hover:bg-blue-150';
+
+                                                return (
+                                                    <button
+                                                        onClick={() => handleReadnews(item.title, item.news_id)}
+                                                        key={index}
+                                                        className={`w-full py-1 rounded-sm px-1  hover:bg-gray-200 m-[1px] ${bgClass}`}
+                                                    >
+                                                        <div className="w-full">
+                                                            <p className="text-sm font-kanit text-start">
+                                                                {item.title.replace(/'/g, '')}
+                                                            </p>
+                                                            <p className="text-sm font-kanit text-start">
+                                                                {parseMessage(item.message)}
+                                                            </p>
+                                                        </div>
+                                                    </button>
+                                                );
+                                            })
                                         ) : (
                                             <div className="p-2">
                                                 <p className="text-sm font-kanit">ไม่มีการแจ้งเตือนใหม่</p>
@@ -159,7 +278,7 @@ function ProfileMenu() {
 
                 <div className="relative flex justify-center items-center rounded-full border border-gray">
                     <span className="text-gray-500 px-3 py-1 text-md font-kanit hover:underline">
-                        {user.first_name} {user.last_name} ({user?.role || 'ไม่มีข้อมูล'})
+                        {user.first_name} {user.last_name}
                     </span>
                     <div className="ml-1 rounded-full flex items-center justify-center">
                         <Button
@@ -183,7 +302,7 @@ function ProfileMenu() {
                         }}
                     >
                         {user ? (
-                            ['teacher', 'admin', 'superadmin'].includes(user.role) ? (
+                            ['teacher', 'admin', 'superadmin'].includes(userRoleHash) ? (
                                 <div className="font-kanit">
                                     <MenuItem onClick={() => handleMenuItemClick('/Admin')}>
                                         <p className='font-kanit' >Dashboard</p>
@@ -195,7 +314,7 @@ function ProfileMenu() {
                                         <p className='font-kanit' >Logout</p>
                                     </MenuItem>
                                 </div>
-                            ) : user.role === 'student' ? (
+                            ) : userRoleHash === 'student' ? (
                                 <div className="font-kanit">
                                     <MenuItem onClick={() => handleMenuItemClick('/Information')}>
                                         <p className='font-kanit' >

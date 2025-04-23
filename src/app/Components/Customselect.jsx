@@ -25,13 +25,12 @@ export default function Customselect({
       <FormControl fullWidth sx={{ background: 'white' }}>
         <InputLabel sx={{ fontFamily: 'Kanit, sans-serif' }} id="custom-select-label">{label}</InputLabel>
         <Select
-        
           labelId="custom-select-label"
           id="custom-select"
           value={value}
           label={label}
           onChange={handleChange}
-          sx={{ fontFamily: 'Kanit, sans-serif' }}
+          sx={{ fontFamily: 'Kanit, sans-serif', height: high }}
           disabled={readOnly} // ใช้ disabled เมื่อ readOnly เป็น true
         >
           {options.length > 0 ? (

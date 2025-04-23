@@ -37,9 +37,13 @@ function Page() {
     const [validationMessage, setValidationMessage] = useState({});
     const [isopen, setIsopen] = useState(null);
     const [isOpenEdit, setIsOpenEdit] = useState(true);
-
+    const { userRoleHash, initUserRoleHash } = useStore()
     // ตรวจสอบว่าเราอยู่ในฝั่ง client
 
+
+    useEffect(() => {
+        initUserRoleHash()
+    }, [userRoleHash])
 
     useEffect(() => {
         setIsClient(true);
@@ -177,7 +181,7 @@ function Page() {
 
         try {
             let response;
-            if (user?.role === 'teacher' || user?.role === 'admin') {
+            if (userRoleHash === 'teacher' || userRoleHash === 'admin') {
                 response = await updateTeacher(updatedData);
             } else {
                 response = await updateUser(updatedData);
@@ -324,7 +328,7 @@ function Page() {
                                         options={branches}
                                     />
                                 </div>
-                                
+
                                 <div className="flex">
                                     <div className='xs:grid md:grid-cols-2'>
 

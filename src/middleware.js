@@ -11,24 +11,24 @@ export async function middleware(req) {
 
   if (!token) {
     console.log("❌ No token")
-    url.pathname = '/Home'
+    url.pathname = '/'
     return NextResponse.redirect(url)
   }
 
   try {
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET)
+    const secret = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SECRET)
     const { payload } = await jwtVerify(token, secret)
 
     console.log("✅ JWT Verified:", payload)
 
     if (!['admin', 'teacher', 'superadmin' , 'student'].includes(payload.role)) {
       console.log("❌ Unauthorized role:", payload.role)
-      url.pathname = '/Home'
+      url.pathname = '/'
       return NextResponse.redirect(url)
     }
   } catch (err) {
     console.error("❌ JWT Error:", err)
-    url.pathname = '/Home'
+    url.pathname = '/'
     return NextResponse.redirect(url)
   }
 

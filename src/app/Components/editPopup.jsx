@@ -31,7 +31,11 @@ export default function EditPopup({ selectedEditItem, closeModal, onSave, fields
     const [formData, setFormData] = useState({});
     const [facultiesList, setFacultiesList] = useState([]);
     const path = usePathname();
-    const { user } = useStore();
+    const { user, initUserRoleHash, userRoleHash } = useStore();
+
+    useEffect(() => {
+        initUserRoleHash()
+    }, [userRoleHash])
 
     const monthMapping = {
         "มกราคม": "01", "กุมภาพันธ์": "02", "มีนาคม": "03", "เมษายน": "04",
@@ -76,7 +80,7 @@ export default function EditPopup({ selectedEditItem, closeModal, onSave, fields
             } else if (path === '/Admin/MyEvent') {
                 const formattedStartDate = `${parseInt(year) - 543}-${monthEn}-${day.padStart(2, '0')} ${updatedData.start_time}:00`;
 
-                await editEventById(user.role, Number(updatedData.event_id), {
+                await editEventById(userRoleHash, Number(updatedData.event_id), {
                     event_name: updatedData.event_name,
                     start_date: formattedStartDate,
                     free_space: updatedData.free_space,

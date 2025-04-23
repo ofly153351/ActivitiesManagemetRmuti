@@ -229,27 +229,25 @@ export const updateTeacher = async (payload) => {
 }
 
 export const CreateEvent = async (payload) => {
-
-  console.log(payload);
-
-
   try {
-    const response = await axios.post(`${API_BASE}/protected/teacher/event`, payload,
-      {
-        withCredentials: true, // ส่ง cookie ไปพร้อมกับคำขอ
-      }
-    );
+    const response = await axios.post(`${API_BASE}/protected/teacher/event`, payload, {
+      withCredentials: true,
+    });
 
     console.log("Event created successfully:", response.data);
-    return response.data; // ส่งคืนผลลัพธ์เพื่อใช้ในที่อื่น
+    return response.data;
   } catch (error) {
+    console.log("Error in CreateEvent:", error);
+
+    // ยกข้อความ error จาก backend ขึ้นไปให้ handleSubmit รับ
     if (error.response) {
-      console.log("Server Error:", error.response.data);
+      throw new Error(error.response.data.error);
     } else {
-      console.log("Network or Other Error:", error.message);
+      throw new Error("Network or unexpected error occurred.");
     }
   }
 };
+
 
 export const getAllevent = async () => {
   try {
@@ -264,7 +262,7 @@ export const getAllevent = async () => {
 
 export const getCurrentEvent = async () => {
   try {
-    const response = await axios.get(`${API_BASE}/currentevents`, {
+    const response = await axios.get(`${API_BASE}/protected/teacher/currentevents`, {
       withCredentials: true
     })
     return response
@@ -275,7 +273,7 @@ export const getCurrentEvent = async () => {
 }
 export const getAllowedEvent = async () => {
   try {
-    const response = await axios.get(`${API_BASE}/allowedevents`, {
+    const response = await axios.get(`${API_BASE}/protected/teacher/allowedevents`, {
       withCredentials: true
     })
     return response
@@ -385,20 +383,20 @@ export const editStatusEvent = async (role, id, statusData, token) => {
 }
 
 export const editEventById = async (role, id, data) => {
-  const getCookie = (cookieName) => {
-    const cookies = document.cookie.split('; ');
-    const cookie = cookies.find((row) => row.startsWith(`${cookieName}=`));
-    return cookie ? cookie.split('=')[1] : null;
-  };
-  const token = getCookie('token'); // ดึง token จาก cookie
-  if (!token) {
-    console.error('Token not found');
-    throw new Error('Authentication token is missing');
-  }
+  // const getCookie = (cookieName) => {
+  //   const cookies = document.cookie.split('; ');
+  //   const cookie = cookies.find((row) => row.startsWith(`${cookieName}=`));
+  //   return cookie ? cookie.split('=')[1] : null;
+  // };
+  // const token = getCookie('token'); // ดึง token จาก cookie
+  // if (!token) {
+  //   console.error('Token not found');
+  //   throw new Error('Authentication token is missing');
+  // }
 
   // กำหนด URL ตาม role
   const url = role === 'admin'
-    ? `${API_BASE}/protected/admin/event/${id}`
+    ? `${API_BASE}/protected/teacher/event/${id}`
     : `${API_BASE}/protected/teacher/event/${id}`;
 
   try {
@@ -406,9 +404,9 @@ export const editEventById = async (role, id, data) => {
       url,
       data, // ใส่ข้อมูล body ที่ต้องการส่ง
       {
-        headers: {
-          Authorization: `Bearer ${token}`, // ส่ง token ใน header
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`, // ส่ง token ใน header
+        // },
         withCredentials: true, // รองรับ cookie
       }
     );
@@ -420,6 +418,7 @@ export const editEventById = async (role, id, data) => {
     throw error;
   }
 };
+
 
 export const joinEvent = async (eventId) => {
   try {
@@ -680,5 +679,27 @@ export const ChangeHeaderOffaculty = async (facultyId, payload) => {
     return response
   } catch (error) {
     console.log(error);
+  }
+}
+
+export const readNews = async (newsID) => {
+  try {
+    const response = await axios.put(`${API_BASE}/protected/news/${newsID}`, {}, {
+      withCredentials: true
+    })
+    return response
+  } catch (error) {
+    console.log(error);
+  }
+}
+export const adminDashboard = async (year) => {
+  try {
+    const response = await axios.get(`${API_BASE}/protected/admin/dashboard/${year}`, {
+      withCredentials: true
+    })
+    return response
+  } catch (error) {
+    console.log(error);
+
   }
 }

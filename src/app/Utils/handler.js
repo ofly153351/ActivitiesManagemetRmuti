@@ -7,8 +7,10 @@ export const filterActivities = (activities, searchQuery) => {
     }
 
     // กรองเฉพาะ activities ที่ status ไม่ใช่ false
-    const filteredActivities = activities.filter(activity => activity.status !== false);
+    const filteredActivities = activities
 
+
+    
     // ถ้าไม่มี searchQuery หรือเป็นค่าว่าง คืนค่ากิจกรรมที่กรองแล้วทั้งหมด
     if (!searchQuery || searchQuery.trim() === "") {
         return filteredActivities;
