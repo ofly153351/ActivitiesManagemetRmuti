@@ -21,15 +21,21 @@ function Page() {
     const [alertType, setAlertType] = useState("success");
     const [allteacher, setAllTeacehr] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { user } = useStore()
+    const { user, userRoleHash, initUserRoleHash } = useStore()
     const path = usePathname();
+
 
 
     const title = 'รายชื่อคณะทั้งหมด';
 
+    useEffect(() => {
+        initUserRoleHash();
+    }, [userRoleHash])
+
     // โหลดข้อมูลจาก API 
     useEffect(() => {
         blockNulluser(user)
+
         const fetchData = async () => {
             try {
                 setLoading(true); // เริ่มโหลด
@@ -40,7 +46,7 @@ function Page() {
                 }));
                 setFacultiesList(dataWithId);
 
-                if (path === '/Admin/Facultylist' && user.role === 'admin') {
+                if (path === '/Admin/Facultylist' && userRoleHash === 'admin') {
                     const teacherResponse = await getAllteacher();
                     setAllTeacehr(teacherResponse.data);
                 }
