@@ -111,7 +111,7 @@ export default function EvidancedDialog({ open, setOpen, userID, years, setOpenA
                             value={comment}
                             onChange={handleChangeComment} // ✅ ส่ง handler ตรงนี้
                         />
-                        <BasicButtons color={'#e53935'} hover={'#c62828'} label={'ไม่นุมัติ'} onClick={() => handleSubmit(false)} />
+                        <BasicButtons color={'#e53935'} hover={'#c62828'} label={'ไม่อนุมัติ'} onClick={() => handleSubmit(false)} />
                         <BasicButtons label={'อนุมัติ'} onClick={() => handleSubmit(true)} />
 
                     </DialogActions>

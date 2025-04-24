@@ -7,7 +7,7 @@ import { getStudentEvidence } from '@/app/Utils/api'
 import EvidancedDialog from '@/app/Components/Evidenced/EvidancedDialog'
 import { SuccessAlert } from '@/app/Components/AlertShow'
 import { blockNulluser } from '@/app/Utils/block'
-import { useStore } from '@mui/x-charts/internals'
+import { useStore } from '@/store/useStore'
 
 function page() {
 
@@ -21,7 +21,7 @@ function page() {
     const { user } = useStore()
 
     useEffect(() => {
-        useStore(user)
+        blockNulluser(user)
         const fetchData = async () => {
             setLoading(true);
             try {

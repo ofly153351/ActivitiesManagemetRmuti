@@ -16,7 +16,7 @@ function page() {
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertType, setAlertType] = useState("success");
   const [facultiesList, setFacultiesList] = useState([]);
-
+  const { user } = useStore()
 
   const columns = [
     { headerName: 'รหัสสาขา', field: 'branch_code' },

@@ -18,6 +18,8 @@ function page() {
     const { userRoleHash, initUserRoleHash } = useStore()
     // ตรวจสอบว่าเราอยู่ในฝั่ง client
 
+
+
     useEffect(() => {
         initUserRoleHash()
     }, [userRoleHash])
@@ -78,6 +80,24 @@ function page() {
 
     ];
 
+    const thaiMonths = {
+        'มกราคม': '01', 'กุมภาพันธ์': '02', 'มีนาคม': '03', 'เมษายน': '04',
+        'พฤษภาคม': '05', 'มิถุนายน': '06', 'กรกฎาคม': '07', 'สิงหาคม': '08',
+        'กันยายน': '09', 'ตุลาคม': '10', 'พฤศจิกายน': '11', 'ธันวาคม': '12'
+    };
+
+    function parseThaiDate(thaiDate) {
+        const [day, monthThai, yearThai] = thaiDate.split(' ');
+        const month = thaiMonths[monthThai];
+        const year = parseInt(yearThai) - 543; // แปลง พ.ศ. -> ค.ศ.
+        return new Date(`${year}-${month}-${day}`);
+    }
+
+    myEvent.sort((a, b) => {
+        const dateA = parseThaiDate(a.start_date);
+        const dateB = parseThaiDate(b.start_date);
+        return dateB - dateA;
+    });
 
 
 
