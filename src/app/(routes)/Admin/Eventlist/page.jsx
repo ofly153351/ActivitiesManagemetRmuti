@@ -88,7 +88,7 @@ function Page() {
     }, []);
 
 
-    console.log(selectedEvent);
+    console.log(selectedEvent , 'dwadwa');
 
     const columns = [
         { headerName: 'ชื่อกิจกรรม', field: 'event_name' },
