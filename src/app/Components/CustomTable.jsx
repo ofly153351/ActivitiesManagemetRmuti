@@ -268,7 +268,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
         try {
             let response;
             if (userRoleHash === 'admin') {
-                response = await deleteEventByAdmin(selectedItem.event_id);
+                response = await deleteEventByTeacher(selectedItem.event_id);
             } else if (userRoleHash === 'teacher') {
                 response = await deleteEventByTeacher(selectedItem.event_id);
             }
