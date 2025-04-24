@@ -40,10 +40,10 @@ function page() {
             try {
                 if (userRoleHash === 'admin') {
                     const response = await getMyEventAdmin();
-                    setMyEvent(response.data);
+                    setMyEvent(response.data || []);
                 } else if (userRoleHash === 'teacher') {
                     const response = await getMyEventTeacher();
-                    setMyEvent(response.data);
+                    setMyEvent(response.data || []);
                 }
             } catch (error) {
                 console.log(error);  // You can add a more specific error handling logic if needed

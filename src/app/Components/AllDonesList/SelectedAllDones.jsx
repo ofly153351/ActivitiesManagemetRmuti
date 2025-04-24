@@ -99,6 +99,7 @@ function SelectedAllDones({ open, setOpen }) {
                                 field='faculty_name'
                                 onChange={(e) => handleSelectedFaculty(e)}
                                 value={selectedFaculty}
+                                require
                             />
                         </div>
                         <div className='py-1' >
