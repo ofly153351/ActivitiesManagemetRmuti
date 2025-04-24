@@ -8,7 +8,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { fontFamily } from '../Utils/font';
 import ViewPDFdialog from './ViewPDFdialog';
-import { viewFilepath } from '../Utils/api';
 
 function ViewTable({ columns, rows }) {
     const [selectedFile, setSelectedFile] = useState('');
@@ -21,12 +20,13 @@ function ViewTable({ columns, rows }) {
 
     const handleSelectedFile = (filePath, eventID, userID, status, first_name, last_name) => {
         console.log(userID);
-        setSelectedUser(userID);
-        setSelectedStatus(status);
+        setSelectedUser(userID)
+        setSelectedStatus(status)
         setSelectedFile(filePath);
-        setSelectedEvent(eventID);
-        setSelectedFirstName(first_name);
-        setSelectedLastName(last_name);
+        setSelectedEvent(eventID)
+        setSelectedFirstName(first_name)
+        setSelectedLastName(last_name)
+        setOpenDialog(true);  // เปิด dialog เมื่อเลือกไฟล์
     };
 
     const handleCloseDialog = () => {
