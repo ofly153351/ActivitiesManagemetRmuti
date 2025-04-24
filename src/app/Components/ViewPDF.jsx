@@ -82,8 +82,13 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
     // console.log(filePath);
 
 
+    let pdfUrl = '';
 
-    const pdfUrl = `${API_BASE}/protected/file-outside/${eventID}/${userID}`;
+    if (pathName === '/Admin/MyEvent') {
+        pdfUrl = `${API_BASE}/protected/file/${eventID}/${userID}`;
+    } else if (pathName === '/Information/MyEvent/selectedEvent/') {
+        pdfUrl = `${API_BASE}/protected/file-outside/${eventID}/${userID}`;
+    }
 
     console.log(pdfUrl);
 
