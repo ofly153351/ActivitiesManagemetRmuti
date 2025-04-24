@@ -158,7 +158,7 @@ export default function Sidebar() {
                     },
                     {
                         name: 'ดูรายชื่อกิจกรรม',
-                        link: '/Admin/EventList',
+                        link: '/Admin/Eventlist',
                         icon: <ListIcon sx={{ color: 'gray' }} />,
                     },
                     {
