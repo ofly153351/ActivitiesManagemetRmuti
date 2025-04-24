@@ -43,13 +43,14 @@ function page() {
     const fetchData = async () => {
       try {
         const response = await getBranches();
-        console.log('Fetched data:', response.data); // ตรวจสอบข้อมูลที่ได้รับจาก API
+        console.log('Fetched data:', response.data || []); // ตรวจสอบข้อมูลที่ได้รับจาก API
         if (response.status === 200) {
           setBrancheslist(response.data);
+
         }
         const faculties = await getFaculties();
         if (faculties.status === 200) {
-          setFacultiesList(faculties.data);
+          setFacultiesList(faculties.data || []);
         }
       } catch (error) {
         console.log(error);
@@ -103,6 +104,8 @@ function page() {
       showAlert("เกิดข้อผิดพลาดในการลบสาขา", "error");
     }
   };
+
+  brancheslist?.sort((a, b) => b.branch_code.localeCompare(a.branch_code));
 
   return (
 
