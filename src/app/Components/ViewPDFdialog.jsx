@@ -12,7 +12,6 @@ const ViewPDFdialog = ({ open, onClose, filePath, eventID, userID, status, first
 
     const pathName = usePathname()
 
-
     return (
         <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
 

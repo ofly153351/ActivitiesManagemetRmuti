@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AlertCircle } from 'lucide-react';
 import CustomTextfield from './Textfield';
 import BasicButtons from './BasicButtons';
 import { useStore } from '@/store/useStore';
-import { checkFileStudent } from '../Utils/api';
+import { checkFileStudent, viewFilepath } from '../Utils/api';
 import { ErrorAlert, SuccessAlert } from './AlertShow';
 import { usePathname } from 'next/navigation';
 
@@ -71,11 +71,15 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
 
     };
 
+
+
     const pdfUrl = filePath.startsWith('./uploads')
         ? `${API_BASE}${filePath.replace('./', '/')}`
         : filePath;
 
-    console.log(pdfUrl, 'dwadwa');
+    // console.log(pdfUrl);
+
+
 
     return (
         <div className="w-full max-w-5xl mx-auto p-4">

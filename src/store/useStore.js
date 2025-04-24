@@ -61,7 +61,7 @@ export const useStore = create((set, get) => ({
             };
 
             set({ user: userData, userRole: userData.role });
-            const hash =  encryptText(userResponse.data.role, SECRET_KEY);
+            const hash = encryptText(userResponse.data.role, SECRET_KEY);
             localStorage.setItem("userRoleHash", hash);
             localStorage.setItem("user", JSON.stringify(userData));
 
@@ -116,3 +116,4 @@ export const useStore = create((set, get) => ({
         set({ user: updatedUser });
     },
 }));
+

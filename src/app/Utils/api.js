@@ -714,3 +714,15 @@ export const closedEvent = async () => {
     console.log(error);
   }
 }
+
+export const viewFilepath = async (eventID, userID) => {
+  try {
+    const response = await axios.get(`${API_BASE}/protected/file-outside/${eventID}/${userID}`, {
+      withCredentials: true
+    })
+    return response
+  } catch (error) {
+    console.log(error);
+
+  }
+}

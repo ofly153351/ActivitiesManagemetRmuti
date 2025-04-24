@@ -130,8 +130,11 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
                     setBranchesList(branchResponse.data || []);
                 }
 
-                const myEventList = await getMyEventStudentWithOutYear()
-                setEventsInside(myEventList.data.inside_events);
+                if (userRoleHash === 'student') {
+                    const myEventList = await getMyEventStudentWithOutYear()
+                    setEventsInside(myEventList.data.inside_events);
+                }
+
 
                 setLoading(false);
             } catch (error) {

@@ -4,10 +4,9 @@ import Nav from '@/app/Components/Nav'
 import CustomTable from '@/app/Components/CustomTable'
 import { getAllUser } from '@/app/Utils/api'
 import Loading from '@/app/Components/Loading'
-import useStore from '@/store/useStore'
+import { useStore } from '@/store/useStore'
 import { all } from 'axios'
 import { blockNulluser } from '@/app/Utils/block'
-blockNulluser
 
 function page() {
     const title = 'รายชื่อนักศึกษาในระบบ'
