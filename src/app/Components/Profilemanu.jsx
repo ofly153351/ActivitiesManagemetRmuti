@@ -230,36 +230,37 @@ function ProfileMenu() {
                         <MailNotification newCount={unreadCount} />
                     </button>
                     {openMail && (
-                        <div className='mt-3 absolute z-50 translate-y-2 duration-300' >
-                            <div class=" mx-2 w-0 h-0 
-                                border-l-[10px] border-l-transparent
-                                border-b-[12px] border-b-gray-200
-                                border-r-[12px] border-r-transparent">
-                            </div>
+                        <div className="mt-3 absolute z-50 translate-y-2 duration-300">
+                            {/* Triangle Arrow */}
+                            <div className="mx-2 w-0 h-0 
+      border-l-[10px] border-l-transparent
+      border-b-[12px] border-b-gray-200
+      border-r-[12px] border-r-transparent"
+                            ></div>
+
+                            {/* Dropdown Box */}
                             <div className="absolute xs:w-52 lg:w-72 bg-white border border-gray-200 shadow-md rounded-lg z-50">
-                                <div className="p-2">
-                                    <h4 className="text-lg font-kanit px-1">แจ้งเตือน</h4>
+                                <h4 className="text-lg font-kanit px-1 mt-2 mb-2">แจ้งเตือน</h4>
+                                <div className="p-2 max-h-56 overflow-y-auto">
                                     <div>
                                         {news?.length > 0 ? (
                                             news.map((item, index) => {
                                                 const bgClass = item.is_read
-                                                    ? 'bg-gray-100 hover:bg-gray-150'
-                                                    : 'bg-blue-100 hover:bg-blue-150';
+                                                    ? 'bg-gray-100 hover:bg-gray-200'
+                                                    : 'bg-blue-100 hover:bg-blue-200';
 
                                                 return (
                                                     <button
                                                         onClick={() => handleReadnews(item.title, item.news_id)}
                                                         key={index}
-                                                        className={`w-full py-1 rounded-sm px-1  hover:bg-gray-200 m-[1px] ${bgClass}`}
+                                                        className={`w-full py-1 rounded-sm px-1 m-[1px] text-start ${bgClass}`}
                                                     >
-                                                        <div className="w-full">
-                                                            <p className="text-sm font-kanit text-start">
-                                                                {item.title.replace(/'/g, '')}
-                                                            </p>
-                                                            <p className="text-sm font-kanit text-start">
-                                                                {parseMessage(item.message)}
-                                                            </p>
-                                                        </div>
+                                                        <p className="text-sm font-kanit">
+                                                            {item.title.replace(/'/g, '')}
+                                                        </p>
+                                                        <p className="text-sm font-kanit">
+                                                            {parseMessage(item.message)}
+                                                        </p>
                                                     </button>
                                                 );
                                             })
@@ -272,7 +273,6 @@ function ProfileMenu() {
                                 </div>
                             </div>
                         </div>
-
                     )}
                 </div>
 
@@ -304,7 +304,7 @@ function ProfileMenu() {
                         {user ? (
                             ['teacher', 'admin', 'superadmin'].includes(userRoleHash) ? (
                                 <div className="font-kanit">
-                                    
+
                                     <MenuItem onClick={() => handleMenuItemClick('/Information')}>
                                         <p className='font-kanit' >แก้ไขข้อมูลส่วนตัว</p>
                                     </MenuItem>

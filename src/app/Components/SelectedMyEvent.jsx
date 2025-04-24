@@ -165,18 +165,12 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                             <CustomTextfield width={'98%'} label={selectedEvent?.comment} disabled={true} />
                         </div>
                     ) : (selectedEvent?.intendent !== undefined) ? (
-                        <div className='mx-2 flex justify-between items-center' >
-                            < button className='underline text-lg text-green-800' label={"ดาวน์โหลดเอกสาร"} onClick={(e) => downloadFileEvents(Number(selectedEvent.event_id))}>
-                                ดาวน์โหลดเอกสาร
-                            </button>
+                        <div className='mx-2 gap-2 flex justify-end items-center' >
+                            <BasicButtons label={"ดาวน์โหลดเอกสาร"} onClick={(e) => downloadFileEvents(Number(selectedEvent.event_id))} />
                             {selectedEvent.file && (
-                                < button className='underline text-lg text-green-800' label={"ดาวน์โหลดเอกสาร"} onClick={(e) => handleOpenDialog(selectedEvent.event_id, user.user_id)}>
-                                    เรียกดูเอกสารที่ส่งไป
-                                </button>
+                                <BasicButtons hover={"#f57c00"} color={"#fb8c00"} label={"เรียกดูเอกสารที่ส่งไป"} onClick={(e) => handleOpenDialog(selectedEvent.event_id, user.user_id)} />
                             )}
-                            < button className='underline text-lg text-red-800' label={"ดาวน์โหลดเอกสาร"} onClick={(e) => handleDeleteMyeventOutside(selectedEvent.event_id)} >
-                                ลบข้อมูลกิจกกรม
-                            </button>
+                            <BasicButtons hover={"#d32f2f"} color={"#e53935"} label={"ยกเลิกกิจกรรม"} onClick={(e) => handleDeleteMyeventOutside(selectedEvent.event_id)} />
                         </div>
                     ) : (
                         <div>

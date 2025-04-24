@@ -8,6 +8,7 @@ import BasicButtons from './BasicButtons';
 import width from '../Utils/textfieldWidth';
 import { ErrorAlert, SuccessAlert } from './AlertShow';
 import { useStore } from '@/store/useStore';
+import Loading from './Loading';
 
 function Activity({ searchQuery, inEvent, selectedValue }) {
     const [activities, setActivities] = useState([]);
@@ -119,36 +120,38 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setLoading(true); // ✅ เริ่มโหลดก่อน
+
                 // ดึงข้อมูลกิจกรรม
                 const eventResponse = await getAllevent();
                 setActivities(eventResponse.data || []);
-                // console.log("ข้อมูลกิจกรรมที่ได้จาก API:", eventResponse.data);
 
-                // ดึงข้อมูลสาขาถ้ายังไม่มี
+                // ดึงข้อมูลสาขา (ถ้ายังไม่มี)
                 if (!branchesList || branchesList.length === 0) {
                     const branchResponse = await getBranches();
                     setBranchesList(branchResponse.data || []);
                 }
 
                 if (userRoleHash === 'student') {
-                    const myEventList = await getMyEventStudentWithOutYear()
-                    setEventsInside(myEventList.data.inside_events);
+                    const myEventList = await getMyEventStudentWithOutYear();
+                    setEventsInside(myEventList.data.inside_events || []);
                 }
 
+                // อื่น ๆ เช่น admin/teacher ไม่ต้องดึง event เพิ่มก็ไม่ต้องทำอะไรเพิ่ม
 
-                setLoading(false);
             } catch (error) {
                 console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
                 setActivities([]);
                 setEventsInside([]);
-                setLoading(false);
+            } finally {
+                setLoading(false); // ✅ หยุดโหลดเสมอ หลังจากทุกอย่างทำเสร็จ
             }
         };
+
         fetchData();
-    }, [myEventList]);
+    }, [userRoleHash]);
 
-
-    console.log("my", eventsInside);
+    // console.log("my", eventsInside);
 
     // ดึงชื่อสาขาอย่างปลอดภัย
     const getBranchNames = (branchIds) => {
@@ -185,30 +188,29 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
     };
 
     // ตรวจสอบกิจกรรมที่เข้าร่วมแล้ว
-    const matchingEvent = useMemo(() => {
+    const matchedEventIds = useMemo(() => {
         const safeActivities = sortedActivities || [];
         const safeEventsInside = eventsInside || [];
 
-        console.log("eventsInside" + eventsInside);
-
-        console.log("safeActivities:", safeActivities);
-        console.log("safeEventsInside:", safeEventsInside);
-
-        const matched = safeActivities
-            .map(activity => {
-                const found = safeEventsInside.find(event =>
-                    event && activity && event.event_id === activity.event_id
-                );
-                console.log("Matching:", { activity, found });
-                return found;
-            })
-            .filter(event => event !== undefined);
-
-        console.log("Final matched:", matched);
-        return matched;
+        return new Set(
+            safeActivities
+                .map(activity =>
+                    safeEventsInside.find(event =>
+                        event?.event_id === activity?.event_id
+                    )
+                )
+                .filter(Boolean)
+                .map(event => event?.event_id)
+                .filter(id => typeof id === 'number')
+        );
     }, [sortedActivities, eventsInside]);
 
-    // แสดงสถานะกำลังโหลด
+    const isMatchingReady = (userRoleHash === 'student') ? eventsInside.length > 0 : true;
+
+    console.log(isMatchingReady);
+
+    if (!isMatchingReady) return <div className='my-20 w-full h-full justify-center items-center flex' ><Loading /></div>;
+
     if (loading) {
         return <div>กำลังโหลด...</div>;
     }
@@ -263,30 +265,22 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
                                             </div>
                                         )}
                                     </div>
-                                    {userRoleHash === 'student' &&
-                                        matchingEvent &&
-                                        matchingEvent.some(event => event.event_id === activity.event_id) ? (
-
-                                        <div>
-                                            {console.log(matchingEvent.some(event => event.event_id === activity.event_id))}
-                                            <BasicButtons
-                                                diasble
-                                                label={'เข้าร่วมแล้ว'}
-                                                width={width.sm}
-                                                color={"red"}
-                                            />
-                                        </div>
-                                    ) : (userRoleHash === 'student') && (
-                                        <div>
-                                            <BasicButtons
-                                                label={'ขอเข้าร่วมกิจกรรม'}
-                                                width={width.sm}
-                                                onClick={() => handleSubmit(activity.event_id)}
-                                                aria-label={`เข้าร่วมกิจกรรม ${activity.event_name}`}
-                                                disabled={activity.free_space === 0}
-                                            />
-                                        </div>
-                                    )}
+                                    {userRoleHash === 'student' && isMatchingReady && matchedEventIds.has(activity.event_id) ? (
+                                        <BasicButtons
+                                            diasble
+                                            label={'เข้าร่วมแล้ว'}
+                                            width={width.sm}
+                                            color={"red"}
+                                        />
+                                    ) : userRoleHash === 'student' && isMatchingReady ? (
+                                        <BasicButtons
+                                            label={'ขอเข้าร่วมกิจกรรม'}
+                                            width={width.sm}
+                                            onClick={() => handleSubmit(activity.event_id)}
+                                            aria-label={`เข้าร่วมกิจกรรม ${activity.event_name}`}
+                                            disabled={activity.free_space === 0}
+                                        />
+                                    ) : null}
                                 </div>
                             </div>
                         </div>

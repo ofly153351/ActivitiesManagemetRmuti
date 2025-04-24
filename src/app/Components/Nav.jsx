@@ -42,7 +42,6 @@ function Nav() {
     }, []);
 
 
-    console.log(role);
 
     const commonLinks = [
         { href: '/', label: 'รายชื่อกิจกรรม' }

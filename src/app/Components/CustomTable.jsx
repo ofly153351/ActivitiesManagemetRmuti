@@ -438,7 +438,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                                         <td key={colIndex} className="p-2  text-center border-x-[1px] border-slate-100 hover:bg-[#f5f5f5] duration-50">
 
                                             {column.field === 'status' ? (
-                                                <div className="flex justify-center items-center">
+                                                <div className="flex justify-start items-center">
                                                     {item[column.field] !== undefined ? (
                                                         <SwitchOnOff
                                                             status={Boolean(item[column.field])}  // ตรวจสอบให้แน่ใจว่า item[column.field] เป็นค่าใหม่ที่อัพเดตแล้ว
