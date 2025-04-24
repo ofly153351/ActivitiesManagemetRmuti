@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import ViewPDFdialog from './ViewPDFdialog'
 import { Input } from 'postcss'
 import InputUploadfile from './InputUploadfile'
+import { useStore } from '@/store/useStore'
 
 
 
@@ -16,7 +17,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
     const [file, setFile] = useState(null);
     const [uploading, setUploading] = useState(false);
     const router = useRouter()
-
+    const { user } = useStore()
 
     useEffect(() => {
         if (selectedEvent) {
@@ -81,9 +82,14 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
 
 
     const [openDialog, setOpenDialog] = useState(false); // State สำหรับเปิด/ปิด dialog
+    const [selectedEventId, setSelectedEventId] = useState('')
+    const [selectedUserID, setSelectedUserID] = useState('')
 
-    const handleOpenDialog = () => {
+
+    const handleOpenDialog = (eventID, userID) => {
         setOpenDialog(true); // เปิด dialog
+        setSelectedEventId(eventID)
+        setSelectedUserID(userID)
     };
 
     const handleCloseDialog = () => {
@@ -164,7 +170,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                 ดาวน์โหลดเอกสาร
                             </button>
                             {selectedEvent.file && (
-                                < button className='underline text-lg text-green-800' label={"ดาวน์โหลดเอกสาร"} onClick={handleOpenDialog}>
+                                < button className='underline text-lg text-green-800' label={"ดาวน์โหลดเอกสาร"} onClick={(e) => handleOpenDialog(selectedEvent.event_id, user.user_id)}>
                                     เรียกดูเอกสารที่ส่งไป
                                 </button>
                             )}
@@ -262,7 +268,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                     ) : null}
                 </div>
             </div >
-            <ViewPDFdialog open={openDialog} filePath={selectedEvent.file} onClose={handleCloseDialog} />
+            <ViewPDFdialog open={openDialog} eventID={selectedEventId} userID={selectedUserID} filePath={selectedEvent.file} onClose={handleCloseDialog} />
         </div >
     )
 }

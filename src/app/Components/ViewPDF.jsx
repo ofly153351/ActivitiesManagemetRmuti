@@ -16,6 +16,8 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
     const [errorMessage, setErrorMessage] = useState('')
     const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
+    console.log(API_BASE);
+
     const pathName = usePathname()
     if (!filePath) {
         return (
@@ -73,9 +75,17 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
 
 
 
-    const pdfUrl = filePath.startsWith('./uploads')
-        ? `${API_BASE}${filePath.replace('./', '/')}`
-        : filePath;
+    // const pdfUrl = filePath.startsWith('./uploads')
+    //     ? `${API_BASE}${filePath.replace('./', '/')}`
+    //     : filePath;
+
+    // console.log(filePath);
+
+
+
+    const pdfUrl = `${API_BASE}/protected/file-outside/${eventID}/${userID}`;
+
+    console.log(pdfUrl);
 
     // console.log(pdfUrl);
 
