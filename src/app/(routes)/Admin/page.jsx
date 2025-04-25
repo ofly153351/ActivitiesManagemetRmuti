@@ -152,6 +152,7 @@ function Page() {
                             <span className='px-3 text-xl'>กิจกรรมที่ไกล้ถึง</span>
                             <div className='p-2 grid gap-2 md:flex md:overflow-x-auto'>
                                 {closedEvents ? (
+                                    
                                     closedEvents.map((item, idx) => (
                                         <CloseActivitiesCard
                                             key={idx}
@@ -160,7 +161,7 @@ function Page() {
                                             time={item.start_time}
                                             location={item.location}
                                             detail={item.detail}
-                                            space={item.limit - item.fee_space}
+                                            space={item.limit - item.free_space}
                                             status={item.status}
                                         />
                                     ))

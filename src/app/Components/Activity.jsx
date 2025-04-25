@@ -265,22 +265,28 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
                                             </div>
                                         )}
                                     </div>
-                                    {userRoleHash === 'student' && isMatchingReady && matchedEventIds.has(activity.event_id) ? (
-                                        <BasicButtons
-                                            diasble
-                                            label={'เข้าร่วมแล้ว'}
-                                            width={width.sm}
-                                            color={"red"}
-                                        />
-                                    ) : userRoleHash === 'student' && isMatchingReady ? (
-                                        <BasicButtons
-                                            label={'ขอเข้าร่วมกิจกรรม'}
-                                            width={width.sm}
-                                            onClick={() => handleSubmit(activity.event_id)}
-                                            aria-label={`เข้าร่วมกิจกรรม ${activity.event_name}`}
-                                            disabled={activity.free_space === 0}
-                                        />
-                                    ) : null}
+                                    {userRoleHash === 'student' && isMatchingReady && (
+                                        matchedEventIds.has(activity.event_id) ? (
+                                            <BasicButtons
+                                                diasble
+                                                label={'เข้าร่วมแล้ว'}
+                                                width={width.sm}
+                                            />
+                                        ) : activity.free_space === 0 ? (
+                                            <BasicButtons
+                                                diasble
+                                                label={'ปิดรับสมัคร'}
+                                                width={width.sm}
+                                            />
+                                        ) : (
+                                            <BasicButtons
+                                                label={'ขอเข้าร่วมกิจกรรม'}
+                                                width={width.sm}
+                                                onClick={() => handleSubmit(activity.event_id)}
+                                                aria-label={`เข้าร่วมกิจกรรม ${activity.event_name}`}
+                                            />
+                                        )
+                                    )}
                                 </div>
                             </div>
                         </div>

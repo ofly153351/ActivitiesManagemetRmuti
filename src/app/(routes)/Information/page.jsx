@@ -12,13 +12,12 @@ import { getBranches, getFaculties, updateTeacher, updateUser } from '@/app/Util
 import Loading from '@/app/Components/Loading';
 import { handleValidationThai, handleCodeValidation, handlePhoneValidation } from '@/app/Utils/validation';
 import { ErrorAlert, SuccessAlert } from '@/app/Components/AlertShow';
-import { blockNulluser, checkUserAuth } from '@/app/Utils/block';
+import { blockNulluser } from '@/app/Utils/block';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 
 function Page() {
     // ใช้ useState สำหรับ client-side rendering
     const [isClient, setIsClient] = useState(false);
-    const { user, setUser } = useStore();
     const [selectedTitle, setSelectedTitle] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -37,7 +36,7 @@ function Page() {
     const [validationMessage, setValidationMessage] = useState({});
     const [isopen, setIsopen] = useState(null);
     const [isOpenEdit, setIsOpenEdit] = useState(true);
-    const { userRoleHash, initUserRoleHash } = useStore()
+    const { userRoleHash, initUserRoleHash, user } = useStore()
     // ตรวจสอบว่าเราอยู่ในฝั่ง client
 
 
@@ -50,13 +49,9 @@ function Page() {
     }, []);
 
     useEffect(() => {
-        if (!isClient) return; // ไม่ทำงานถ้ายังไม่ใช่ฝั่ง client
-
+        // if (!isClient) return; // ไม่ทำงานถ้ายังไม่ใช่ฝั่ง client
         // ป้องกัน user ที่เป็น null
-        if (!user) {
-            blockNulluser(user);
-        }
-
+        blockNulluser(userRoleHash)
 
         const fetchData = async () => {
             try {
@@ -257,7 +252,7 @@ function Page() {
                 <div className="w-fit bg-[#f5f5f5] rounded-xl shadow-md">
                     <div className="flex p-4 justify-start items-center gap-4">
                         <PermIdentityIcon sx={{ fontSize: 64, color: colorsCode.blue }} />
-                        <h1 className="text-2xl">แก้ไขข้อมูลส่วนตัว</h1>
+                        <h1 className="text-2xl">แก้ไขข้อมูลส่วนบุคคล</h1>
                     </div>
                     <div className="p-4">
                         {userRoleHash === 'student' ? (

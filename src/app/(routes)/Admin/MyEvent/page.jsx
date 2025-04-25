@@ -68,8 +68,8 @@ function page() {
         { headerName: 'ชื่อกิจกรรม', field: 'event_name' },
         { headerName: 'วันที่เริ่มกิจกรรม', field: 'start_date' },
         { headerName: 'เวลา', field: 'start_time' },
-        { headerName: 'จำนวนที่ว่าง', field: 'free_space' },
-        { headerName: 'จำนวนที่รับ', field: 'limit' },
+        { headerName: 'จำนวนที่ว่าง (คน)', field: 'free_space' },
+        { headerName: 'จำนวนที่รับ (คน)', field: 'limit' },
         {
             headerName: 'สถานะ', field: 'status',
             renderCell: (params) => {

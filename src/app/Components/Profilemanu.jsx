@@ -306,7 +306,7 @@ function ProfileMenu() {
                                 <div className="font-kanit">
 
                                     <MenuItem onClick={() => handleMenuItemClick('/Information')}>
-                                        <p className='font-kanit' >แก้ไขข้อมูลส่วนตัว</p>
+                                        <p className='font-kanit' >แก้ไขข้อมูลส่วนบุคคล</p>
                                     </MenuItem>
                                     <MenuItem onClick={() => handleMenuItemClick('/logout')}>
                                         <p className='font-kanit' >Logout</p>
@@ -316,7 +316,7 @@ function ProfileMenu() {
                                 <div className="font-kanit">
                                     <MenuItem onClick={() => handleMenuItemClick('/Information')}>
                                         <p className='font-kanit' >
-                                            แก้ไขข้อมูลส่วนตัว
+                                            แก้ไขข้อมูลส่วนบุคคล
                                         </p>
                                     </MenuItem>
                                     <MenuItem onClick={() => handleMenuItemClick('/Information/MyEvent')}>

@@ -293,7 +293,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
             console.error("❌ API Error:", error.response?.data || error.message);
 
             if (error.response?.status === 400 || error.response?.status === 404) {
-                setAlertMessage('การลบข้อมูลล้มเหลว เนื่องจากมีผู้อยู่ในกิจกรรมแล้ว');
+                setAlertMessage('การลบข้อมูลล้มเหลว');
                 setAlertOpen(false);
                 setTimeout(() => {
                     setAlertMessage('');
@@ -411,7 +411,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                             {columns.map((item, index) => {
                                 { (item.headerName === 'ระดับ' && userRoleHash === 'teacher') && null }
                                 return (
-                                    <th className='p-4 border-x-[1px] border-slate-200' key={index}>
+                                    <th className='p-2 border-x-[1px] border-slate-200' key={index}>
                                         {item.headerName}
                                     </th>
                                 );
@@ -435,7 +435,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                                 <tr key={index} className='hover:bg-[#f5f5f5] ' >
 
                                     {columns.map((column, colIndex) => (
-                                        <td key={colIndex} className="p-2  text-center border-x-[1px] border-slate-100 hover:bg-[#f5f5f5] duration-50">
+                                        <td key={colIndex} className="p-2 text-start border-x-[1px] border-slate-100 hover:bg-[#f5f5f5] duration-50">
 
                                             {column.field === 'status' ? (
                                                 <div className="flex justify-start items-center">
@@ -469,12 +469,13 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                                                         key={item.user_id}
                                                         options={rolelsit}
                                                         label={'เลือกระดับ'}
-                                                        width="18ch"
+                                                        width="12ch"
                                                         value={
                                                             selectedRoles[item.user_id] ?? (item.role === 'admin' ? "เจ้าหน้าที่ กยศ." : "อาจารย์")
                                                         }
                                                         field="label"
                                                         onChange={(newValue) => handleRoleChange(item.user_id, newValue)}
+                                                        high='30px'
                                                     />
                                                 </div>
                                             ) : column.field === 'evidence' ? (
@@ -499,6 +500,14 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                                                         displayField="full_name"
                                                         width="300px"
                                                     />
+                                                </div>
+                                            ) : column.field === 'start_time' ? (
+                                                <div>
+                                                    {(() => {
+                                                        const hour = Math.floor(item.limit);
+                                                        const minute = Math.round((item.limit % 1) * 60);
+                                                        return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')} น.`;
+                                                    })()}
                                                 </div>
                                             ) : (
                                                 column.valueGetter ? column.valueGetter({ data: item }) : item[column.field]

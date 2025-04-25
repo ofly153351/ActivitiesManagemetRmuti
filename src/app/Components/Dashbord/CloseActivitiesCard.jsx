@@ -17,7 +17,8 @@ const bull = (
 
 function CloseActivitiesCard({ eventName, thaiDate, location, detail, status, space, time }) {
 
-    console.log(thaiDate);
+    console.log(space);
+
 
     return (
         <Card sx={{ minWidth: 275 }}>
@@ -35,7 +36,7 @@ function CloseActivitiesCard({ eventName, thaiDate, location, detail, status, sp
                     รายละเอียด : {detail}
                 </Typography>
                 <Typography variant="body2">
-                    จำนวนผู้ที่เข้าร่วม : {space}
+                    จำนวนผู้ที่เข้าร่วม : {String(space)} คน
                 </Typography>
                 <Typography variant="body2">
                     สถานะของกิจกรรม : {status ? <span className='text-green-500' >เปิด</span> : <span className='text-red-500' >ปิด</span>}

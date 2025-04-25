@@ -491,25 +491,25 @@ export const uploadFileMyEvent = async (eventID, file) => {
   try {
     const response = await axios.put(`${API_BASE}/protected/student/upload/${Number(eventID)}`, file, {
       withCredentials: true
-    })
-    console.log(response);
-    return response
+    });
+    return response;
   } catch (error) {
-    console.log(error);
+    console.error("uploadFileMyEvent error:", error);
+    throw error; // ✅ โยน error กลับไป
   }
-}
+};
 
 export const uploadFileMyEventOustide = async (eventID, file) => {
   try {
     const response = await axios.put(`${API_BASE}/protected/student/upload-outside/${Number(eventID)}`, file, {
       withCredentials: true
-    })
-    console.log(response);
-    return response
+    });
+    return response;
   } catch (error) {
-    console.log(error);
+    console.error("uploadFileMyEventOustide error:", error);
+    throw error; // ✅ โยน error กลับไป
   }
-}
+};
 
 export const unJoinEvent = async (eventID) => {
   if (eventID) {

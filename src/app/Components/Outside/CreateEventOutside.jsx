@@ -3,10 +3,12 @@ import CustomDialog from '../CustomDialog';
 import dayjs from 'dayjs';
 import { CreateEventsOutSide } from '@/app/Utils/api';
 import { ErrorAlert, SuccessAlert } from '../AlertShow';
+import { useRouter } from 'next/navigation';
 
 
 
 function CreateEventOutside({ isOpen, isClose }) {
+    const router = useRouter()
     const [closeDialog, setCloseDialog] = useState(null);
     const [eventName, setEventname] = useState('');
     const [intendent, setIntendent] = useState('');
@@ -160,6 +162,7 @@ function CreateEventOutside({ isOpen, isClose }) {
                 }
                 fetchData();
                 setIsAlert({ status: true, message: "สร้างกิจกรรมสำเร็จ" });
+                router.push('/Information/MyEvent')
                 setTimeout(() => {
                     window.location.reload()
                 }, 1000)

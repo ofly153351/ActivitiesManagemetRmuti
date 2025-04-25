@@ -9,6 +9,7 @@ import ViewPDFdialog from './ViewPDFdialog'
 import { Input } from 'postcss'
 import InputUploadfile from './InputUploadfile'
 import { useStore } from '@/store/useStore'
+import axios from 'axios'
 
 
 
@@ -40,23 +41,53 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
 
         try {
             setUploading(true);
-            if (!selectedEvent.intendent) {
-                const response = await uploadFileMyEvent(selectedEvent.event_id, formData)
-                console.log(response);
-            } else if (selectedEvent.intendent) {
-                const response = await uploadFileMyEventOustide(selectedEvent.event_id, formData)
-                console.log(response);
-            }
-            setFile(null);
-            showAlert(true, 'อัพโหลดไฟล์สำเร็จ')
-            setTimeout(() => {
-                showAlert(null, '')
-                router.push('/Information/MyEvent')
-            }, 1000)
-        } catch (error) {
-            console.error("Upload error:", error);
-            showAlert(false, 'เกิดข้อผิดพลาดในการอัพโหลด')
 
+            if (!selectedEvent.intendent) {
+                const res = await uploadFileMyEvent(selectedEvent.event_id, formData);
+                if (res.status === 200) {
+                    showAlert(true, 'อัปโหลดไฟล์สำเร็จ');
+                    setFile(null);
+                    setTimeout(() => {
+                        showAlert(null, '');
+                        router.push('/Information/MyEvent');
+                    }, 1000);
+                }
+            } else {
+                const res = await uploadFileMyEventOustide(selectedEvent.event_id, formData);
+                if (res.status === 200) {
+                    showAlert(true, 'อัปโหลดไฟล์สำเร็จ');
+                    setFile(null);
+                    setTimeout(() => {
+                        showAlert(null, '');
+                        router.push('/Information/MyEvent');
+                    }, 1000);
+                }
+            }
+        } catch (error) {
+            console.log('Upload error:', error);
+
+            if (axios.isAxiosError(error)) {
+                const status = error.response?.status;
+
+                if (status === 403) {
+                    showAlert(false, 'กรุณาอัปโหลดไฟล์ที่มีขนาดไม่เกิน 10 MB');
+                } else if (status === 500) {
+                    showAlert(false, 'กรุณาอัปโหลดไฟล์ที่มีนามสกุล .pdf');
+                    setTimeout(() => {
+                        showAlert(null, '');
+                    }, 3000);
+                } else if (status > 400 || 450) {
+                    showAlert(false, 'กรุณาอัปโหลดไฟล์ที่มีขนาดไม่เกิน 10 MB');
+                    setTimeout(() => {
+                        showAlert(null, '');
+                    }, 3000);
+                }
+            } else {
+                showAlert(false, 'เกิดข้อผิดพลาดในการอัปโหลดไฟล์');
+                setTimeout(() => {
+                    showAlert(null, '');
+                }, 3000);
+            }
         } finally {
             setUploading(false);
         }
@@ -126,7 +157,18 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
         <div className='drop-shadow-md rounded-xl mt-20 xs:mx-2 '
             style={{ backgroundColor: colorsCode.whiteSmoke }} >
             <div className='text-2xl p-4 gap-2' >
-                <p className='p-2 border-b-[2px] w-fit'>ข้อมูลกิจกรรมที่ลงทะเบียน</p>
+                <div className='flex justify-between items-center w-full px-4 py-2'>
+                    <div>
+                        <p className='p-2 border-b-2 w-fit font-medium'>ข้อมูลกิจกรรมที่ลงทะเบียน</p>
+                    </div>
+                    <div className='flex gap-2'>
+                        <BasicButtons label="ดาวน์โหลดเอกสาร" onClick={() => downloadFileEvents(Number(selectedEvent.event_id))} />
+                        {selectedEvent.file && (
+                            <BasicButtons hover="#f57c00" color="#fb8c00" label="เรียกดูเอกสารที่ส่งไป" onClick={() => handleOpenDialog(selectedEvent.event_id, user.user_id)} />
+                        )}
+                        <BasicButtons hover="#d32f2f" color="#e53935" label="ยกเลิกกิจกรรม" onClick={() => handleDeleteMyeventOutside(selectedEvent.event_id)} />
+                    </div>
+                </div>
                 <div className="xs:grid lg:flex py-2">
                     <div className='grid '>
                         <p className='text-sm px-2'>ชื่อกิจกรรม:</p>
@@ -164,14 +206,6 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                             <p className='text-sm px-2'>ความคิดเห็น:</p>
                             <CustomTextfield width={'98%'} label={selectedEvent?.comment} disabled={true} />
                         </div>
-                    ) : (selectedEvent?.intendent !== undefined) ? (
-                        <div className='mx-2 gap-2 flex justify-end items-center' >
-                            <BasicButtons label={"ดาวน์โหลดเอกสาร"} onClick={(e) => downloadFileEvents(Number(selectedEvent.event_id))} />
-                            {selectedEvent.file && (
-                                <BasicButtons hover={"#f57c00"} color={"#fb8c00"} label={"เรียกดูเอกสารที่ส่งไป"} onClick={(e) => handleOpenDialog(selectedEvent.event_id, user.user_id)} />
-                            )}
-                            <BasicButtons hover={"#d32f2f"} color={"#e53935"} label={"ยกเลิกกิจกรรม"} onClick={(e) => handleDeleteMyeventOutside(selectedEvent.event_id)} />
-                        </div>
                     ) : (
                         <div>
                             <p className='text-sm px-2'>ความคิดเห็น:</p>
@@ -185,17 +219,14 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                             <div className='lg:flex lg:justify-end lg:items-center  gap-2'>
                                 {/* {file && selectedEvent.intendent !== undefined ? (
                                     <div>
-                                        <BasicButtons label={'อัพโหลดเอกสาร'} onClick={handleUpload} />
+                                        <BasicButtons label={'อัปโหลดเอกสาร'} onClick={handleUpload} />
                                     </div>
                                 ) : (
                                     <div>
-                                        <BasicButtons diasble={true} label={'อัพโหลดเอกสาร'} />
+                                        <BasicButtons diasble={true} label={'อัปโหลดเอกสาร'} />
                                     </div>
                                 )} */}
                                 <div className="lg:flex w-full gap-2 justify-end xs:mt-2 lg:mt-0">
-                                    <div>
-                                        <p className='p-2.5 text-[14px] xs:text-center lg:text-wrap text-white bg-[#e90000d9] rounded-sm shadow-md'>ยังไม่ส่งเอกสาร</p>
-                                    </div>
                                     <div className='xs:flex xs:mt-2 lg:mt-0 xs:justify-end xs:items-end gap-2 lg:mb-4' >
                                         {(!selectedEvent.intendent && selectedEvent.intendent !== undefined) && (
                                             <div className='flex justify-center items-center '>
@@ -206,11 +237,11 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                         <div className="flex gap-2 justify-end items-center  ">
                                             {file ? (
                                                 <div>
-                                                    <BasicButtons label={'อัพโหลดเอกสาร'} onClick={handleUpload} />
+                                                    <BasicButtons label={'อัปโหลดเอกสาร'} onClick={handleUpload} />
                                                 </div>
                                             ) : (
                                                 <div>
-                                                    <BasicButtons diasble={true} label={'อัพโหลดเอกสาร'} onClick={handleUpload} />
+                                                    <BasicButtons diasble={true} label={'อัปโหลดเอกสาร'} onClick={handleUpload} />
                                                 </div>
 
                                             )}
@@ -242,11 +273,11 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                 <div className="flex gap-2 justify-end items-center  ">
                                     {file ? (
                                         <div>
-                                            <BasicButtons label={'อัพโหลดเอกสาร'} onClick={handleUpload} />
+                                            <BasicButtons label={'อัปโหลดเอกสาร'} onClick={handleUpload} />
                                         </div>
                                     ) : (
                                         <div>
-                                            <BasicButtons diasble={true} label={'อัพโหลดเอกสาร'} onClick={handleUpload} />
+                                            <BasicButtons diasble={true} label={'อัปโหลดเอกสาร'} onClick={handleUpload} />
                                         </div>
 
                                     )}

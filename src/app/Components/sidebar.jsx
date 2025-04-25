@@ -116,7 +116,7 @@ export default function Sidebar() {
     const menuPath = useMemo(() => {
         if (!user || !userRoleHash) return [];
 
-        
+
         return [
             {
                 name: 'หน้าแรก',
@@ -162,7 +162,7 @@ export default function Sidebar() {
                         icon: <ListIcon sx={{ color: 'gray' }} />,
                     },
                     {
-                        name: 'กิจกรรมของฉัน',
+                        name: 'กิจกรรมที่ต้องตรวจสอบ',
                         link: '/Admin/MyEvent',
                         icon: <ListIcon sx={{ color: 'gray' }} />,
                     }
@@ -170,7 +170,7 @@ export default function Sidebar() {
             },
             ...(user?.superUser ? [
                 {
-                    name: 'นักศึกษาที่ส่งหลักฐานกิจกรรมภายในคณะ',
+                    name: 'นักศึกษาสังกัดคณะที่ยื่นหลักฐานกิจกรรม',
                     link: '/Admin/StudentEvidence',
                     icon: <ListIcon sx={{ color: 'gray' }} />,
                 },

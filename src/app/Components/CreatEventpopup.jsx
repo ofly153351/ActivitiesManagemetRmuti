@@ -182,9 +182,12 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
 
             if (response) {
                 setSuccessMessage('สร้างกิจกรรมเรียบร้อย');
-                setTimeout(() => setSuccessMessage(""), 3000);
-                handleCloseDialog();
-                window.location.reload();
+                setTimeout(() => {
+                    handleCloseDialog();
+                    setSuccessMessage("")
+                    window.location.reload();
+                }, 800);
+
             }
         } catch (error) {
             console.log("Failed to create event:", error);
@@ -359,6 +362,7 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
                                 onChange={(e) => handleSelectedSchoolYear(e)}
                                 value={selectedSchoolYear}
                                 width={width.md}
+                                required
                             />
                             <div className='md:flex xs:grid ' >
                                 <Customselect
@@ -407,7 +411,7 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
                     </Button>
                     < Button onClick={handleSubmit} color="primary"
                         disabled={
-                            !eventName || !startDate || !hour || !space || !location
+                            !eventName || !startDate || !hour || !space || !location || !selectedSchoolYear
                         }
                         sx={{
                             textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
