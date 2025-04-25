@@ -314,13 +314,13 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
 
 
     const rolelsit = [
-        { label: 'เจ้าหน้าที่ กยศ.', value: 'admin' },
+        { label: 'เจ้าหน้าที่กยศ.', value: 'admin' },
         { label: 'อาจารย์', value: 'teacher' },
     ]
     const handleRoleChange = async (user_id, newValue) => {
         console.log(user_id, newValue);
 
-        const mappedRole = newValue === 'เจ้าหน้าที่ กยศ.' ? 'admin' : 'teacher';
+        const mappedRole = newValue === 'เจ้าหน้าที่กยศ.' ? 'admin' : 'teacher';
 
         setSelectedRoles((prevState) => ({
             ...prevState,
@@ -471,7 +471,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                                                         label={'เลือกระดับ'}
                                                         width="12ch"
                                                         value={
-                                                            selectedRoles[item.user_id] ?? (item.role === 'admin' ? "เจ้าหน้าที่ กยศ." : "อาจารย์")
+                                                            selectedRoles[item.user_id] ?? (item.role === 'admin' ? "เจ้าหน้าที่กยศ." : "อาจารย์")
                                                         }
                                                         field="label"
                                                         onChange={(newValue) => handleRoleChange(item.user_id, newValue)}

@@ -4,8 +4,11 @@ import "./globals.css";
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "กยศ",
-  description: "กยศ",
+  title: "ระบบจักการกิจกรรม",
+  description: "ระบบจักการกิจกรรม",
+  icons: {
+    icon: "/runner.svg"
+  }
 };
 
 export default function RootLayout({ children }) {

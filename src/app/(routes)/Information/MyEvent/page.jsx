@@ -129,7 +129,7 @@ function page() {
                         </div>
                     ) : (
                         <>
-                            <div className='w-full px-4' >
+                            <div className=' px-4' >
                                 <div className=' border-b-2 border-slate-200 ' >
                                     <p className=' text-2xl py-2 border-b-1 ' >กิจกรรมภายในมหาวิทยาลัย :</p>
                                 </div>

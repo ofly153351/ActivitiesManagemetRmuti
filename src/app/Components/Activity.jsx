@@ -83,37 +83,28 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
 
     // เรียงลำดับกิจกรรม
     const sortedActivities = useMemo(() => {
+        const activeActivities = filteredActivities.filter(activity => activity.status === true);
+
         if (selectedValue === "hour") {
-            return [...filteredActivities].sort((a, b) => b.working_hour - a.working_hour);
+            return [...activeActivities].sort((a, b) => b.working_hour - a.working_hour);
         }
 
-        // เรียงลำดับตามวันที่ใกล้ปัจจุบัน
         const now = new Date();
-        // console.log("วันที่ปัจจุบัน:", now);
 
-        const sorted = [...filteredActivities].sort((a, b) => {
+        const sorted = [...activeActivities].sort((a, b) => {
             const dateA = parseDateTime(a.start_date, a.start_time);
             const dateB = parseDateTime(b.start_date, b.start_time);
 
-            // ถ้าไม่สามารถแปลงวันที่ได้ จะเรียงไว้ท้ายสุด
             if (!dateA && !dateB) return 0;
             if (!dateA) return 1;
             if (!dateB) return -1;
 
-            // console.log(`วันที่ ${a.event_name}:`, dateA);
-            // console.log(`วันที่ ${b.event_name}:`, dateB);
-
-            // คำนวณความต่างจากวันปัจจุบัน (เป็นค่าสัมบูรณ์)
             const diffA = Math.abs(dateA - now);
             const diffB = Math.abs(dateB - now);
-
-            // console.log(`ความต่างของ ${a.event_name}: ${diffA}`);
-            // console.log(`ความต่างของ ${b.event_name}: ${diffB}`);
 
             return diffA - diffB;
         });
 
-        // console.log("กิจกรรมหลังเรียงลำดับ:", sorted);
         return sorted;
     }, [filteredActivities, selectedValue]);
 
@@ -208,6 +199,9 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
     const isMatchingReady = (userRoleHash === 'student') ? eventsInside.length > 0 : true;
 
     console.log(isMatchingReady);
+
+    console.log(sortedActivities);
+
 
     if (!isMatchingReady) return <div className='my-20 w-full h-full justify-center items-center flex' ><Loading /></div>;
 

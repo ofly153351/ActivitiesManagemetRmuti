@@ -157,19 +157,21 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
         <div className='drop-shadow-md rounded-xl mt-20 xs:mx-2 '
             style={{ backgroundColor: colorsCode.whiteSmoke }} >
             <div className='text-2xl p-4 gap-2' >
-                <div className='flex justify-between items-center w-full px-4 py-2'>
+                <div className="w-full px-4 py-2 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                     <div>
-                        <p className='p-2 border-b-2 w-fit font-medium'>ข้อมูลกิจกรรมที่ลงทะเบียน</p>
+                        <p className="p-2 border-b-2 w-fit font-medium">ข้อมูลกิจกรรมที่ลงทะเบียน</p>
                     </div>
-                    <div className='flex gap-2'>
+                    <div className="flex flex-wrap gap-2 justify-end">
                         {selectedEvent.file && selectedEvent.intendent && (
-                            <div className='flex gap-2' >
-                                <BasicButtons label="ดาวน์โหลดเอกสาร" onClick={() => downloadFileEvents(Number(selectedEvent.event_id))} />
-                                <BasicButtons hover="#f57c00" color="#fb8c00" label="เรียกดูเอกสารที่ส่งไป" onClick={() => handleOpenDialog(selectedEvent.event_id, user.user_id)} />
-                            </div>
+                            <>
+                                <BasicButtons
+                                    label="ดาวน์โหลดเอกสาร"
+                                    onClick={() => downloadFileEvents(Number(selectedEvent.event_id))}
+                                />
 
+                            </>
                         )}
-                        <BasicButtons hover="#d32f2f" color="#e53935" label="ยกเลิกกิจกรรม" onClick={() => handleDeleteMyeventOutside(selectedEvent.event_id)} />
+
                     </div>
                 </div>
                 <div className="xs:grid lg:flex py-2">
@@ -249,6 +251,12 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
 
                                             )}
                                         </div>
+                                        <BasicButtons
+                                            hover="#d32f2f"
+                                            color="#e53935"
+                                            label="ยกเลิกกิจกรรม"
+                                            onClick={() => handleDeleteMyeventOutside(selectedEvent.event_id)}
+                                        />
                                     </div>
 
                                 </div>
@@ -257,6 +265,14 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                         ) : (selectedEvent.intendent && selectedEvent.file) ? (
                             <div className='xs:grid lg:flex justify-end items-center gap-2'>
                                 <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
+                                    <BasicButtons
+                                        hover="#f57c00"
+                                        color="#fb8c00"
+                                        label="เรียกดูเอกสารที่ส่งไป"
+                                        onClick={() =>
+                                            handleOpenDialog(selectedEvent.event_id, user.user_id)
+                                        }
+                                    />
                                     <div className='flex justify-center items-center'>
                                         <p className='p-2.5 text-[14px] text-white bg-green-500 rounded-sm shadow-md w-full'>ส่งเอกสารแล้ว</p>
                                     </div>
@@ -282,15 +298,21 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                         <div>
                                             <BasicButtons diasble={true} label={'อัปโหลดเอกสาร'} onClick={handleUpload} />
                                         </div>
-
                                     )}
+                                    <BasicButtons
+                                        hover="#d32f2f"
+                                        color="#e53935"
+                                        label="ยกเลิกกิจกรรม"
+                                        onClick={() => handleDeleteMyeventOutside(selectedEvent.event_id)}
+                                    />
                                 </div>
                             </div>
                         ) : null}
-                    {selectedEvent.file !== "" && selectedEvent.status == true ? (
+                    {selectedEvent.file !== "" && selectedEvent.status === true ? (
                         <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
                             <div className='flex justify-center items-center'>
                                 <p className='p-2.5 text-[14px] text-white bg-green-500 rounded-sm shadow-md w-full'>ผ่านกิจกรรม</p>
+
                             </div>
                         </div>
                     ) : null}
