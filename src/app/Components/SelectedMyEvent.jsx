@@ -163,7 +163,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                     </div>
                     <div className='flex gap-2'>
                         <BasicButtons label="ดาวน์โหลดเอกสาร" onClick={() => downloadFileEvents(Number(selectedEvent.event_id))} />
-                        {selectedEvent.file && (
+                        {selectedEvent.file && selectedEvent.intendent && (
                             <BasicButtons hover="#f57c00" color="#fb8c00" label="เรียกดูเอกสารที่ส่งไป" onClick={() => handleOpenDialog(selectedEvent.event_id, user.user_id)} />
                         )}
                         <BasicButtons hover="#d32f2f" color="#e53935" label="ยกเลิกกิจกรรม" onClick={() => handleDeleteMyeventOutside(selectedEvent.event_id)} />
