@@ -46,31 +46,30 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
     // Function เมื่อกดปุ่ม
     const handleButtonClick = async (statusValue) => {
         setStatus(statusValue); // เก็บสถานะ
+
         const payload = {
-            event_id: eventID,    // Map ชื่อ key ให้ตรงกับ database
+            event_id: eventID,
             user_id: userID,
-            comment: comment,
+            comment: comment || (statusValue === false ? 'ไม่ผ่านกิจกรรม' : ''),
             status: statusValue,
         };
 
         try {
-            const response = await checkFileStudent(Number(eventID), Number(userID), payload)
-            setSuccessMessage('ตรวจสอบกิจกรรมเรียบร้อยแล้ว')
+            const response = await checkFileStudent(Number(eventID), Number(userID), payload);
+            setSuccessMessage('ตรวจสอบกิจกรรมเรียบร้อยแล้ว');
             setTimeout(() => {
                 window.location.reload();
-            }, 500)
+            }, 500);
             console.log(response);
-
-            return response
+            return response;
         } catch (error) {
             console.log(error.message);
-            setErrorMessage('เกิดข้อผิดพลาดในการตรวจสอบ')
+            setErrorMessage('เกิดข้อผิดพลาดในการตรวจสอบ');
             setTimeout(() => {
-                setErrorMessage(false)
-            }, 3000)
-            throw error
+                setErrorMessage(false);
+            }, 3000);
+            throw error;
         }
-
     };
 
 
@@ -123,7 +122,7 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
                                     <BasicButtons
                                         hover={'#de0a26'}
                                         color={'#f94449'}
-                                        label={'ไม่ผ่าน'}
+                                        label={'ไม่อนุมัติ'}
                                         onClick={() => handleButtonClick(false)}
                                     />
                                 ) : (
@@ -131,11 +130,11 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
                                         <BasicButtons
                                             hover={'#de0a26'}
                                             color={'#f94449'}
-                                            label={'ไม่ผ่าน'}
+                                            label={'ไม่อนุมัติ'}
                                             onClick={() => handleButtonClick(false)}
                                         />
                                         <BasicButtons
-                                            label={'ผ่าน'}
+                                            label={'อนุมัติ'}
                                             onClick={() => handleButtonClick(true)}
                                         />
                                     </>
