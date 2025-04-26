@@ -263,7 +263,7 @@ function EditDialog({ isOpen, isClose, selectUser = [], titleNameOption = [], us
                 </DialogContent>
                 <DialogActions>
                     <Button sx={{ fontFamily: 'Kanit' }} autoFocus onClick={handleSave}>
-                        บันทึก
+                        แก้ไขข้อมูล
                     </Button>
                 </DialogActions>
             </BootstrapDialog>

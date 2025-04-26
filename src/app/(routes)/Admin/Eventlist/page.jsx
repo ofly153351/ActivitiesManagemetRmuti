@@ -73,7 +73,7 @@ function Page() {
     };
 
     useEffect(() => {
-        blockNulluser(user)
+        // blockNulluser(user)
         const fetchData = async () => {
             try {
                 const response = await getAllevent();
@@ -88,7 +88,7 @@ function Page() {
     }, []);
 
 
-    console.log(selectedEvent , 'dwadwa');
+    // console.log(selectedEvent , 'dwadwa');
 
     const columns = [
         { headerName: 'ชื่อกิจกรรม', field: 'event_name' },

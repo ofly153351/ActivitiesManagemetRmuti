@@ -34,7 +34,7 @@ function Page() {
 
     // โหลดข้อมูลจาก API 
     useEffect(() => {
-        blockNulluser(user)
+        // blockNulluser(user)
 
         const fetchData = async () => {
             try {

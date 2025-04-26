@@ -21,7 +21,7 @@ function page() {
     const { user } = useStore()
 
     useEffect(() => {
-        blockNulluser(user)
+        // blockNulluser(user)
         const fetchData = async () => {
             setLoading(true);
             try {

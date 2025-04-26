@@ -19,7 +19,7 @@ function page() {
     const [userId, setUserId] = useState('')
 
     useEffect(() => {
-        blockNulluser(user)
+        // blockNulluser(user)
         const fetchData = async () => {
             try {
                 const response = await getAllUser()
@@ -56,7 +56,7 @@ function page() {
             field: 'faculty_name',
         },
         { headerName: 'สาขา', field: 'branch_name' },
-        { headerName: 'เบอร์โทร', field: 'phone' },
+        { headerName: 'เบอร์โทรศัพท์', field: 'phone' },
         { headerName: 'แก้ไขข้อมูล', field: 'editInfomation' }
 
     ]

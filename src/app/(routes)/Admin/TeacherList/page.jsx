@@ -23,7 +23,7 @@ function page() {
 
 
     useEffect(() => {
-        blockNulluser(user)
+        // blockNulluser(user)
         if (user) {
             const fetchData = async () => {
                 try {

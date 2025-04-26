@@ -45,7 +45,7 @@ export default function BasicTable({ column, insideEvents, outsideEvent, showVie
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: 'kanit ', }} align="center">{item.location}</TableCell>
                                 <TableCell sx={{ fontFamily: 'kanit ', }} align="center">{item.working_hour}</TableCell>
-                                <TableCell sx={{ fontFamily: 'kanit ', }} align="center">{item.status ? <p className='text-green-500' >ผ่าน</p> : <p className='text-red-500' >ไม่ผ่าน</p>}</TableCell>
+                                <TableCell sx={{ fontFamily: 'kanit ', }} align="center">{item.status ? <p className='text-green-500' >อนุมัติ</p> : <p className='text-red-500' >ไม่อนุมัติ</p>}</TableCell>
                                 <TableCell align="center" onClick={(e) => showViewPDF(item.file)}
                                     sx={{
                                         cursor: 'pointer',

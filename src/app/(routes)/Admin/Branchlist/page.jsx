@@ -39,7 +39,7 @@ function page() {
 
 
   useEffect(() => {
-    blockNulluser(user)
+    // blockNulluser(user)
     const fetchData = async () => {
       try {
         const response = await getBranches();

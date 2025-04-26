@@ -33,7 +33,7 @@ function page() {
     };
 
     useEffect(() => {
-        blockNulluser(userRoleHash)
+        // blockNulluser(userRoleHash)
         const fetchData = async () => {
             setLoading(true);
 

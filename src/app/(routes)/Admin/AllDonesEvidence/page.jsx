@@ -23,7 +23,7 @@ export default function page({ searchParams }) {
     const { user } = useStore()
     
     useEffect(() => {
-        blockNulluser(user)
+        // blockNulluser(user)
 
         const fetchEvidenceData = async () => {
             try {

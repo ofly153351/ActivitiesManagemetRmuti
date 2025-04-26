@@ -216,13 +216,13 @@ function Page() {
               <Controller
                 name="year"
                 control={control}
-                rules={{ required: "กรุณาเลือกปีที่" }}
+                rules={{ required: "กรุณาเลือกชั้นปี" }}
                 render={({ field }) => (
                   <FormControl sx={{ width: '138px' }} margin="normal" size="small" error={!!errors.year}>
-                    <InputLabel sx={{ fontSize: '0.9rem' }}>ปีที่</InputLabel>
+                    <InputLabel sx={{ fontSize: '0.9rem' }}>ชั้นปี</InputLabel>
                     <Select
                       {...field}
-                      label="ปีที่"
+                      label="ชั้นปี"
                     >
                       {[1, 2, 3, 4, 5].map((year) => (
                         <MenuItem key={year} value={Number(year)}>
