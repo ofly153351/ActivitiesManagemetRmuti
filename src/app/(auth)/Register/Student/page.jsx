@@ -238,13 +238,13 @@ function Page() {
 
             <input
               {...register("phone", {
-                required: "กรุณากรอกเบอร์โทร",
+                required: "กรุณากรอกเบอร์โทรศัพ์",
                 pattern: {
                   value: /^\d{10}$/,
-                  message: "เบอร์โทรต้องมี 10 ตัว"
+                  message: "เบอร์โทรศัพท์ต้องมี 10 ตัว"
                 }
               })}
-              placeholder="เบอร์โทร"
+              placeholder="เบอร์โทรศัพท์"
               className="p-2 border-[1px] border-gray-300 w-full focus:outline-blue-500 bg-transparent rounded-md placeholder-gray-550 mt-2"
               type="text"
             />

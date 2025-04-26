@@ -80,7 +80,7 @@ function EditDialog({ isOpen, isClose, selectUser = [], titleNameOption = [], us
             setFormErrors((prev) => ({ ...prev, [label]: isValid ? '' : 'รหัสนักศึกษาไม่ถูกต้อง เช่น 65123212324-3' }));
         }
 
-        if (label === 'เบอร์โทร') {
+        if (label === 'เบอร์โทรศัพท์') {
             setDupError(false)
             const isValid = /^0\d{9}$/.test(value);
             setFormErrors((prev) => ({ ...prev, [label]: isValid ? '' : 'เบอร์โทรศัพท์ต้องขึ้นต้นด้วย 0 และมี 10 หลัก' }));
@@ -132,7 +132,7 @@ function EditDialog({ isOpen, isClose, selectUser = [], titleNameOption = [], us
                 }
             } else if (fieldName === 'ชั้นปี') {
                 payload.year = parseInt(finalValue);
-            } else if (fieldName === 'เบอร์โทร') {
+            } else if (fieldName === 'เบอร์โทรศัพท์') {
                 payload.phone = finalValue;
             } else if (fieldName === 'รหัสนักศึกษา') {
                 payload.code = finalValue;
@@ -258,7 +258,7 @@ function EditDialog({ isOpen, isClose, selectUser = [], titleNameOption = [], us
                         )
                     ))}
                     {dupError && (
-                        <div className='px-2 w-[280px] text-red-500 ' >บันทึกทึกข้อมูลไม่สำเร็จเนื่องจาก รหัสนักศึกษา/เบอร์โทร ซ้ำ</div>
+                        <div className='px-2 w-[280px] text-red-500 ' >บันทึกทึกข้อมูลไม่สำเร็จเนื่องจาก รหัสนักศึกษา/เบอร์โทรศัพท์ ซ้ำ</div>
                     )}
                 </DialogContent>
                 <DialogActions>

@@ -529,7 +529,7 @@ function CustomTable({
                                                         { label: 'คณะ', value: { id: item.faculty_id, name: item.faculty_name } }, // ส่งทั้ง id และ name สำหรับคณะ
                                                         { label: 'สาขา', value: { id: item.branch_id, name: item.branch_name, facultyId: item.faculty_id } },   // ส่งทั้ง id และ name สำหรับสาขา
                                                         { label: 'รหัสนักศึกษา', value: item.code },
-                                                        { label: 'เบอร์โทร', value: item.phone },
+                                                        { label: 'เบอร์โทรศัพท์', value: item.phone },
                                                         { label: 'ชั้นปี', value: item.year },
                                                     ], item.user_id)}
                                                 >

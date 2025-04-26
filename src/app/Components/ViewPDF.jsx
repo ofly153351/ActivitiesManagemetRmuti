@@ -96,7 +96,7 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
 
 
     return (
-        <div className="w-full max-w-5xl mx-auto p-4">
+        <div className="w-full max-w-5xl mx-auto xs:p-0  xs:mx-0 ">
             <div className="flex flex-col gap-3">
                 {/* PDF Viewer */}
                 <iframe
