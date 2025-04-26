@@ -7,12 +7,17 @@ import Loading from '@/app/Components/Loading'
 import { useStore } from '@/store/useStore'
 import { all } from 'axios'
 import { blockNulluser } from '@/app/Utils/block'
+import EditDialog from '@/app/Components/EditInfomation/EditDialog'
 
 function page() {
-    const title = 'รายชื่อนักศึกษาในระบบ'
+    const title = 'รายชื่อนักศึกษา'
     const [allUser, setAlluser] = useState([])
     const [loading, setLoading] = useState(true)
     const { user } = useStore()
+    const [isOpen, setIsOpen] = useState('')
+    const [selectedUser, setSelectedUser] = useState([])
+    const [userId, setUserId] = useState('')
+
     useEffect(() => {
         blockNulluser(user)
         const fetchData = async () => {
@@ -46,14 +51,13 @@ function page() {
         // {headerName : 'คำนำหน้า' , field: 'title_name'},
         { headerName: 'ชื่อจริง', field: 'first_name' },
         { headerName: 'นามสกุล', field: 'last_name' },
-        //     {headerName : 'เบอร์โทร' , field: 'phone'},
-        //     {headerName : 'ปีการศึกษา' , field: 'years'},
         {
             headerName: 'คณะ',
             field: 'faculty_name',
         },
         { headerName: 'สาขา', field: 'branch_name' },
         { headerName: 'เบอร์โทร', field: 'phone' },
+        { headerName: 'แก้ไขข้อมูล', field: 'editInfomation' }
 
     ]
 
@@ -63,12 +67,22 @@ function page() {
         return 0;
     });
 
-    console.log(allUser);
+    const handleOpenEditDialog = (Information, userID) => {
+        setUserId(userID);
 
+        setIsOpen(true)
+        setSelectedUser(Information)
+    }
+
+    const titleName = [
+        { label: 'นาย', value: 'นาย' },
+        { label: 'นาง', value: 'นาง' },
+        { label: 'นางสาว', value: 'นางสาว' },
+
+
+    ]
 
     return (
-
-
 
         <>
             <div className='min-h-screen bg-gray-50' >
@@ -83,10 +97,24 @@ function page() {
                                 </div>
                             </div>
                         ) : (
-                            <CustomTable columns={columns} rows={sortedByCode} entity='รายชื่อนักศึกษา' />
+                            <CustomTable
+                                columns={columns}
+                                rows={sortedByCode}
+                                entity='รายชื่อนักศึกษา'
+                                openDialog={handleOpenEditDialog}
+                            />
                         )}
                     </div>
                 </div>
+                {isOpen && (
+                    <EditDialog
+                        isOpen={isOpen}
+                        isClose={() => setIsOpen(false)}
+                        selectUser={selectedUser}
+                        titleNameOption={titleName}
+                        userID={userId}
+                    />
+                )}
             </div >
         </>
     )

@@ -36,7 +36,21 @@ import TeacherSelect from './TeacherSelect';
 import { blockNulluser } from '../Utils/block';
 
 
-function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, ToggleButtonState, alignment, setOpenEvidence, setUserID, setYears, teacherList = [] }) {
+function CustomTable({
+    rows = [],
+    columns = [],
+    entity,
+    onEdit,
+    onDelete,
+    ToggleButtonState,
+    alignment,
+    setOpenEvidence,
+    setUserID,
+    setYears,
+    teacherList = [],
+    openDialog,
+    editData
+}) {
     const [inputValue, setInputValue] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [openCreateDialog, setOpenCreateDialog] = useState(false);
@@ -73,13 +87,13 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
     const handleStatusChange = async (itemId, field, newStatus) => {
         try {
             // เรียก API เพื่ออัพเดทสถานะ
-            console.log(itemId, field, newStatus);
+            // console.log(itemId, field, newStatus);
 
             // สมมติว่า editStatusEvent ทำการอัพเดทสถานะให้ใน backend
             const response = await editStatusEvent(userRoleHash, itemId, newStatus);
 
             if (response && response.status === 200) {
-                console.log("Response data:", response.data);  // ดูค่าที่ส่งกลับมาจาก API
+                // console.log("Response data:", response.data);  // ดูค่าที่ส่งกลับมาจาก API
                 setTableRows((prevData) =>
                     prevData.map((item) =>
                         item.event_id === Number(itemId) // ตรวจสอบ event_id
@@ -88,7 +102,6 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                     )
                 );
             }
-
         } catch (error) {
             console.error('Error updating status:', error);
             // อาจจะแสดง error message ให้ user ทราบ
@@ -135,10 +148,10 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
     }, [teacherList, pathName]);
 
     const handleTeacherChange = (itemUserId, newTeacherId, facultyId, facultyname, facultyCode) => {
-        console.log("เปลี่ยนครู:", itemUserId, "เป็น:", newTeacherId, facultyId); // เพิ่ม log เพื่อดีบัก
+        // console.log("เปลี่ยนครู:", itemUserId, "เป็น:", newTeacherId, facultyId); // เพิ่ม log เพื่อดีบัก
         setSelectedTeacher(prev => {
             const updated = { ...prev, [itemUserId]: newTeacherId };
-            console.log("State ใหม่:", updated); // ดู state ที่จะอัพเดท
+            // console.log("State ใหม่:", updated); // ดู state ที่จะอัพเดท
             return updated;
         });
         try {
@@ -150,7 +163,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
 
 
             const response = ChangeHeaderOffaculty(facultyId, payload);
-            console.log(response);
+            // console.log(response);
             if (response && response.status === 200) {
                 setAlertMessage('อัพเดทเจ้าหน้าที่ประจำคณะสำเร็จ');
                 setAlertType('success');
@@ -318,7 +331,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
         { label: 'อาจารย์', value: 'teacher' },
     ]
     const handleRoleChange = async (user_id, newValue) => {
-        console.log(user_id, newValue);
+        // console.log(user_id, newValue);
 
         const mappedRole = newValue === 'เจ้าหน้าที่กยศ.' ? 'admin' : 'teacher';
 
@@ -335,7 +348,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
 
             try {
                 const response = await editRoleByadmin(payload);
-                console.log(response);
+                // console.log(response);
             } catch (error) {
                 console.error("Failed to update role:", error);
             }
@@ -428,15 +441,13 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                         </tr>
                     </thead>
                     <tbody>
-                        {console.log("currentRows", currentRows)}
+                        {/* {console.log("currentRows", currentRows)} */}
 
                         {currentRows.length > 0 ? (
                             currentRows.map((item, index) => (
                                 <tr key={index} className='hover:bg-[#f5f5f5] ' >
-
                                     {columns.map((column, colIndex) => (
                                         <td key={colIndex} className="p-2 text-start border-x-[1px] border-slate-100 hover:bg-[#f5f5f5] duration-50">
-
                                             {column.field === 'status' ? (
                                                 <div className="flex justify-start items-center">
                                                     {item[column.field] !== undefined ? (
@@ -464,7 +475,7 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                                                 </div>
                                             ) : column.field === 'level' && (userRoleHash === 'admin' || userRoleHash === 'superadmin') ? (
                                                 <div className="flex justify-center items-center">
-                                                    {console.log(selectedRoles)}
+                                                    {/* {console.log(selectedRoles)} */}
                                                     <Customselect
                                                         key={item.user_id}
                                                         options={rolelsit}
@@ -509,6 +520,26 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                                                         return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')} น.`;
                                                     })()}
                                                 </div>
+                                            ) : column.field === 'editInfomation' ? (
+                                                <button
+                                                    onClick={() => openDialog([
+                                                        { label: 'คำนำหน้า', value: item.title_name },
+                                                        { label: 'ชื่อจริง', value: item.first_name },
+                                                        { label: 'นามสกุล', value: item.last_name },
+                                                        { label: 'คณะ', value: { id: item.faculty_id, name: item.faculty_name } }, // ส่งทั้ง id และ name สำหรับคณะ
+                                                        { label: 'สาขา', value: { id: item.branch_id, name: item.branch_name, facultyId: item.faculty_id } },   // ส่งทั้ง id และ name สำหรับสาขา
+                                                        { label: 'รหัสนักศึกษา', value: item.code },
+                                                        { label: 'เบอร์โทร', value: item.phone },
+                                                        { label: 'ชั้นปี', value: item.year },
+                                                    ], item.user_id)}
+                                                >
+                                                    <EditIcon
+                                                        sx={{
+                                                            color: '#32CD32',
+                                                            "&:hover": { color: 'green' },
+                                                        }}
+                                                    />
+                                                </button>
                                             ) : (
                                                 column.valueGetter ? column.valueGetter({ data: item }) : item[column.field]
                                             )}
@@ -681,9 +712,11 @@ function CustomTable({ rows = [], columns = [], entity, onEdit, onDelete, Toggle
                     <Button onClick={handleCloseDetails} sx={{ fontFamily: fontFamily.Kanit, fontSize: 'large' }} color="primary">ปิด</Button>
                 </DialogActions>
             </Dialog>
-            {isUpload && (
-                <UploadPopup eventID={eventUploadID} eventName={eventUploadName} isOpen={isUpload} onClose={handleCloseUpload} />
-            )}
+            {
+                isUpload && (
+                    <UploadPopup eventID={eventUploadID} eventName={eventUploadName} isOpen={isUpload} onClose={handleCloseUpload} />
+                )
+            }
             {
                 alertMessage && (
                     alertType === 'success' ? (

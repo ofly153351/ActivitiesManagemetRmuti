@@ -726,3 +726,26 @@ export const viewFilepath = async (eventID, userID) => {
 
   }
 }
+
+
+export const editPersonalinfo = async (payload) => {
+  if (!payload) return;
+
+  try {
+    const response = await axios.put(`${API_BASE}/protected/admin/studentinfo`, payload, {
+      withCredentials: true,
+    });
+
+    // คืนค่า response เพื่อให้ frontend สามารถใช้ได้
+    return response;
+  } catch (error) {
+    // ใช้ error.response เพื่อให้ได้ข้อมูลที่มีรายละเอียดจาก server
+    console.log('Error in editPersonalinfo:', error.response?.data || error.message);
+
+    // ถ้าต้องการให้ error ถูกจัดการบน frontend
+    throw error;  // หรือ return error เพื่อให้ frontend รู้ว่ามีข้อผิดพลาด
+  }
+}
+
+
+//protected/admin/studentInfo/
