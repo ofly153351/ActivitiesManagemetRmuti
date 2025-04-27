@@ -62,10 +62,15 @@ export const useStore = create((set, get) => ({
 
             set({ user: userData, userRole: userData.role });
             const hash = encryptText(userResponse.data.role, SECRET_KEY);
-            localStorage.setItem("userRoleHash", hash);
-            localStorage.setItem("user", JSON.stringify(userData));
+            const expireTime = new Date().getTime() + 5 * 60 * 60 * 1000; // หมดอายุใน 2 ชั่วโมง (ตัวอย่าง)
 
-
+            if (expireTime && new Date().getTime() > parseInt(expireTime)) {
+                // หมดอายุแล้ว
+                localStorage.removeItem("userRoleHash");
+                localStorage.removeItem("user");
+                localStorage.removeItem("expireTime");
+                // อาจจะ redirect ไป login ใหม่
+            }
 
             set({ isLoading: false });
             return response.data;
