@@ -64,7 +64,7 @@ function Page() {
               </div>
 
               {/* Email Input */}
-              <Box sx={{ '& > :not(style)': { m: 1, width: '100%' } }}>
+              <Box sx={{ '& > :not(style)': { m: 1, width: '42ch' } }}>
                 <TextField
                   id="email"
                   label="Email"
@@ -78,7 +78,7 @@ function Page() {
               {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
 
               {/* Password Input */}
-              <Box sx={{ '& > :not(style)': { m: 1, width: '100%' } }}>
+              <Box sx={{ '& > :not(style)': { m: 1, width: '42ch' } }}>
                 <TextField
                   id="password"
                   label="Password"
@@ -91,13 +91,16 @@ function Page() {
               {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
 
               {/* Submit Button */}
-              <div className="flex justify-center items-center mt-4">
-                <button
-                  className="py-2 px-6 bg-blue-500 rounded-md text-white hover:bg-blue-800 transition duration-300 w-full"
-                  type="submit"
-                >
-                  เข้าสู่ระบบ
-                </button>
+              <div className=" flex justify-center items-center mt-4">
+                <div className="pl-2 w-full " >
+                  <button
+                    className=" py-2 px-6 bg-blue-500 rounded-md text-white hover:bg-blue-800 transition duration-300 w-full"
+                    type="submit"
+                  >
+                    เข้าสู่ระบบ
+                  </button>
+                </div>
+
               </div>
 
               {/* Success & Error Messages */}
