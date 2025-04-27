@@ -1,4 +1,4 @@
-// middleware.js (อยู่ที่ root ของโปรเจกต์)
+// middleware.js
 import { NextResponse } from 'next/server'
 import { jwtVerify } from 'jose'
 
@@ -21,11 +21,20 @@ export async function middleware(req) {
 
     console.log("✅ JWT Verified:", payload)
 
-    if (!['admin', 'teacher', 'superadmin' , 'student'].includes(payload.role)) {
+    // เช็ก role ว่าไม่ใช่ 4 ตัวที่อนุญาต
+    if (!['admin', 'teacher', 'superadmin', 'student'].includes(payload.role)) {
       console.log("❌ Unauthorized role:", payload.role)
       url.pathname = '/'
       return NextResponse.redirect(url)
     }
+
+    // 👉 เช็กเพิ่มเติม ถ้า role เป็น student แล้วพยายามเข้า /Admin
+    if (payload.role === 'student' && req.nextUrl.pathname.startsWith('/Admin')) {
+      console.log("❌ Student not allowed to access /Admin")
+      url.pathname = '/'
+      return NextResponse.redirect(url)
+    }
+
   } catch (err) {
     console.error("❌ JWT Error:", err)
     url.pathname = '/'
@@ -35,7 +44,7 @@ export async function middleware(req) {
   return NextResponse.next()
 }
 
-// กำหนด path ที่ middleware จะทำงาน
+// ให้ middleware ทำงานเฉพาะ /Admin และ /Information
 export const config = {
   matcher: ['/Admin/:path*', '/Information/:path*'],
 }
