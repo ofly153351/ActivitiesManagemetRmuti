@@ -88,7 +88,7 @@ function Nav() {
                         <div className='flex justify-center items-center'>
                             <Sidebar />
                             <Link href="/" className='hover:bg-stone-50 xs:hidden lg:block md:block'>
-                                <img className='"w-14 h-14 object-cover rounded-full' src="/logolight.png" />
+                                <img className='w-14 rounded-full' src="/logolight.png" />
                             </Link>
                         </div>
                     </div>
@@ -107,7 +107,7 @@ function Nav() {
             {
                 userRoleHash === 'student' && (
                     <Link href="/" className='ml-[50px]  justify-center items-center lg:flex ' >
-                        <img className='"w-14 h-14 object-cover rounded-full' src="/logolight.png" />
+                        <img className='w-14 rounded-full' src="/logolight.png" />
                     </Link>
                 )
             }
