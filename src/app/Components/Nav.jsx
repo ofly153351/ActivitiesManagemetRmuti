@@ -81,7 +81,7 @@ function Nav() {
 
     return (
 
-        <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-between items-center px-5 fixed z-10 top-0">
+        <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-between items-center px-5 absolute z-10 top-0">
             {(userRoleHash === 'teacher' || userRoleHash === 'admin' || userRoleHash === 'superadmin') && (
                 <div className='flex justify-between items-center  lg:mx-20 w-screen'>
                     <div className='flex justify-between items-center w-full'>

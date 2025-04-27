@@ -35,6 +35,11 @@ export async function middleware(req) {
       return NextResponse.redirect(url)
     }
 
+    if (!payload && req.nextUrl.pathname.startsWith('/Infomation')) {
+      console.log("❌ Gueast user not allowed to access /Infomation")
+      url.pathname = '/'
+      return NextResponse.redirect(url)
+    }
   } catch (err) {
     console.error("❌ JWT Error:", err)
     url.pathname = '/'
