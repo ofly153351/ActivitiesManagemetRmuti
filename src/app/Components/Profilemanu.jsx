@@ -309,7 +309,7 @@ function ProfileMenu() {
                                         <p className='font-kanit' >แก้ไขข้อมูลส่วนบุคคล</p>
                                     </MenuItem>
                                     <MenuItem onClick={() => handleMenuItemClick('/logout')}>
-                                        <p className='font-kanit' >Logout</p>
+                                        <p className='font-kanit' >ออกจากระบบ</p>
                                     </MenuItem>
                                 </div>
                             ) : userRoleHash === 'student' ? (
@@ -323,7 +323,7 @@ function ProfileMenu() {
                                         <p className='font-kanit' >กิจกรรมของฉัน</p>
                                     </MenuItem>
                                     <MenuItem onClick={() => handleMenuItemClick('/logout')}>
-                                        <p className='font-kanit' >Logout</p>
+                                        <p className='font-kanit' >ออกจากระบบ</p>
                                     </MenuItem>
                                 </div>
                             ) : null

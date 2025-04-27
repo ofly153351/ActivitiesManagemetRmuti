@@ -64,21 +64,21 @@ function Page() {
               </div>
 
               {/* Email Input */}
-              <Box sx={{ '& > :not(style)': { m: 1, width: '42ch' } }}>
+              <Box sx={{ '& > :not(style)': { m: 1, width: '97%' } }}>
                 <TextField
                   id="email"
                   label="Email"
                   placeholder="Email Address"
                   variant="outlined"
                   type="email"
-                  fullWidth
+                  
                   {...register('email', { required: 'Email is required' })}
                 />
               </Box>
               {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
 
               {/* Password Input */}
-              <Box sx={{ '& > :not(style)': { m: 1, width: '42ch' } }}>
+              <Box sx={{ '& > :not(style)': { m: 1, width: '97%' } }}>
                 <TextField
                   id="password"
                   label="Password"
