@@ -16,6 +16,8 @@ function page() {
     const { userRoleHash, initUserRoleHash } = useStore()
     // ตรวจสอบว่าเราอยู่ในฝั่ง client
 
+    console.log(user);
+
 
     useEffect(() => {
         initUserRoleHash()

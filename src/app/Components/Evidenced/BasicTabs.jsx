@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -45,8 +45,8 @@ export default function BasicTabs({ userID, studentYears }) {
     const [insideEvents, setInsideEvents] = React.useState([]);
     const [outSideEvents, setOutsideEvents] = React.useState([]);
     const [filePath, setFilePath] = React.useState(null);
-
-    console.log(studentYears);
+    const [admintable, setAdmintable] = React.useState('')
+    const [eventID, setEventID] = useState('')
 
 
     useEffect(() => {
@@ -91,9 +91,10 @@ export default function BasicTabs({ userID, studentYears }) {
 
     };
 
-    const handleViewPDF = (file) => {
-        console.log(file);
+    const handleViewPDF = (admintable, file, eventID) => {
         setFilePath(file)
+        setAdmintable(admintable)
+        setEventID(eventID)
     }
 
     const columns = [
@@ -118,7 +119,6 @@ export default function BasicTabs({ userID, studentYears }) {
             </Box>
             <div className='p-4' >
                 <BasicTable column={columns} insideEvents={insideEvents} outsideEvent={outSideEvents} showViewPDF={handleViewPDF} />
-
             </div>
             {
                 filePath && (
@@ -126,6 +126,9 @@ export default function BasicTabs({ userID, studentYears }) {
                         open={filePath !== null}
                         filePath={filePath}
                         onClose={() => setFilePath(null)}
+                        admintable={admintable}
+                        userID={userID}
+                        eventID={eventID}
                     />
                 )
             }

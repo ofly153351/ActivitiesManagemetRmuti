@@ -8,7 +8,7 @@ import { ErrorAlert, SuccessAlert } from './AlertShow';
 import { usePathname } from 'next/navigation';
 
 
-const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
+const ViewPDF = ({ filePath, eventID, userID, selectedStatus, admintable }) => {
     const [status, setStatus] = useState(null); // เก็บสถานะ (ผ่าน/ไม่ผ่าน)
     const { user } = useStore()
     const [comment, setComment] = useState(''); // State เก็บความคิดเห็น
@@ -17,6 +17,10 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
     const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
     console.log(API_BASE);
+    console.log("admintable", admintable);
+    console.log("userID ", userID);
+    console.log("eventID", eventID);
+
 
     const pathName = usePathname()
     if (!filePath) {
@@ -83,11 +87,29 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus }) => {
 
     let pdfUrl = '';
 
-    if (pathName === '/Admin/MyEvent') {
+
+    // if (pathName === '/Admin/MyEvent' || pathName.startsWith('/Admin/StudentEvidence/') || pathName.startsWith('/Admin/AllDonesList/')) {
+    //     pdfUrl = `${API_BASE}/protected/file/${eventID}/${userID}`;
+    // } else if (pathName.startsWith('/Information/MyEvent/selectedEvent/')) {
+    //     pdfUrl = `${API_BASE}/protected/file-outside/${eventID}/${userID}`;
+    // }
+
+    if (pathName.startsWith('/Information/MyEvent/selectedEvent/out-side/')) {
+        pdfUrl = `${API_BASE}/protected/file-outside/${eventID}/${userID}`;
+    } else if (pathName.startsWith('/Information/MyEvent/selectedEvent/in-side/')) {
         pdfUrl = `${API_BASE}/protected/file/${eventID}/${userID}`;
-    } else if (pathName.startsWith('/Information/MyEvent/selectedEvent/')) {
+    }
+
+    console.log(pathName);
+    if ((pathName.startsWith('/Admin/AllDonesEvidence') || pathName.startsWith('/Admin/StudentEvidence')) && admintable === 'in-side') {
+        pdfUrl = `${API_BASE}/protected/file/${eventID}/${userID}`;
+    } else if ((pathName.startsWith('/Admin/AllDonesEvidence') || pathName.startsWith('/Admin/StudentEvidence')) && admintable === 'out-side') {
         pdfUrl = `${API_BASE}/protected/file-outside/${eventID}/${userID}`;
     }
+
+
+
+
 
     console.log(pdfUrl);
 

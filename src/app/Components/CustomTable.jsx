@@ -47,6 +47,7 @@ function CustomTable({
     setOpenEvidence,
     setUserID,
     setYears,
+    setEventID,
     teacherList = [],
     openDialog,
     editData
@@ -225,7 +226,6 @@ function CustomTable({
         setEventUploadName(eventName)
         setEventUploadID(eventID)
         setIsUpload(true);
-
     };
 
     const handleCloseUpload = () => {
@@ -354,10 +354,11 @@ function CustomTable({
             }
         }
     };
-    const handleOpenEnvidence = (userID, userYear) => {
+    const handleOpenEnvidence = (userID, userYear, eventID) => {
         setOpenEvidence(true)
         setUserID(userID)
         setYears(userYear)
+        setEventID(eventID)
     }
 
 
@@ -491,7 +492,7 @@ function CustomTable({
                                                 </div>
                                             ) : column.field === 'evidence' ? (
                                                 <div className='flex justify-center items-center' >
-                                                    <button onClick={(e) => handleOpenEnvidence(item.user_id, item.year)} >
+                                                    <button onClick={(e) => handleOpenEnvidence(item.user_id, item.year, item.event_id)} >
                                                         <FindInPageIcon sx={{ color: colorsCode.blue }} />
                                                     </button>
                                                 </div>

@@ -18,13 +18,13 @@ function HorizontalCard({ eventsInside, eventOutside }) {
     }, [])
 
     const router = useRouter()
-    const selectEvent = (params, myEvent) => {
+    const selectEvent = (where, params, myEvent) => {
         console.log(params, myEvent);
         if (params && myEvent) {
             // แปลงข้อมูล myEvent เป็น string (ถ้าจำเป็น)
             const myEventString = JSON.stringify(myEvent);
             // ส่งข้อมูลไปพร้อม query parameter
-            router.push(`/Information/MyEvent/selectedEvent/${params}?myEvent=${encodeURIComponent(myEventString)}`);
+            router.push(`/Information/MyEvent/selectedEvent/${where}/${params}?myEvent=${encodeURIComponent(myEventString)}`);
         }
     }
 
@@ -38,7 +38,7 @@ function HorizontalCard({ eventsInside, eventOutside }) {
         <div className="">
             {eventsInside?.map((item, index) => (
                 <>
-                    <button key={index} className=" py-1 border-md w-full hover:-translate-y-1 hover:duration-75  " onClick={() => selectEvent(item.event_id, item)} >
+                    <button key={index} className=" py-1 border-md w-full hover:-translate-y-1 hover:duration-75  " onClick={() => selectEvent('in-side', item.event_id, item)} >
                         <div className="md:h-[80px] xs:justify-center p-2 m-2 drop-shadow-md  xs:gap-2 bg-white md:flex md:justify-between items-center xs:grid  ">
                             <div className='md:flex gap-2 px-2 xs:gird' >
                                 <p className='truncate xs:border-[0px] md:border-r-[1px] border-gray-200 px-2' >
@@ -117,7 +117,7 @@ function HorizontalCard({ eventsInside, eventOutside }) {
             {eventOutside && eventOutside.length > 0 ? (
                 <>
                     {eventOutside?.map((item, index) => (
-                        <button key={index} className=" py-1 border-md w-full hover:-translate-y-1 hover:duration-75  " onClick={() => selectEvent(item.event_id, item)} >
+                        <button key={index} className=" py-1 border-md w-full hover:-translate-y-1 hover:duration-75  " onClick={() => selectEvent("out-side", item.event_id, item)} >
                             <div className="md:h-[80px] xs:justify-center p-2 m-2 drop-shadow-md  xs:gap-2 bg-white md:flex md:justify-between items-center xs:grid  ">
                                 <div className='md:flex gap-2 px-2 xs:gird' >
                                     <p className='truncate xs:border-[0px] md:border-r-[1px] border-gray-200 px-2' >

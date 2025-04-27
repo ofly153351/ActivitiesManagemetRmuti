@@ -21,7 +21,9 @@ export default function page({ searchParams }) {
     const [userID, setUserID] = useState('');
     const [years, setYears] = useState('');
     const { user } = useStore()
-    
+    const [eventID, setEventID] = useState('')
+
+
     useEffect(() => {
         // blockNulluser(user)
 
@@ -75,6 +77,7 @@ export default function page({ searchParams }) {
                             setOpenEvidence={setOpen}
                             setUserID={setUserID}
                             setYears={setYears}
+                            setEventID={setEventID}
                         />
                     )}
                 </div>

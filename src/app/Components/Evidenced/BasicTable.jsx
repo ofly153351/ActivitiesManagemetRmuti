@@ -18,7 +18,7 @@ export default function BasicTable({ column, insideEvents, outsideEvent, showVie
     return (
         <TableContainer sx={{ fontFamily: 'kanit ', }} component={Paper}>
             <div className="flex justify-between items-center w-full">
-                <div className="text-lg p-2 border-t border-[#e0e0e0] w-full">
+                <div className="text-lg p-2 border-t text-[30px] border-[#e0e0e0] w-full">
                     กิจกรรมภายในมหาวิทยาลัย
                 </div>
                 <div className="text-lg p-2 border-t border-[#e0e0e0] px-4 w-full text-right">
@@ -40,13 +40,13 @@ export default function BasicTable({ column, insideEvents, outsideEvent, showVie
                                 key={index}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 }, fontFamily: 'kanit ' }}
                             >
+                                {console.log(item)}
                                 <TableCell align="center" component="th" scope="row">
-                                    {item.event_name}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: 'kanit ', }} align="center">{item.location}</TableCell>
                                 <TableCell sx={{ fontFamily: 'kanit ', }} align="center">{item.working_hour}</TableCell>
                                 <TableCell sx={{ fontFamily: 'kanit ', }} align="center">{item.status ? <p className='text-green-500' >อนุมัติ</p> : <p className='text-red-500' >ไม่อนุมัติ</p>}</TableCell>
-                                <TableCell align="center" onClick={(e) => showViewPDF(item.file)}
+                                <TableCell align="center" onClick={(e) => showViewPDF("in-side", item.file, item.event_id)}
                                     sx={{
                                         cursor: 'pointer',
                                         '&:hover': {
@@ -54,7 +54,6 @@ export default function BasicTable({ column, insideEvents, outsideEvent, showVie
                                         },
                                         fontFamily: 'kanit ',
                                     }} >{item?.file ? <p>เรียกดูเอกสาร</p> : <p>ไม่พบเอกสาร</p>}</TableCell>
-
                             </TableRow>
                         ))
                     ) : (
@@ -67,7 +66,7 @@ export default function BasicTable({ column, insideEvents, outsideEvent, showVie
                 </TableBody>
             </Table>
             <div className="flex justify-between items-center w-full">
-                <div className="text-lg p-2 border-t border-[#e0e0e0] w-full">
+                <div className="text-lg p-2 text-[30px] border-t border-[#e0e0e0] w-full">
                     กิจกรรมภายนอกมหาวิทยาลัย
                 </div>
                 <div className="text-lg p-2 border-t border-[#e0e0e0] px-4 w-full text-right">
@@ -106,7 +105,7 @@ export default function BasicTable({ column, insideEvents, outsideEvent, showVie
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: 'kanit ', }} align="center">{item.location}</TableCell>
                                 <TableCell sx={{ fontFamily: 'kanit ', }} align="center">{item.working_hour}</TableCell>
-                                <TableCell align="center" onClick={(e) => showViewPDF(item.file)}
+                                <TableCell align="center" onClick={(e) => showViewPDF("out-side", item.file, item.event_id)}
                                     sx={{
                                         cursor: 'pointer',
                                         '&:hover': {

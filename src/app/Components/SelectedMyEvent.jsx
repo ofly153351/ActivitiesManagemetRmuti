@@ -218,7 +218,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                         </div>
                     )}
                 </div>
-                <div className=' lg:flex lg:justify-end items-center p-2'>
+                <div className=' xs:flex xs:justify-end items-center p-2 gap-2'>
                     {
                         !selectedEvent.file && !selectedEvent.status ? (
                             <div className='lg:flex lg:justify-end lg:items-center  gap-2'>
@@ -262,7 +262,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                 </div>
                             </div>
 
-                        ) : (selectedEvent.intendent && selectedEvent.file) ? (
+                        ) : (selectedEvent.file) ? (
                             <div className='xs:grid lg:flex justify-end items-center gap-2'>
                                 <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
                                     <BasicButtons
@@ -273,9 +273,11 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                             handleOpenDialog(selectedEvent.event_id, user.user_id)
                                         }
                                     />
-                                    <div className='flex justify-center items-center'>
-                                        <p className='p-2.5 text-[14px] text-white bg-green-500 rounded-sm shadow-md w-full'>ส่งเอกสารแล้ว</p>
-                                    </div>
+                                    {selectedEvent.intendent && (
+                                        <div className='flex justify-center items-center'>
+                                            <p className='p-2.5 text-[14px] text-white bg-green-500 rounded-sm shadow-md w-full'>ส่งเอกสารแล้ว</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ) : selectedEvent.file && !selectedEvent.status && !selectedEvent.comment ? (

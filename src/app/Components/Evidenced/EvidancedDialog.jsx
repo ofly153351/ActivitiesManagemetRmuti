@@ -85,7 +85,7 @@ export default function EvidancedDialog({ open, setOpen, userID, years, setOpenA
                 fullWidth
             >
                 <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                    ข้อมูลกิจกรรมของนักศึกษา
+                    <p className='text-[30px]' >ข้อมูลกิจกรรมของนักศึกษา</p>
                 </DialogTitle>
                 <BasicTabs
                     studentYears={years}
@@ -102,10 +102,8 @@ export default function EvidancedDialog({ open, setOpen, userID, years, setOpenA
                 >
                     <CloseIcon />
                 </IconButton>
-
                 {pathName !== '/Admin/AllDonesEvidence' ? (
                     <DialogActions>
-
                         <CustomTextfield
                             label="ความคิดเห็น"
                             value={comment}

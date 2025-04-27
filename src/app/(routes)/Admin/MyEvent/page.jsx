@@ -101,14 +101,14 @@ function page() {
 
 
 
-    const title = 'รายชื่อกิจกรรมของฉัน';
+    const title = 'รายชื่อกิจกรรมที่ต้องตรวจสอบ';
 
     return (
         <div className="bg-gray-50 h-screen">
             <Nav />
             <div className="flex justify-center items-center bg-gray-50 min-h-screen">
                 <div className="w-[80%] bg-white rounded-md mt-10 font-kanit shadow-md">
-                    <h1 className="text-[52px] text-shadow-md p-10">{title}</h1>
+                    <h1 className="lg:text-[52px] xs:text-[36px] text-shadow-md p-10 ">{title}</h1>
                     {loading ? (
                         <div className="flex justify-center items-center">
                             <div className="mt-40 px-10 h-[400px]">

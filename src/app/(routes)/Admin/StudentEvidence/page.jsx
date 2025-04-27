@@ -18,6 +18,7 @@ function page() {
     const [userID, setUserID] = useState('');
     const [years, setYears] = useState('')
     const [openAlert, setOpenAlert] = useState({ status: false, message: '' });
+    const [eventID, setEventID] = useState('')
     const { user } = useStore()
 
     useEffect(() => {
@@ -65,7 +66,6 @@ function page() {
 
     ];
 
-
     return (
         <div className="bg-gray-50 h-screen">
             <Nav />
@@ -86,6 +86,7 @@ function page() {
                             setOpenEvidence={setOpen}
                             setUserID={setUserID}
                             setYears={setYears}
+                            setEventID={setEventID}
                         />
                     )}
                 </div>

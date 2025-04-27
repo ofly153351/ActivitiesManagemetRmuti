@@ -8,9 +8,11 @@ import { AlertCircle } from 'lucide-react';
 import ViewPDF from './ViewPDF'; // Your PDF viewer component
 import { usePathname } from 'next/navigation';
 
-const ViewPDFdialog = ({ open, onClose, filePath, eventID, userID, status, firstName, lastName }) => {
+const ViewPDFdialog = ({ open, onClose, filePath, eventID, userID, status, firstName, lastName, admintable }) => {
 
     const pathName = usePathname()
+
+    
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
@@ -33,7 +35,7 @@ const ViewPDFdialog = ({ open, onClose, filePath, eventID, userID, status, first
                     <ViewPDF filePath={filePath} eventID={eventID} userID={userID} selectedStatus={status} />
 
                 ) : (filePath && pathName.startsWith('/Admin/StudentEvidence') || pathName.startsWith('/Admin/AllDonesEvidence')) ? (
-                    <ViewPDF filePath={filePath} eventID={eventID} userID={userID} selectedStatus={status} />
+                    <ViewPDF filePath={filePath} eventID={eventID} userID={userID} selectedStatus={status} admintable={admintable} />
                 ) : (
                     <div className="flex items-start gap-4 border rounded-lg p-4 bg-red-50">
                         <AlertCircle className="h-5 w-5 text-red-600 mt-1 flex-shrink-0" />
