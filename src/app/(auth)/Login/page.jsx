@@ -50,10 +50,14 @@ function Page() {
         <div className="flex flex-col md:flex-row bg-blue-300 w-full max-w-3xl rounded-[12px] shadow-2xl">
           {/* Left Side (Logo) */}
           <div className="hidden md:flex items-center justify-center w-1/2">
-            <p>LOGO</p>
+            <img
+              className={`${errorMessage ? 'rounded-l-[12px] h-[420px]' : 'rounded-l-[12px]'}`}
+              src="/logo.png"
+              alt="Logo"
+            />
           </div>
           {/* Right Side (Form) */}
-          <div className="bg-slate-100 flex flex-col justify-center items-center w-full md:w-1/2 p-6 rounded-[12px] shadow-2xl">
+          <div className="bg-slate-100 flex flex-col justify-center items-center w-full md:w-1/2 p-6 rounded-r-[12px] shadow-2xl">
             <form className="w-full max-w-sm" onSubmit={handleSubmit(onSubmit)}>
               <div className="text-[30px] text-center font-kanit py-4 text-gray-700">
                 เข้าสู่ระบบ
@@ -109,7 +113,7 @@ function Page() {
               )}
 
               {/* Forgot Password */}
-              
+
             </form>
           </div>
         </div>

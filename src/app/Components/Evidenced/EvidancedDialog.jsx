@@ -89,7 +89,8 @@ export default function EvidancedDialog({ open, setOpen, userID, years, setOpenA
                 </DialogTitle>
                 <BasicTabs
                     studentYears={years}
-                    userID={userID} />
+                    userID={userID}
+                />
                 <IconButton
                     aria-label="close"
                     onClick={handleClose}

@@ -88,10 +88,7 @@ function Nav() {
                         <div className='flex justify-center items-center'>
                             <Sidebar />
                             <Link href="/" className='hover:bg-stone-50 xs:hidden lg:block md:block'>
-                                <LogoDevIcon style={{
-                                    fontSize: "50px",
-                                    color: "#0067B3"
-                                }} />
+                                <img className='"w-14 h-14 object-cover rounded-full' src="/logolight.png" />
                             </Link>
                         </div>
                     </div>
@@ -103,86 +100,99 @@ function Nav() {
 
             {!userRoleHash && (
                 <Link href="/" className='ml-[50px]  justify-center items-center lg:flex xs:hidden' >
-                    <span className=" font-kanit text-2xl">LOGO</span>
+                    <img className='"w-14 h-14 object-cover rounded-full' src="/logolight.png" />
                 </Link>
-            )}
-            {userRoleHash === 'student' && (
-                <Link href="/" className='ml-[50px]  justify-center items-center lg:flex ' >
-                    <span className="ml-[50px] font-kanit text-2xl xs:hidden lg:flex ">LOGO</span>
-                </Link>
-            )}
+            )
+            }
+            {
+                userRoleHash === 'student' && (
+                    <Link href="/" className='ml-[50px]  justify-center items-center lg:flex ' >
+                        <img className='"w-14 h-14 object-cover rounded-full' src="/logolight.png" />
+                    </Link>
+                )
+            }
 
-            {pathname === '/Login' && (
-                <div className="xs:w-screen xs:flex  xs:justify-end xs:items-center xs:mr-2 lg:mr-10  md:justify-end">
+            {
+                pathname === '/Login' && (
+                    <div className="xs:w-screen xs:flex  xs:justify-end xs:items-center xs:mr-2 lg:mr-10  md:justify-end">
 
-                    <div className='xs:grid xs:grid-cols-2 lg:flex justify-center items-center gap-5 xs:mr-5'>
-                        <CustomMenu />
-                        <BasicButtons
-                            label={'กิจกรรม'}
-                            onClick={() => router.push('/')}
-                        />
+                        <div className='xs:grid xs:grid-cols-2 lg:flex justify-center items-center gap-5 xs:mr-5'>
+                            <CustomMenu />
+                            <BasicButtons
+                                label={'กิจกรรม'}
+                                onClick={() => router.push('/')}
+                            />
+                        </div>
                     </div>
-                </div>
-            )}
+                )
+            }
 
-            {isRegistrationPage && (
-                <div className='flex gap-5 xs:mr-5'>
-                    {registerPath.map((link, index) => (
-                        <Link
-                            key={index}
-                            href={link.href}
-                            className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100"
-                        >
-                            <span className="drop-shadow-2xl">{link.label}</span>
-                        </Link>
-                    ))}
-                    {commonLinks.map((link, index) => (
-                        <Link
-                            key={index}
-                            href={link.href}
-                            className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100"
-                        >
-                            <span className="drop-shadow-2xl">{link.label}</span>
-                        </Link>
-                    ))}
-                </div>
-            )}
-
-            {/* Home page navigation for user role */}
-            {userRoleHash === 'student' && (
-                <div className=" flex  justify-between">
-                    <div className='flex ' >
-                        {userLinks.map((link, index) => (
-                            <div key={index} className="p-2 flex xs:hidden lg:flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] font-kanit">
-                                <button onClick={link.function}>
-                                    <span>{link.label}</span>
-                                </button>
-                            </div>
+            {
+                isRegistrationPage && (
+                    <div className='flex gap-5 xs:mr-5'>
+                        {registerPath.map((link, index) => (
+                            <Link
+                                key={index}
+                                href={link.href}
+                                className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100"
+                            >
+                                <span className="drop-shadow-2xl">{link.label}</span>
+                            </Link>
+                        ))}
+                        {commonLinks.map((link, index) => (
+                            <Link
+                                key={index}
+                                href={link.href}
+                                className="drop-shadow-2xl px-10 py-3 bg-[#0067B3] rounded-md text-[#ffffff] font-kanit hover:bg-gray-200 hover:text-black transition duration-100"
+                            >
+                                <span className="drop-shadow-2xl">{link.label}</span>
+                            </Link>
                         ))}
                     </div>
-                    <div className='flex justify-center items-center lg:hidden' >
-                        <StudentNavmenu buttonName="เมนู" menu={userLinks} onClick={(e) => console.log('11')} />
+                )
+            }
+
+            {/* Home page navigation for user role */}
+            {
+                userRoleHash === 'student' && (
+                    <div className=" flex  justify-between">
+                        <div className='flex ' >
+                            {userLinks.map((link, index) => (
+                                <div key={index} className="p-2 flex xs:hidden lg:flex justify-center items-center gap-4 hover:border-b-2 border-[#0067B3] font-kanit">
+                                    <button onClick={link.function}>
+                                        <span>{link.label}</span>
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                        <div className='flex justify-center items-center lg:hidden' >
+                            <StudentNavmenu buttonName="เมนู" menu={userLinks} onClick={(e) => console.log('11')} />
+                        </div>
+                        <div className="min-w-fit lg:mr-20">
+                            <Profilemanu user={user} />
+                        </div>
                     </div>
-                    <div className="min-w-fit lg:mr-20">
-                        <Profilemanu user={user} />
+
+                )
+            }
+
+            {
+                openDialog ? (
+                    <CreateEventOutside isOpen={openDialog} isClose={handleDialogClose} />
+                ) : null
+            }
+
+            {
+                pathname === '/' && !user && (
+                    <div className='flex gap-5 xs:mr-5'>
+                        <CustomMenu />
+                        <BasicButtons label={'เข้าสู่ระบบ'} onClick={(e) => {
+                            router.push('/Login')
+                        }} />
                     </div>
-                </div>
-
-            )}
-
-            {openDialog ? (
-                <CreateEventOutside isOpen={openDialog} isClose={handleDialogClose} />
-            ) : null}
-
-            {pathname === '/' && !user && (
-                <div className='flex gap-5 xs:mr-5'>
-                    <CustomMenu />
-                    <BasicButtons label={'เข้าสู่ระบบ'} onClick={(e) => {
-                        router.push('/Login')
-                    }} />
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 }
 

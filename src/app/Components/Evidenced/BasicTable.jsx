@@ -18,10 +18,10 @@ export default function BasicTable({ column, insideEvents, outsideEvent, showVie
     return (
         <TableContainer sx={{ fontFamily: 'kanit ', }} component={Paper}>
             <div className="flex justify-between items-center w-full">
-                <div className="text-lg p-2 border-t text-[30px] border-[#e0e0e0] w-full">
+                <div className=" text-[26px] p-2 border-t  border-[#e0e0e0] w-full">
                     กิจกรรมภายในมหาวิทยาลัย
                 </div>
-                <div className="text-lg p-2 border-t border-[#e0e0e0] px-4 w-full text-right">
+                <div className="text-[26px] p-2 border-t border-[#e0e0e0] px-4 w-full text-right">
                     รวมชั่วโมงกิจกรรม : {totalInsideWorkingHour}
                 </div>
             </div>
@@ -41,8 +41,10 @@ export default function BasicTable({ column, insideEvents, outsideEvent, showVie
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 }, fontFamily: 'kanit ' }}
                             >
                                 {console.log(item)}
-                                <TableCell align="center" component="th" scope="row">
-                                </TableCell>
+                                {/* <TableCell align="center" component="th" scope="row">
+                                </TableCell> */}
+                                <TableCell sx={{ fontFamily: 'kanit ', }} align="center">{item.event_name}</TableCell>
+
                                 <TableCell sx={{ fontFamily: 'kanit ', }} align="center">{item.location}</TableCell>
                                 <TableCell sx={{ fontFamily: 'kanit ', }} align="center">{item.working_hour}</TableCell>
                                 <TableCell sx={{ fontFamily: 'kanit ', }} align="center">{item.status ? <p className='text-green-500' >อนุมัติ</p> : <p className='text-red-500' >ไม่อนุมัติ</p>}</TableCell>
@@ -66,10 +68,10 @@ export default function BasicTable({ column, insideEvents, outsideEvent, showVie
                 </TableBody>
             </Table>
             <div className="flex justify-between items-center w-full">
-                <div className="text-lg p-2 text-[30px] border-t border-[#e0e0e0] w-full">
+                <div className=" text-[26px] p-2  border-t border-[#e0e0e0] w-full">
                     กิจกรรมภายนอกมหาวิทยาลัย
                 </div>
-                <div className="text-lg p-2 border-t border-[#e0e0e0] px-4 w-full text-right">
+                <div className="text-[26px]  p-2 border-t border-[#e0e0e0] px-4 w-full text-right">
                     รวมชั่วโมงกิจกรรม : {totalOutsideWorkingHour}
                 </div>
             </div>
