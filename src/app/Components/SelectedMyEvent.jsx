@@ -261,7 +261,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                         color="#fb8c00"
                                         label="เรียกดูเอกสารที่ส่งไป"
                                         onClick={() =>
-                                            handleOpenDialog("out-side", selectedEvent.event_id, user.user_id)
+                                            handleOpenDialog(selectedEvent.event_id, user.user_id)
                                         }
                                     />
                                     {selectedEvent.intendent && (
