@@ -142,6 +142,9 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
         fetchData();
     }, [userRoleHash]);
 
+    console.log(userRoleHash);
+
+
     // console.log("my", eventsInside);
 
     // ดึงชื่อสาขาอย่างปลอดภัย
