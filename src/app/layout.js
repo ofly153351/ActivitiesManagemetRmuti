@@ -7,7 +7,7 @@ export const metadata = {
   title: "ระบบจักการกิจกรรม",
   description: "ระบบจักการกิจกรรม",
   icons: {
-    icon: "/runner.svg"
+    icon: "/titlelogo.ico"
   }
 };
 
