@@ -164,7 +164,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                         <p className="p-2 border-b-2 w-fit font-medium">ข้อมูลกิจกรรมที่ลงทะเบียน</p>
                     </div>
                     <div className="flex flex-wrap gap-2 justify-end">
-                        {selectedEvent.file && selectedEvent.intendent && (
+                        {selectedEvent.intendent && (
                             <>
                                 <BasicButtons
                                     label="ดาวน์โหลดเอกสาร"
@@ -173,7 +173,6 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
 
                             </>
                         )}
-
                     </div>
                 </div>
                 <div className="xs:grid lg:flex py-2">

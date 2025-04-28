@@ -54,8 +54,6 @@ function Nav() {
 
     const userLinks = [
         { function: () => setOpenDialog(true), label: 'สร้างแปบฟอร์มกิจกรรมภายนอก' },
-        { function: null, label: '-' },
-        { function: null, label: '-' }
     ];
 
     const isRegistrationPage = pathname === '/Register/Student' || pathname === '/Register/Teacher';
