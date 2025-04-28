@@ -99,7 +99,9 @@ export const useStore = create((set, get) => ({
         localStorage.removeItem("user");
         localStorage.removeItem("userRole");
         localStorage.removeItem("userRoleHash");
-        set({ user: null, userRole: null, isLoading: false });
+        localStorage.removeItem("expireTime");
+
+        set({ user: null, userRole: null, isLoading: false, localStorage: null });
     },
 
     branchesList: [],

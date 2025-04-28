@@ -99,7 +99,7 @@ function Nav() {
             )}
 
             {!userRoleHash && (
-                <Link href="/" className='ml-[50px]  justify-center items-center lg:flex xs:hidden' >
+                <Link href="/" className='md:ml-[50px] xs:ml-2  justify-center items-center  xs:flex' >
                     <img className='"w-14 h-14 object-cover rounded-full' src="/logolight.png" />
                 </Link>
             )
@@ -184,7 +184,7 @@ function Nav() {
 
             {
                 pathname === '/' && !user && (
-                    <div className='flex gap-5 xs:mr-5'>
+                    <div className='flex  gap-5 xs:mr-5'>
                         <CustomMenu />
                         <BasicButtons label={'เข้าสู่ระบบ'} onClick={(e) => {
                             router.push('/Login')

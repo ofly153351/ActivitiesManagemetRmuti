@@ -24,6 +24,7 @@ function Page() {
     handleSubmit,
     control,
     watch,
+    setValue,
     formState: { errors }
   } = useForm({
     defaultValues: {
@@ -43,6 +44,7 @@ function Page() {
 
   const [faculties, setFaculties] = useState([]);
   const [branches, setBranches] = useState([]);
+  const [filteredBranches, setFilteredBranches] = useState([]);
 
   useEffect(() => {
     checkUserAuth(user);
@@ -61,8 +63,21 @@ function Page() {
       }
     };
 
+
     fetchData();
   }, []);
+
+
+  const selectedFacultyId = watch('faculty');
+
+  useEffect(() => {
+    if (selectedFacultyId) {
+      const branchesOfFaculty = branches.filter(branch => branch.faculty_id === selectedFacultyId);
+      setFilteredBranches(branchesOfFaculty);
+      setValue('branch', ''); // reset สาขา ถ้าเปลี่ยนคณะ
+    }
+  }, [selectedFacultyId, branches, setValue]);
+
 
   const onSubmit = async (data) => {
 
@@ -174,63 +189,52 @@ function Page() {
                 control={control}
                 rules={{ required: "กรุณาเลือกคณะ" }}
                 render={({ field }) => (
-                  <FormControl sx={{ width: '138px' }} margin="normal" size="small" error={!!errors.faculty}>
-                    <InputLabel sx={{ fontSize: '0.9rem' }}>คณะ</InputLabel>
-                    <Select
-                      {...field}
-                      label="คณะ"
-                    >
-                      {faculties.map((item) => (
-                        <MenuItem key={item.faculty_id} value={item.faculty_id}>
-                          {item.faculty_name}
+                  <FormControl sx={{ width: '138px' }} size="small" error={!!errors.faculty}>
+                    <InputLabel>คณะ</InputLabel>
+                    <Select {...field} label="คณะ">
+                      {faculties.map(faculty => (
+                        <MenuItem key={faculty.faculty_id} value={faculty.faculty_id}>
+                          {faculty.faculty_name}
                         </MenuItem>
                       ))}
                     </Select>
-                    {errors.faculty && <div className="text-red-500 text-xs mt-1">{errors.faculty.message}</div>}
+                    {errors.faculty && <p className="text-red-500 text-xs mt-1">{errors.faculty.message}</p>}
                   </FormControl>
                 )}
               />
-
               <Controller
                 name="branch"
                 control={control}
                 rules={{ required: "กรุณาเลือกสาขา" }}
                 render={({ field }) => (
-                  <FormControl sx={{ width: '138px' }} margin="normal" size="small" error={!!errors.branch}>
-                    <InputLabel sx={{ fontSize: '0.9rem' }}>สาขา</InputLabel>
-                    <Select
-                      {...field}
-                      label="สาขา"
-                    >
-                      {branches.map((branch) => (
+                  <FormControl sx={{ width: '138px' }} size="small" error={!!errors.branch}>
+                    <InputLabel>สาขา</InputLabel>
+                    <Select {...field} label="สาขา">
+                      {filteredBranches.map(branch => (
                         <MenuItem key={branch.branch_id} value={branch.branch_id}>
                           {branch.branch_name}
                         </MenuItem>
                       ))}
                     </Select>
-                    {errors.branch && <div className="text-red-500 text-xs mt-1">{errors.branch.message}</div>}
+                    {errors.branch && <p className="text-red-500 text-xs mt-1">{errors.branch.message}</p>}
                   </FormControl>
                 )}
               />
-
               <Controller
                 name="year"
                 control={control}
                 rules={{ required: "กรุณาเลือกชั้นปี" }}
                 render={({ field }) => (
-                  <FormControl sx={{ width: '138px' }} margin="normal" size="small" error={!!errors.year}>
-                    <InputLabel sx={{ fontSize: '0.9rem' }}>ชั้นปี</InputLabel>
-                    <Select
-                      {...field}
-                      label="ชั้นปี"
-                    >
-                      {[1, 2, 3, 4, 5].map((year) => (
-                        <MenuItem key={year} value={Number(year)}>
+                  <FormControl sx={{ width: '138px' }} size="small" error={!!errors.year}>
+                    <InputLabel>ชั้นปี</InputLabel>
+                    <Select {...field} label="ชั้นปี">
+                      {[1, 2, 3, 4, 5].map(year => (
+                        <MenuItem key={year} value={year}>
                           {year}
                         </MenuItem>
                       ))}
                     </Select>
-                    {errors.year && <div className="text-red-500 text-xs mt-1">{errors.year.message}</div>}
+                    {errors.year && <p className="text-red-500 text-xs mt-1">{errors.year.message}</p>}
                   </FormControl>
                 )}
               />
