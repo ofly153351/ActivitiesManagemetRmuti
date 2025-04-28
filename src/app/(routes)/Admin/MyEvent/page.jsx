@@ -36,7 +36,6 @@ function page() {
         // blockNulluser(userRoleHash)
         const fetchData = async () => {
             setLoading(true);
-
             try {
                 if (userRoleHash === 'admin') {
                     const response = await getMyEventAdmin();
@@ -53,7 +52,7 @@ function page() {
         };
 
         fetchData();
-    }, [user]);
+    }, [userRoleHash]);
 
     const fields = [
         { name: 'event_name', label: 'ชื่อกิจกรรม', placeholder: 'กรุณากรอกชื่อกิจกรรม' },

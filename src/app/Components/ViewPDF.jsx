@@ -107,6 +107,9 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus, admintable }) => {
         pdfUrl = `${API_BASE}/protected/file-outside/${eventID}/${userID}`;
     }
 
+    if (pathName.startsWith('/Admin/MyEvent')) {
+        pdfUrl = `${API_BASE}/protected/file/${eventID}/${userID}`;
+    }
 
 
 
