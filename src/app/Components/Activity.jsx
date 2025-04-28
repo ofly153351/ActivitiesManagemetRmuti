@@ -142,7 +142,6 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
         fetchData();
     }, [userRoleHash]);
 
-    console.log(userRoleHash);
 
 
     // console.log("my", eventsInside);
@@ -201,9 +200,14 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
 
     const isMatchingReady = (userRoleHash === 'student') ? eventsInside.length > 0 : true;
 
-    console.log(isMatchingReady);
+    console.log("isMatchingReady", isMatchingReady);
 
-    console.log(sortedActivities);
+    console.log("sortedActivities", sortedActivities);
+
+    console.log("userRole", userRoleHash);
+
+    console.log("eventInside", eventsInside);
+
 
 
     if (!isMatchingReady) return <div className='my-20 w-full h-full justify-center items-center flex' ><Loading /></div>;
