@@ -261,10 +261,9 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                         color="#fb8c00"
                                         label="เรียกดูเอกสารที่ส่งไป"
                                         onClick={() =>
-                                            handleOpenDialog(selectedEvent.event_id, user.user_id)
+                                            handleOpenDialog("out-side", selectedEvent.event_id, user.user_id)
                                         }
                                     />
-
                                     {selectedEvent.intendent && (
                                         <div className='flex justify-center items-center'>
                                             <p className='p-2.5 text-[14px] text-white bg-green-500 rounded-sm shadow-md w-full'>ส่งเอกสารแล้ว</p>
