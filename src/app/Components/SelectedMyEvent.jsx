@@ -151,6 +151,8 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
     }
 
 
+    console.log(selectedEvent.status, selectedEvent.comment, selectedEvent.file);
+
 
 
     return (
@@ -222,15 +224,6 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                     {
                         !selectedEvent.file && !selectedEvent.status ? (
                             <div className='lg:flex lg:justify-end lg:items-center  gap-2'>
-                                {/* {file && selectedEvent.intendent !== undefined ? (
-                                    <div>
-                                        <BasicButtons label={'อัปโหลดเอกสาร'} onClick={handleUpload} />
-                                    </div>
-                                ) : (
-                                    <div>
-                                        <BasicButtons diasble={true} label={'อัปโหลดเอกสาร'} />
-                                    </div>
-                                )} */}
                                 <div className="lg:flex w-full gap-2 justify-end xs:mt-2 lg:mt-0">
                                     <div className='xs:flex xs:mt-2 lg:mt-0 xs:justify-end xs:items-end gap-2 lg:mb-4' >
                                         {(!selectedEvent.intendent && selectedEvent.intendent !== undefined) && (
@@ -262,7 +255,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                 </div>
                             </div>
 
-                        ) : (selectedEvent.file) ? (
+                        ) : (selectedEvent.file && !selectedEvent.status && !selectedEvent.comment) ? (
                             <div className='xs:grid lg:flex justify-end items-center gap-2'>
                                 <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
                                     <BasicButtons
@@ -273,6 +266,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                             handleOpenDialog(selectedEvent.event_id, user.user_id)
                                         }
                                     />
+
                                     {selectedEvent.intendent && (
                                         <div className='flex justify-center items-center'>
                                             <p className='p-2.5 text-[14px] text-white bg-green-500 rounded-sm shadow-md w-full'>ส่งเอกสารแล้ว</p>
@@ -280,15 +274,28 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                     )}
                                 </div>
                             </div>
-                        ) : selectedEvent.file && !selectedEvent.status && !selectedEvent.comment ? (
-                            <div className='xs:grid lg:flex justify-end items-center gap-2'>
-                                <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
-                                    <div className='flex justify-center items-center'>
-                                        <p className='p-2.5 text-[14px] text-white bg-yellow-500 rounded-sm shadow-md w-full'>รอตรวจสอบ</p>
-                                    </div>
+                        ) : selectedEvent.file ? (
+                            <div className='xs:flex justify-end items-center gap-2'>
+                                <InputUploadfile onFileChange={setFile} />
+                                <div className="flex gap-2 justify-end items-center  ">
+                                    {file ? (
+                                        <div>
+                                            <BasicButtons label={'อัปโหลดเอกสาร'} onClick={handleUpload} />
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <BasicButtons diasble={true} label={'อัปโหลดเอกสาร'} onClick={handleUpload} />
+                                        </div>
+                                    )}
+                                    <BasicButtons
+                                        hover="#d32f2f"
+                                        color="#e53935"
+                                        label="ยกเลิกกิจกรรม"
+                                        onClick={() => handleDeleteMyeventOutside(selectedEvent.event_id)}
+                                    />
                                 </div>
                             </div>
-                        ) : selectedEvent.file && !selectedEvent.status && selectedEvent.comment ? (
+                        ) : (
                             <div className='xs:flex  justify-end items-center gap-2'>
                                 <InputUploadfile onFileChange={setFile} />
                                 <div className="flex gap-2 justify-end items-center  ">
@@ -309,12 +316,11 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                     />
                                 </div>
                             </div>
-                        ) : null}
+                        )}
                     {selectedEvent.file !== "" && selectedEvent.status === true ? (
                         <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
                             <div className='flex justify-center items-center'>
                                 <p className='p-2.5 text-[14px] text-white bg-green-500 rounded-sm shadow-md w-full'>ผ่านกิจกรรม</p>
-
                             </div>
                         </div>
                     ) : null}

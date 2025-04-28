@@ -416,7 +416,7 @@ function Page() {
                 </div>
                 {isopen !== null && isopen === true ? (
                     <div className='fixed bottom-4 right-4'>
-                        <SuccessAlert label='อัพเดทข้อมูลเรียบร้อย' />
+                        <SuccessAlert label='อัปเดทข้อมูลเรียบร้อย' />
                     </div>
                 ) : isopen !== null && isopen === false && (
                     <div className='fixed bottom-4 right-4'>
