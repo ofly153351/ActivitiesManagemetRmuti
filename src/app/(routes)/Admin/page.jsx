@@ -95,10 +95,10 @@ function Page() {
 
 
     return (
-        <>
+        <div className='bg-slate-50' >
             <Nav />
             <div className='bg-slate-50 min-h-screen' >
-                <div className='h-screen  '>
+                <div className='h-screen bg-slate-50 '>
                     <div className='flex justify-start items-center p-4 
                     xs:h-10 sm:h-16 md:h-20   
                     bg-slate-75 rounded-lg shadow-lg m-4 xs:text-md sm:text-xl md:text-2xl '
@@ -152,7 +152,7 @@ function Page() {
                             <span className='px-3 text-xl'>กิจกรรมที่ไกล้ถึง</span>
                             <div className='p-2 grid gap-2 md:flex md:overflow-x-auto'>
                                 {closedEvents ? (
-                                    
+
                                     closedEvents.map((item, idx) => (
                                         <CloseActivitiesCard
                                             key={idx}
@@ -177,7 +177,7 @@ function Page() {
                 </div>
             </div>
 
-        </>
+        </div>
     );
 }
 
