@@ -36,7 +36,7 @@ function Page() {
     const [validationMessage, setValidationMessage] = useState({});
     const [isopen, setIsopen] = useState(null);
     const [isOpenEdit, setIsOpenEdit] = useState(true);
-    const { userRoleHash, initUserRoleHash, user } = useStore()
+    const { userRoleHash, initUserRoleHash, user, setUser } = useStore()
     // ตรวจสอบว่าเราอยู่ในฝั่ง client
 
 
