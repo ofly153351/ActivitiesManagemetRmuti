@@ -83,7 +83,7 @@ function Page() {
             title: 'จำนวนกิจกรรมทั้งหมดที่มีในระบบ', value: countofDashBoard.count_event || 0
         },
         {
-            title: 'จำนวนกิจกรรมที่เปิดอยู่ตอน', value: countofDashBoard.count_eventallow || 0
+            title: 'จำนวนกิจกรรมที่เปิดอยู่ตอนนี้', value: countofDashBoard.count_eventallow || 0
         },
         {
             title: 'จำนวนนักศึกษาที่ผ่านการตรวจสอบจากผู้ดูแลคณะ', value: countofDashBoard.count_done || 0
