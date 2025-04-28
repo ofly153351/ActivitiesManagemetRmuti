@@ -198,7 +198,7 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
         );
     }, [sortedActivities, eventsInside]);
 
-    const isMatchingReady = (userRoleHash === 'student') ? eventsInside.length > 0 : true;
+    const isMatchingReady = (userRoleHash === 'student') ? (eventsInside.length >= 0) : true;
 
     console.log("isMatchingReady", isMatchingReady);
 
