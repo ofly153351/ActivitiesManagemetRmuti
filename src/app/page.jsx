@@ -23,7 +23,7 @@ function Page() {
 
     const Manu = [
         { selectName: "วันที่ไกล้เริ่ม", SelectValue: "date" },
-        { selectName: "ชั่วโมงกิจกรรม(มาก-นอย)", SelectValue: "hour" },
+        { selectName: "ชั่วโมงกิจกรรม(มาก-น้อย)", SelectValue: "hour" },
     ]
 
     const d = new Date();

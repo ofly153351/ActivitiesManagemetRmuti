@@ -1,8 +1,10 @@
 // store/useStore.js
 import { create } from "zustand";
-import { getUserbyClaim, getBranches, getFaculties } from "@/app/Utils/api";
+import { getUserbyClaim, getBranches, getFaculties, handlelogOut } from "@/app/Utils/api";
 import axios from "axios";
 import { decryptText, encryptText } from "@/app/Utils/hash";
+
+
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 const SECRET_KEY = process.env.NEXT_PUBLIC_ENCODE_ENV; // ถ้า deploy จริงให้ generate จาก backend หรือ env
@@ -100,7 +102,6 @@ export const useStore = create((set, get) => ({
         localStorage.removeItem("userRole");
         localStorage.removeItem("userRoleHash");
         localStorage.removeItem("expireTime");
-
         set({ user: null, userRole: null, isLoading: false, localStorage: null });
     },
 
@@ -127,3 +128,12 @@ export const useStore = create((set, get) => ({
     },
 }));
 
+
+
+const checkTokenExpire = () => {
+    const expireTime = localStorage.getItem("expireTime");
+    if (expireTime && new Date().getTime() > parseInt(expireTime)) {
+        console.warn("Token expired, logging out...");
+        useStore.getState().handleLogout();
+    }
+};
