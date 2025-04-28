@@ -241,7 +241,6 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                                 <div>
                                                     <BasicButtons diasble={true} label={'อัปโหลดเอกสาร'} onClick={handleUpload} />
                                                 </div>
-
                                             )}
                                         </div>
                                         <BasicButtons
@@ -295,28 +294,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                     />
                                 </div>
                             </div>
-                        ) : (
-                            <div className='xs:flex  justify-end items-center gap-2'>
-                                <InputUploadfile onFileChange={setFile} />
-                                <div className="flex gap-2 justify-end items-center  ">
-                                    {file ? (
-                                        <div>
-                                            <BasicButtons label={'อัปโหลดเอกสาร'} onClick={handleUpload} />
-                                        </div>
-                                    ) : (
-                                        <div>
-                                            <BasicButtons diasble={true} label={'อัปโหลดเอกสาร'} onClick={handleUpload} />
-                                        </div>
-                                    )}
-                                    <BasicButtons
-                                        hover="#d32f2f"
-                                        color="#e53935"
-                                        label="ยกเลิกกิจกรรม"
-                                        onClick={() => handleDeleteMyeventOutside(selectedEvent.event_id)}
-                                    />
-                                </div>
-                            </div>
-                        )}
+                        ) : null}
                     {selectedEvent.file !== "" && selectedEvent.status === true ? (
                         <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
                             <div className='flex justify-center items-center'>

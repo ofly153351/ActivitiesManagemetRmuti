@@ -70,9 +70,9 @@ function ViewTable({ columns, rows }) {
                                         return (
                                             <TableCell sx={{ fontFamily: fontFamily.Kanit }} key={colIndex} align="center">
                                                 {value ? (
-                                                    <span className="p-1 bg-green-500 rounded-md text-white">ผ่านกิจกรรม</span>
+                                                    <span className="p-1 bg-green-500 rounded-md text-white">อนุมัติกิจกรรม</span>
                                                 ) : (
-                                                    <span className="p-1 bg-red-500 rounded-md text-white">ไม่ผ่าน</span>
+                                                    <span className="p-1 bg-red-500 rounded-md text-white">ไม่อนุมัตื</span>
                                                 )}
                                             </TableCell>
                                         );
