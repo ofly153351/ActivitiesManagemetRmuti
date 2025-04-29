@@ -294,7 +294,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                 </div>
                             </div>
                         ) : (selectedEvent.file && !selectedEvent.status && selectedEvent.comment) ? (
-                            <div className='xs:grid lg:flex justify-end items-center gap-2'>
+                            selectedEvent.file && !selectedEvent.status && selectedEvent.comment && !selectedEvent.intendent && (
                                 <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
                                     <InputUploadfile onFileChange={setFile} />
                                     <div className="flex gap-2 justify-end items-center  ">
@@ -322,7 +322,10 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                         </div>
                                     )}
                                 </div>
-                            </div>
+                            )
+                            // <div className='xs:grid lg:flex justify-end items-center gap-2'>
+
+                            // </div>
                         ) : null}
                     {selectedEvent.file !== "" && selectedEvent.status === true ? (
                         <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
