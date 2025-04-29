@@ -13,6 +13,7 @@ import StudentNavmenu from './StudentNavmenu';
 import CreateEventOutside from './Outside/CreateEventOutside';
 import { useStore } from '@/store/useStore';
 import { decryptText } from '../Utils/hash';
+import { checkSessionTimeout } from '../Utils/session';
 
 function Nav() {
     const { user } = useStore();
@@ -29,7 +30,7 @@ function Nav() {
     useEffect(() => {
         // เรียกเมธอดเพื่อดึง role ที่ถอดรหัสแล้วจาก Zustand store
         initUserRoleHash();
-
+        checkSessionTimeout()
     }, [initUserRoleHash]);
 
     useEffect(() => {

@@ -233,7 +233,11 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                         <div className="flex gap-2 justify-end items-center  ">
                                             {file ? (
                                                 <div>
-                                                    <BasicButtons label={'อัปโหลดเอกสาร'} onClick={handleUpload} />
+                                                    <BasicButtons
+                                                        label={uploading ? 'กำลังอัปโหลด...' : 'อัปโหลดเอกสาร'}
+                                                        onClick={handleUpload}
+                                                        disabled={uploading}
+                                                    />
                                                 </div>
                                             ) : (
                                                 <div>
@@ -270,7 +274,11 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                     <div className="flex gap-2 justify-end items-center  ">
                                         {file ? (
                                             <div>
-                                                <BasicButtons label={'อัปโหลดเอกสารใหม่'} onClick={handleUpload} />
+                                                <BasicButtons
+                                                    label={uploading ? 'กำลังอัปโหลด...' : 'อัปโหลดเอกสาร'}
+                                                    onClick={handleUpload}
+                                                    disabled={uploading}
+                                                />
                                             </div>
                                         ) : (
                                             <div>
@@ -300,7 +308,11 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                     <div className="flex gap-2 justify-end items-center  ">
                                         {file ? (
                                             <div>
-                                                <BasicButtons label={'อัปโหลดเอกสารใหม่'} onClick={handleUpload} />
+                                                <BasicButtons
+                                                    label={uploading ? 'กำลังอัปโหลด...' : 'อัปโหลดเอกสารใหม่'}
+                                                    onClick={handleUpload}
+                                                    disabled={uploading}
+                                                />
                                             </div>
                                         ) : (
                                             <div>

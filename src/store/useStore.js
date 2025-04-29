@@ -64,7 +64,7 @@ export const useStore = create((set, get) => ({
 
             set({ user: userData, userRole: userData.role });
             const hash = encryptText(userResponse.data.role, SECRET_KEY);
-            const expireTime = new Date().getTime() + 2 * 60 * 60 * 1000; // หมดอายุใน 2 ชั่วโมง (ตัวอย่าง)
+            const expireTime = new Date().getTime() + 1 * 60 * 1000; // หมดอายุใน 1 นาที // หมดอายุใน 2 ชั่วโมง (ตัวอย่าง)
 
             localStorage.setItem("userRoleHash", hash);
             localStorage.setItem("user", JSON.stringify(userData));
@@ -130,10 +130,3 @@ export const useStore = create((set, get) => ({
 
 
 
-const checkTokenExpire = () => {
-    const expireTime = localStorage.getItem("expireTime");
-    if (expireTime && new Date().getTime() > parseInt(expireTime)) {
-        console.warn("Token expired, logging out...");
-        useStore.getState().handleLogout();
-    }
-};
