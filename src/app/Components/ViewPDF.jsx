@@ -114,7 +114,7 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus, admintable }) => {
 
 
 
-    console.log(pdfUrl);
+    pdfUrl += `?ts=${Date.now()}`;
 
     // console.log(pdfUrl);
 
@@ -125,7 +125,7 @@ const ViewPDF = ({ filePath, eventID, userID, selectedStatus, admintable }) => {
             <div className="flex flex-col gap-3">
                 {/* PDF Viewer */}
                 <iframe
-                    src={pdfUrl}
+                    src={`${pdfUrl}?ts=${Date.now()}`}
                     className={`w-[100%] ${pathName === '/Admin/StudentEvidence' ? 'h-[700px]' : 'h-[500px]'}  border rounded-lg`}
                 />
                 {/* Display comment and buttons only if not on selectedEvent page */}
