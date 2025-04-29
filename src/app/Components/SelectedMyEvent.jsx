@@ -39,6 +39,9 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
         formData.append("file", file);
         formData.append("event_id", selectedEvent.event_id); // ส่ง event_id ไปด้วย
 
+        console.log(formData);
+
+
         try {
             setUploading(true);
 
@@ -97,11 +100,11 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
         if (eventID) {
             try {
                 const response = await unJoinEvent(eventID)
+                console.log(response);
                 showAlert(true, 'ยกเลิกสำเร็จ')
                 setTimeout(() => {
                     router.push('/Information/MyEvent')
                 }, 1000);
-                return response
             } catch (error) {
                 console.error(error);
                 showAlert(false, 'เกิดข้อผิดพลาดในการยกเลิก')
@@ -225,11 +228,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                             <div className='lg:flex lg:justify-end lg:items-center  gap-2'>
                                 <div className="lg:flex w-full gap-2 justify-end xs:mt-2 lg:mt-0">
                                     <div className='xs:flex xs:mt-2 lg:mt-0 xs:justify-end xs:items-end gap-2 lg:mb-4' >
-                                        {(!selectedEvent.intendent && selectedEvent.intendent !== undefined) && (
-                                            <div className='flex justify-center items-center '>
-                                                <BasicButtons color={'#e90000d9'} hover={"#E90000"} label={'ยกเลิกการเข้าร่วม'} onClick={() => handleCanclejoinEvent(selectedEvent.event_id)} />
-                                            </div>
-                                        )}
+
                                         <InputUploadfile onFileChange={setFile} />
                                         <div className="flex gap-2 justify-end items-center  ">
                                             {file ? (
@@ -238,24 +237,77 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                                 </div>
                                             ) : (
                                                 <div>
-                                                    <BasicButtons diasble={true} label={'อัปโหลดเอกสาร'} onClick={handleUpload} />
+                                                    <BasicButtons diasble={true} label={'อัปโหลดเอกสาร'} />
                                                 </div>
                                             )}
                                         </div>
-                                        <BasicButtons
+
+                                        {(!selectedEvent.file && !selectedEvent.status && !selectedEvent.intendent) && (
+                                            <div className='flex justify-center items-center '>
+                                                <BasicButtons color={'#e90000d9'} hover={"#E90000"} label={'ยกเลิกการเข้าร่วม'} onClick={() => handleCanclejoinEvent(selectedEvent.event_id)} />
+
+                                            </div>
+                                        )}
+                                        {(!selectedEvent.status && selectedEvent.intendent) && (
+                                            <div className='flex justify-center items-center '>
+                                                <BasicButtons color={'#e90000d9'} hover={"#E90000"} label={'ยกเลิกการเข้าร่วม'} onClick={() => handleDeleteMyeventOutside(selectedEvent.event_id)} />
+                                            </div>
+                                        )}
+                                        {/* <BasicButtons
                                             hover="#d32f2f"
                                             color="#e53935"
                                             label="ยกเลิกกิจกรรม"
                                             onClick={() => handleDeleteMyeventOutside(selectedEvent.event_id)}
-                                        />
+                                        /> */}
                                     </div>
-
                                 </div>
                             </div>
 
                         ) : (selectedEvent.file && !selectedEvent.status && !selectedEvent.comment) ? (
                             <div className='xs:grid lg:flex justify-end items-center gap-2'>
                                 <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
+                                    <InputUploadfile onFileChange={setFile} />
+                                    <div className="flex gap-2 justify-end items-center  ">
+                                        {file ? (
+                                            <div>
+                                                <BasicButtons label={'อัปโหลดเอกสารใหม่'} onClick={handleUpload} />
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                <BasicButtons diasble={true} label={'อัปโหลดเอกสารใหม่'} />
+                                            </div>
+                                        )}
+                                    </div>
+                                    <BasicButtons
+                                        hover="#f57c00"
+                                        color="#fb8c00"
+                                        label="เรียกดูเอกสารที่ส่งไป"
+                                        onClick={() =>
+                                            handleOpenDialog(selectedEvent.event_id, user.user_id)
+                                        }
+                                    />
+                                    {selectedEvent.intendent && (
+                                        <div className='flex justify-center items-center'>
+                                            <p className='p-2.5 text-[14px] text-white bg-green-500 rounded-sm shadow-md w-full'>ส่งเอกสารแล้ว</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        ) : (selectedEvent.file && !selectedEvent.status && selectedEvent.comment) ? (
+                            <div className='xs:grid lg:flex justify-end items-center gap-2'>
+                                <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
+                                    <InputUploadfile onFileChange={setFile} />
+                                    <div className="flex gap-2 justify-end items-center  ">
+                                        {file ? (
+                                            <div>
+                                                <BasicButtons label={'อัปโหลดเอกสารใหม่'} onClick={handleUpload} />
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                <BasicButtons diasble={true} label={'อัปโหลดเอกสารใหม่'} />
+                                            </div>
+                                        )}
+                                    </div>
                                     <BasicButtons
                                         hover="#f57c00"
                                         color="#fb8c00"
