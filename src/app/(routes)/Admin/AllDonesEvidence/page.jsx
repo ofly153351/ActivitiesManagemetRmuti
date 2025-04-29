@@ -5,6 +5,7 @@ import Loading from '@/app/Components/Loading';
 import Nav from '@/app/Components/Nav';
 import { getAllStudentDonesEvidence } from '@/app/Utils/api';
 import { blockNulluser } from '@/app/Utils/block';
+import { checkSessionTimeout } from '@/app/Utils/session';
 import { useStore } from '@/store/useStore';
 import React, { useEffect, useState } from 'react';
 
@@ -26,7 +27,7 @@ export default function page({ searchParams }) {
 
     useEffect(() => {
         // blockNulluser(user)
-
+        checkSessionTimeout()
         const fetchEvidenceData = async () => {
             try {
                 const res = await getAllStudentDonesEvidence(Number(year), status, Number(facultyId));

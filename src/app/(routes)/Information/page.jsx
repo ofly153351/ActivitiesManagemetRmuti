@@ -14,6 +14,7 @@ import { handleValidationThai, handleCodeValidation, handlePhoneValidation } fro
 import { ErrorAlert, SuccessAlert } from '@/app/Components/AlertShow';
 import { blockNulluser } from '@/app/Utils/block';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import { checkSessionTimeout } from '@/app/Utils/session';
 
 function Page() {
     // ใช้ useState สำหรับ client-side rendering
@@ -40,6 +41,7 @@ function Page() {
     // ตรวจสอบว่าเราอยู่ในฝั่ง client
 
 
+
     useEffect(() => {
         initUserRoleHash()
     }, [userRoleHash])
@@ -52,7 +54,7 @@ function Page() {
         // if (!isClient) return; // ไม่ทำงานถ้ายังไม่ใช่ฝั่ง client
         // ป้องกัน user ที่เป็น null
         blockNulluser(userRoleHash)
-
+        checkSessionTimeout()
         const fetchData = async () => {
             try {
                 const response = await getBranches();

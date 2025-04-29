@@ -7,6 +7,7 @@ import Nav from '@/app/Components/Nav';
 import EditPopup from '@/app/Components/editPopup';
 import { useStore } from '@/store/useStore';
 import { blockNulluser } from '@/app/Utils/block';
+import { checkSessionTimeout } from '@/app/Utils/session';
 
 function Page() {
     const title = 'รายชื่อกิจกรรม';
@@ -74,6 +75,7 @@ function Page() {
 
     useEffect(() => {
         // blockNulluser(user)
+        checkSessionTimeout()
         const fetchData = async () => {
             try {
                 const response = await getAllevent();

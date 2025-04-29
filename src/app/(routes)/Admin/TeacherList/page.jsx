@@ -4,6 +4,7 @@ import Loading from '@/app/Components/Loading'
 import Nav from '@/app/Components/Nav'
 import { getAllteacher } from '@/app/Utils/api'
 import { blockNulluser } from '@/app/Utils/block'
+import { checkSessionTimeout } from '@/app/Utils/session'
 import { useStore } from '@/store/useStore'
 import React, { useEffect, useState } from 'react'
 
@@ -26,6 +27,7 @@ function page() {
 
     useEffect(() => {
         // blockNulluser(user)
+        checkSessionTimeout()
         if (user) {
             const fetchData = async () => {
                 try {

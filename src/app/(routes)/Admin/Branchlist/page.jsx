@@ -6,8 +6,10 @@ import EditPopup from '@/app/Components/editPopup';
 import Nav from '@/app/Components/Nav'
 import { DeleteBranchbyID, getBranches, getFaculties } from '@/app/Utils/api';
 import { blockNulluser } from '@/app/Utils/block';
+import { checkSessionTimeout } from '@/app/Utils/session';
 import { useStore } from '@/store/useStore';
 import React, { useEffect, useState } from 'react'
+
 
 function page() {
   const [brancheslist, setBrancheslist] = useState([]);
@@ -40,6 +42,8 @@ function page() {
 
   useEffect(() => {
     // blockNulluser(user)
+    checkSessionTimeout()
+
     const fetchData = async () => {
       try {
         const response = await getBranches();

@@ -3,9 +3,11 @@ import { ErrorAlert, SuccessAlert } from '@/app/Components/AlertShow';
 import Nav from '@/app/Components/Nav';
 import SelectedMyEvent from '@/app/Components/SelectedMyEvent';
 import { blockNulluser } from '@/app/Utils/block';
+import { checkSessionTimeout } from '@/app/Utils/session';
 import { useStore } from '@/store/useStore';
 import { useParams, useSearchParams } from 'next/navigation';
 import React, { useState, useEffect } from 'react'
+
 
 function Page() {
     // const router = useRouter();
@@ -19,6 +21,7 @@ function Page() {
 
     useEffect(() => {
         blockNulluser(user)
+        checkSessionTimeout()
         if (myEvent) {
             try {
                 setParsedEvent(JSON.parse(myEvent));  // Parse JSON string to object

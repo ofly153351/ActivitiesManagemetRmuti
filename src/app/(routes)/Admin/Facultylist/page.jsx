@@ -9,6 +9,7 @@ import { SuccessAlert, ErrorAlert } from '@/app/Components/AlertShow';
 import { useStore } from "@/store/useStore";
 import { usePathname } from "next/navigation";
 import { blockNulluser } from "@/app/Utils/block";
+import { checkSessionTimeout } from '@/app/Utils/session';
 
 
 
@@ -35,7 +36,7 @@ function Page() {
     // โหลดข้อมูลจาก API 
     useEffect(() => {
         // blockNulluser(user)
-
+        checkSessionTimeout()
         const fetchData = async () => {
             try {
                 setLoading(true); // เริ่มโหลด

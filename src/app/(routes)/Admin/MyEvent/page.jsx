@@ -8,6 +8,7 @@ import { getMyEventTeacher, getMyEventAdmin } from '@/app/Utils/api';
 import { blockNulluser } from '@/app/Utils/block';
 import { useStore } from '@/store/useStore';
 import React, { useEffect, useState } from 'react';
+import { checkSessionTimeout } from '@/app/Utils/session';
 
 function page() {
     const [loading, setLoading] = useState(false);
@@ -34,6 +35,7 @@ function page() {
 
     useEffect(() => {
         // blockNulluser(userRoleHash)
+        checkSessionTimeout()
         const fetchData = async () => {
             setLoading(true);
             try {

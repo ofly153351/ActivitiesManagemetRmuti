@@ -9,6 +9,7 @@ import Nav from '@/app/Components/Nav'
 import ShowDialogTable from '@/app/Components/ShowDialogTable'
 import { getMyEventStudent, sendSummaryToTeacher } from '@/app/Utils/api'
 import { blockNulluser } from '@/app/Utils/block'
+import { checkSessionTimeout } from '@/app/Utils/session'
 import { useStore } from '@/store/useStore'
 import { Value } from '@radix-ui/react-select'
 import React, { use, useState, useEffect, useMemo } from 'react'
@@ -32,7 +33,7 @@ function page() {
 
     useEffect(() => {
         blockNulluser(user)
-
+        checkSessionTimeout()
         const fetchData = async () => {
             setLoading(true);
             try {

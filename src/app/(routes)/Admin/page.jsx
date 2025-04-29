@@ -12,8 +12,10 @@ import 'dayjs/locale/th' // โหลด locale ภาษาไทย
 import { adminDashboard, closedEvent } from '@/app/Utils/api';
 import { useStore } from '@/store/useStore';
 import { useRouter } from 'next/navigation';
+import { checkSessionTimeout } from '@/app/Utils/session';
 
 function Page() {
+    checkSessionTimeout()
     const d = new Date();
     let year = d.getFullYear();
     dayjs.locale('th')

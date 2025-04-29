@@ -8,6 +8,7 @@ import EvidancedDialog from '@/app/Components/Evidenced/EvidancedDialog'
 import { SuccessAlert } from '@/app/Components/AlertShow'
 import { blockNulluser } from '@/app/Utils/block'
 import { useStore } from '@/store/useStore'
+import { checkSessionTimeout } from '@/app/Utils/session'
 
 function page() {
 
@@ -23,6 +24,7 @@ function page() {
 
     useEffect(() => {
         // blockNulluser(user)
+        checkSessionTimeout()
         const fetchData = async () => {
             setLoading(true);
             try {

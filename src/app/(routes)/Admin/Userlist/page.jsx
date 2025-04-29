@@ -8,6 +8,7 @@ import { useStore } from '@/store/useStore'
 import { all } from 'axios'
 import { blockNulluser } from '@/app/Utils/block'
 import EditDialog from '@/app/Components/EditInfomation/EditDialog'
+import { checkSessionTimeout } from '@/app/Utils/session'
 
 function page() {
     const title = 'รายชื่อนักศึกษา'
@@ -20,6 +21,7 @@ function page() {
 
     useEffect(() => {
         // blockNulluser(user)
+        checkSessionTimeout()
         const fetchData = async () => {
             try {
                 const response = await getAllUser()
