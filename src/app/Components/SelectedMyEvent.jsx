@@ -161,7 +161,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
     return (
         <div className='drop-shadow-md rounded-xl mt-20 xs:mx-2 '
             style={{ backgroundColor: colorsCode.whiteSmoke }} >
-            <div className='text-2xl p-4 gap-2' >
+            <div className='text-2xl p-4 gap-2  ' >
                 <div className="w-full px-4 py-2 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                     <div>
                         <p className="p-2 border-b-2 w-fit font-medium">ข้อมูลกิจกรรมที่ลงทะเบียน</p>
@@ -179,7 +179,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                     </div>
                 </div>
                 <div className="xs:grid lg:flex py-2">
-                    <div className='grid '>
+                    <div className='grid  '>
                         <p className='text-sm px-2'>ชื่อกิจกรรม:</p>
                         <CustomTextfield label={selectedEvent?.event_name} disabled={true} />
                     </div>
@@ -222,7 +222,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                         </div>
                     )}
                 </div>
-                <div className=' xs:flex xs:justify-end items-center p-2 gap-2'>
+                <div className="flex flex-col sm:flex-row justify-end items-center p-2 gap-2">
                     {
                         !selectedEvent.file && !selectedEvent.status ? (
                             <div className='lg:flex lg:justify-end lg:items-center  gap-2'>

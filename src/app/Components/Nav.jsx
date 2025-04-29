@@ -97,14 +97,14 @@ function Nav() {
             )}
 
             {!userRoleHash && (
-                <Link href="/" className='md:ml-[50px] xs:ml-2  justify-center items-center  xs:flex' >
+                <Link href="/" className=' xs:ml-2  justify-center items-center  xs:flex' >
                     <img className='"w-14 h-14 object-cover rounded-full' src="/logolight.png" />
                 </Link>
             )
             }
             {
                 userRoleHash === 'student' && (
-                    <Link href="/" className='ml-[50px]  justify-center items-center lg:flex ' >
+                    <Link href="/" className='xs:ml-2  justify-center items-center lg:flex ' >
                         <img className='w-14 rounded-full' src="/logolight.png" />
                     </Link>
                 )

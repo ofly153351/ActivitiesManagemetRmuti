@@ -38,20 +38,23 @@ function Page() {
     return (
         <div>
             <Nav />
-            <div className=' w-screen flex justify-center items-center' >
-                <div className='grid ' >
-                    <SelectedMyEvent selectedEvent={parsedEvent} showAlert={handleShowAlert} />
+            <div>
+                <div className=' w-screen flex justify-center items-center' >
+                    <div className='grid ' >
+                        <SelectedMyEvent selectedEvent={parsedEvent} showAlert={handleShowAlert} />
+                    </div>
+                </div>
+                <div className="fixed bottom-4 right-4 z-50">
+                    {isAlert.status !== null && (
+                        isAlert.status ? (
+                            <SuccessAlert label={isAlert.message} />
+                        ) : (
+                            <ErrorAlert label={isAlert.message} />
+                        )
+                    )}
                 </div>
             </div>
-            <div className="fixed bottom-4 right-4 z-50">
-                {isAlert.status !== null && (
-                    isAlert.status ? (
-                        <SuccessAlert label={isAlert.message} />
-                    ) : (
-                        <ErrorAlert label={isAlert.message} />
-                    )
-                )}
-            </div>
+
         </div>
     );
 }

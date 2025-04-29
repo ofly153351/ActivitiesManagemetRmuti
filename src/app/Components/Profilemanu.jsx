@@ -224,7 +224,7 @@ function ProfileMenu() {
         );
     } else {
         content = (
-            <div className="xs:flex xs:items-center xs:gap-2 xs:mr-5">
+            <div className="xs:flex xs:items-center xs:gap-2 md:mr-5">
                 <div className='mx-5' >
                     <button type="button" onClick={mailClick} >
                         <MailNotification newCount={unreadCount} />
@@ -276,8 +276,8 @@ function ProfileMenu() {
                     )}
                 </div>
 
-                <div className="relative flex justify-center items-center rounded-full border border-gray">
-                    <span className="text-gray-500 px-3 py-1 text-md font-kanit hover:underline">
+                <div className="relative flex justify-center items-center rounded-full border border-gray px-2 py-1 sm:px-3 sm:py-1">
+                    <span className="text-gray-500 text-sm sm:text-md font-kanit hover:underline px-1 sm:px-3">
                         {user.first_name} {user.last_name}
                     </span>
                     <div className="ml-1 rounded-full flex items-center justify-center">
@@ -287,9 +287,9 @@ function ProfileMenu() {
                             aria-haspopup="true"
                             aria-expanded={open ? 'true' : undefined}
                             onClick={handleClick}
-                            className="rounded-full hover:bg-transparent"
+                            className="rounded-full hover:bg-transparent p-0 sm:p-1"
                         >
-                            <AccountCircleIcon fontSize="large" />
+                            <AccountCircleIcon className="text-[28px] sm:text-[32px]" />
                         </Button>
                     </div>
                     <Menu
