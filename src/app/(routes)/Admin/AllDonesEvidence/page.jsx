@@ -58,6 +58,13 @@ export default function page({ searchParams }) {
         // { headerName: 'หมายเหตุ', valueGetter: (params) => params.data.remark || '-' },
     ];
 
+    // let a = [1, 2, 3]
+    // let b = a
+    // b.push(4)
+
+    // console.log(a)
+
+
     return (
         <div className="bg-gray-50 h-screen">
             <Nav />
