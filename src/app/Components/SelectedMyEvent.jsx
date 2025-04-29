@@ -252,7 +252,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
 
                                             </div>
                                         )}
-                                        {(!selectedEvent.status && selectedEvent.intendent) && (
+                                        {(selectedEvent.intendent) && (
                                             <div className='flex justify-center items-center '>
                                                 <BasicButtons color={'#e90000d9'} hover={"#E90000"} label={'ยกเลิกการเข้าร่วม'} onClick={() => handleDeleteMyeventOutside(selectedEvent.event_id)} />
                                             </div>
