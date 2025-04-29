@@ -320,9 +320,39 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                     )}
                                 </div>
                             )
-                            // <div className='xs:grid lg:flex justify-end items-center gap-2'>
 
-                            // </div>
+                        ) : selectedEvent.file && !selectedEvent.status && !selectedEvent.comment ? (
+                            <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0  ddddd">
+                                <InputUploadfile onFileChange={setFile} />
+                                <div className="flex gap-2 justify-end items-center  ">
+                                    {file ? (
+                                        <div>
+                                            <BasicButtons
+                                                label={uploading ? 'กำลังอัปโหลด...' : 'อัปโหลดเอกสารใหม่'}
+                                                onClick={handleUpload}
+                                                disabled={uploading}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <BasicButtons diasble={true} label={'อัปโหลดเอกสารใหม่'} />
+                                        </div>
+                                    )}
+                                </div>
+                                <BasicButtons
+                                    hover="#f57c00"
+                                    color="#fb8c00"
+                                    label="เรียกดูเอกสารที่ส่งไป"
+                                    onClick={() =>
+                                        handleOpenDialog(selectedEvent.event_id, user.user_id)
+                                    }
+                                />
+                                {selectedEvent.intendent && (
+                                    <div className='flex justify-center items-center'>
+                                        <p className='p-2.5 text-[14px] text-white bg-green-500 rounded-sm shadow-md w-full'>ส่งเอกสารแล้ว</p>
+                                    </div>
+                                )}
+                            </div>
                         ) : null}
                     {selectedEvent.file !== "" && selectedEvent.status === true ? (
                         <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
