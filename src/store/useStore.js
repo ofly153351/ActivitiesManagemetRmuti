@@ -66,6 +66,9 @@ export const useStore = create((set, get) => ({
             const hash = encryptText(userResponse.data.role, SECRET_KEY);
             const expireTime = new Date().getTime() + 5 * 60 * 60 * 1000; // หมดอายุใน 5 ชั่วโมง (ตัวอย่าง)
 
+
+
+            
             localStorage.setItem("userRoleHash", hash);
             localStorage.setItem("user", JSON.stringify(userData));
             localStorage.setItem("expireTime", expireTime.toString());
