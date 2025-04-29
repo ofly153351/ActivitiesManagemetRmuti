@@ -17,7 +17,7 @@ export async function checkSessionTimeout() {
         clearUserSession();
         try {
             await handlelogOut(); // เผื่อกรณีเป็น async
-            window.location.href = '/login';
+            window.location.href = '/Login';
         } catch (error) {
             console.error('Failed to logout:', error);
         }
