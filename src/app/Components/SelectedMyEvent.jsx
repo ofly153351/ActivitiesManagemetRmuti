@@ -267,25 +267,10 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                                 </div>
                             </div>
 
-                        ) : (selectedEvent.file && !selectedEvent.status && !selectedEvent.comment) ? (
+                        ) : (selectedEvent.file && !selectedEvent.status && !selectedEvent.comment && selectedEvent.intendent) ? (
                             <div className='xs:grid lg:flex justify-end items-center gap-2'>
                                 <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
-                                    <InputUploadfile onFileChange={setFile} />
-                                    <div className="flex gap-2 justify-end items-center  ">
-                                        {file ? (
-                                            <div>
-                                                <BasicButtons
-                                                    label={uploading ? 'กำลังอัปโหลด...' : 'อัปโหลดเอกสาร'}
-                                                    onClick={handleUpload}
-                                                    disabled={uploading}
-                                                />
-                                            </div>
-                                        ) : (
-                                            <div>
-                                                <BasicButtons diasble={true} label={'อัปโหลดเอกสารใหม่'} />
-                                            </div>
-                                        )}
-                                    </div>
+
                                     <BasicButtons
                                         hover="#f57c00"
                                         color="#fb8c00"
@@ -303,7 +288,7 @@ function SelectedMyEvent({ selectedEvent, showAlert }) {
                             </div>
                         ) : (selectedEvent.file && !selectedEvent.status && selectedEvent.comment) ? (
                             selectedEvent.file && !selectedEvent.status && selectedEvent.comment && !selectedEvent.intendent && (
-                                <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0">
+                                <div className="flex gap-2 justify-end items-center xs:mt-2 md:mt-0  ddddd">
                                     <InputUploadfile onFileChange={setFile} />
                                     <div className="flex gap-2 justify-end items-center  ">
                                         {file ? (
