@@ -113,25 +113,22 @@ function ProfileMenu() {
     const parseMessage = (msg) => {
         const newEventRegex = /กิจกรรม'(.*?)'\s+'(.*?)'\s+'(.*?)'/;
         const newMatch = msg.match(newEventRegex);
-
+    
         const deleteEventRegex = /กิจกรรม\s+'(.*?)'\s+ที่คุณเข้าร่วมถูกลบแล้ว/;
         const deleteMatch = msg.match(deleteEventRegex);
-
+    
         const editEventRegex = /กิจกรรม\s+'(.*?)'\s+ที่คุณเข้าร่วมมีการแก้ไขรายละเอียด./;
         const editMatch = msg.match(editEventRegex);
-
+    
         const checkEventRegex = /กิจกรรม\s+'(.*?)'\s+ที่คุณต้องตรวจสอบ./;
         const checkMatch = msg.match(checkEventRegex);
-
-        const alreadyCheckRegex = /เอกสารกิจกรรม\s+'(.*?)'(?:\s+'(.*?)')?/;
-        const alreadyCheckMatch = msg.match(alreadyCheckRegex); // ✅ ใช้ msg
-
-        const finalDoneAll = /เอกสารของคุณถูกประเมินว่า\s+'(.*?)'(?:\s+'(.*?)')?/;
-        const finalDoneAllMatch = msg.match(finalDoneAll); // ✅ ใช้ msg
-
+    
         const failedReasonRegex = /เอกสารกิจกรรม\s+'(.*?)'\s+'(.*?)'\s+เนื่องจาก:\s+(.*)/;
         const failedReasonMatch = msg.match(failedReasonRegex);
-
+    
+        const checkResultRegex = /เอกสารกิจกรรม\s+'(.*?)'\s+'(.*?)'/;
+        const checkResultMatch = msg.match(checkResultRegex);
+    
         if (newMatch) {
             const [, name, date, time] = newMatch;
             return (
@@ -142,7 +139,7 @@ function ProfileMenu() {
                 </>
             );
         }
-
+    
         if (deleteMatch) {
             const [, name] = deleteMatch;
             return (
@@ -152,7 +149,7 @@ function ProfileMenu() {
                 </>
             );
         }
-
+    
         if (editMatch) {
             const [, name] = editMatch;
             return (
@@ -161,7 +158,7 @@ function ProfileMenu() {
                 </>
             );
         }
-
+    
         if (checkMatch) {
             const [, name] = checkMatch;
             return (
@@ -170,43 +167,7 @@ function ProfileMenu() {
                 </>
             );
         }
-
-        if (finalDoneAllMatch) {
-            const [, status, name] = finalDoneAllMatch;
-
-            return (
-                <>
-                    {name && (
-                        <>
-                            กิจกรรม: <span className="font-kanit text-red-500">{name}</span><br />
-                        </>
-                    )}
-                    <span className="font-kanit">
-                        สถานะ: <span className={status === 'ไม่ผ่าน' ? 'text-red-500' : 'text-green-500'}>
-                            {status}
-                        </span>
-                    </span>
-                </>
-            );
-        }
-        if (finalDoneAllMatch) {
-            const [, name, status] = finalDoneAllMatch;
-            return (
-                <>
-                    กิจกรรม: <span className="font-kanit text-red-500">{name}</span><br />
-                    {status && status === 'ไม่ผ่าน' ? (
-                        <>
-                            สถานะ: <span className="font-kanit text-red-500">{status}</span>
-                        </>
-                    ) : (
-                        <>
-                            สถานะ: <span className="font-kanit text-green-500">{status}</span>
-                        </>
-                    )}
-                </>
-            );
-        }
-
+    
         if (failedReasonMatch) {
             const [, name, status, reason] = failedReasonMatch;
             return (
@@ -217,6 +178,17 @@ function ProfileMenu() {
                 </>
             );
         }
+    
+        if (checkResultMatch) {
+            const [, name, status] = checkResultMatch;
+            return (
+                <>
+                    กิจกรรม: <span className="font-kanit">{name}</span><br />
+                    สถานะ: <span className={`font-kanit ${status === 'ผ่าน' ? 'text-green-500' : 'text-red-500'}`}>{status}</span>
+                </>
+            );
+        }
+    
         return <>{msg}</>;
     };
 
