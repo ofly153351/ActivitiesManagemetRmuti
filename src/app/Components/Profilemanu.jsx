@@ -129,6 +129,9 @@ function ProfileMenu() {
         const finalDoneAll = /เอกสารของคุณถูกประเมินว่า\s+'(.*?)'(?:\s+'(.*?)')?/;
         const finalDoneAllMatch = msg.match(finalDoneAll); // ✅ ใช้ msg
 
+        const failedReasonRegex = /เอกสารกิจกรรม\s+'(.*?)'\s+'(.*?)'\s+เนื่องจาก:\s+(.*)/;
+        const failedReasonMatch = msg.match(failedReasonRegex);
+
         if (newMatch) {
             const [, name, date, time] = newMatch;
             return (
@@ -204,6 +207,16 @@ function ProfileMenu() {
             );
         }
 
+        if (failedReasonMatch) {
+            const [, name, status, reason] = failedReasonMatch;
+            return (
+                <>
+                    กิจกรรม: <span className="font-kanit text-red-500">{name}</span><br />
+                    สถานะ: <span className="font-kanit text-red-500">{status}</span><br />
+                    เหตุผล: <span className="font-kanit text-red-500">{reason}</span>
+                </>
+            );
+        }
         return <>{msg}</>;
     };
 
