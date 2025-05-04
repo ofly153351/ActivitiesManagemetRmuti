@@ -56,16 +56,22 @@ function SelectedAllDones({ open, setOpen }) {
 
 
     const StatusList = [
-        { label: 'ผ่าน', value: true },
-        { label: 'ไม่ผ่าน', value: false },
+        { label: 'อนุมันติ', value: true },
+        { label: 'ไม่อนุมัติ', value: false },
     ]
 
     const handleSubmit = () => {
         const year = selectedYears;
-        const status = selectedStatus
+        const status = selectedStatus;
         const faculty_id = facultyID;
 
-        console.log(year, status, faculty_id);
+        console.log("fac", facultyID);
+
+        if (faculty_id === null || faculty_id === '') {
+            router.push(`/Admin/AllDonesEvidence?year=${year}&status=${status}&faculty_id=null`);
+            setOpen(false);
+            return; // ✅ ป้องกันไม่ให้ทำงานต่อ
+        }
 
         router.push(`/Admin/AllDonesEvidence?year=${year}&status=${status}&faculty_id=${faculty_id}`);
         setOpen(false);
@@ -92,6 +98,15 @@ function SelectedAllDones({ open, setOpen }) {
                                 onChange={handleSelectedYear}
                             />
                         </div>
+                        <div className='py-1' >
+                            <Customselect
+                                label={'สถานะ'}
+                                options={StatusList}
+                                value={status}
+                                field='label'
+                                onChange={handleChangeStatus}
+                            />
+                        </div>
                         <div>
                             <Customselect
                                 label={'คณะ'}
@@ -102,15 +117,9 @@ function SelectedAllDones({ open, setOpen }) {
                                 require
                             />
                         </div>
-                        <div className='py-1' >
-                            <Customselect
-                                label={'สถานะ'}
-                                options={StatusList}
-                                value={status}
-                                field='label'
-                                onChange={handleChangeStatus}
-                            />
-                        </div>
+                        <span className='px-3 text-red-500 font:kanit'>
+                            ไม่จำเป็นต้องเลือก
+                        </span>
                     </div>
                 </DialogContent>
                 <DialogActions>

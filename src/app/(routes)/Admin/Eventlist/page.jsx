@@ -20,6 +20,7 @@ function Page() {
     const [CurrentEvent, setCurrentEvent] = useState([]);
     const [selectedEditEvent, setSelectedEditEvent] = useState(null); // ใช้ null แทนการใช้ [] 
     const { user } = useStore()
+
     const fields = [
         { name: 'event_name', label: 'ชื่อกิจกรรม', placeholder: 'กรุณากรอกชื่อกิจกรรม' },
         { name: 'start_date', label: 'วันที่เริ่มกิจกรรม', placeholder: 'กรุณากรอกวันที่เริ่มกิจกรรม' },
@@ -99,7 +100,7 @@ function Page() {
         { headerName: 'จำนวนที่ว่าง', field: 'free_space' },
         { headerName: 'จำนวนที่รับ', field: 'limit' },
         {
-            headerName: 'สถานะ', field: 'status',
+            headerName: 'ปิด/เปิด รับสมัคร', field: 'status',
             renderCell: (params) => {
                 return String(params.value) ? 'เปิด' : 'ปิด';
             }

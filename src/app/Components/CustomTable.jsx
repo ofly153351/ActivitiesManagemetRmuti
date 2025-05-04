@@ -34,7 +34,7 @@ import FindInPageIcon from '@mui/icons-material/FindInPage';
 import { colorsCode } from '../Utils/color';
 import TeacherSelect from './TeacherSelect';
 import { blockNulluser } from '../Utils/block';
-
+import dayjs from 'dayjs';
 
 function CustomTable({
     rows = [],
@@ -450,15 +450,17 @@ function CustomTable({
                                     {columns.map((column, colIndex) => (
                                         <td key={colIndex} className="p-2 text-start border-x-[1px] border-slate-100 hover:bg-[#f5f5f5] duration-50">
                                             {column.field === 'status' ? (
-                                                <div className="flex justify-start items-center">
+                                                <div className="flex justify-start items-center w-full">
                                                     {item[column.field] !== undefined ? (
-                                                        <SwitchOnOff
-                                                            status={Boolean(item[column.field])}  // ตรวจสอบให้แน่ใจว่า item[column.field] เป็นค่าใหม่ที่อัพเดตแล้ว
-                                                            onStatusChange={(itemId, newStatus) => handleStatusChange(item.event_id, column.field, newStatus)}
-                                                            itemId={item.event_id}
-                                                            disabled={pathName !== '/Admin/MyEvent'} // ✅ ล็อคปุ่มถ้าไม่ใช่ '/Admin/MyEvent'
-                                                            pathName={pathName}
-                                                        />
+                                                        <div className="flex justify-center items-center w-full">
+                                                            <SwitchOnOff
+                                                                status={Boolean(item[column.field])}  // ตรวจสอบให้แน่ใจว่า item[column.field] เป็นค่าใหม่ที่อัพเดตแล้ว
+                                                                onStatusChange={(itemId, newStatus) => handleStatusChange(item.event_id, column.field, newStatus)}
+                                                                itemId={item.event_id}
+                                                                disabled={pathName !== '/Admin/MyEvent'} // ✅ ล็อคปุ่มถ้าไม่ใช่ '/Admin/MyEvent'
+                                                                pathName={pathName}
+                                                            />
+                                                        </div>
                                                     ) : null}
                                                 </div>
                                             ) : column.field === 'userList' ? (
@@ -515,32 +517,31 @@ function CustomTable({
                                                 </div>
                                             ) : column.field === 'start_time' ? (
                                                 <div>
-                                                    {(() => {
-                                                        const hour = Math.floor(item.limit);
-                                                        const minute = Math.round((item.limit % 1) * 60);
-                                                        return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')} น.`;
-                                                    })()}
+                                                    {item.start_time} น.
                                                 </div>
                                             ) : column.field === 'editInfomation' ? (
-                                                <button
-                                                    onClick={() => openDialog([
-                                                        { label: 'คำนำหน้า', value: item.title_name },
-                                                        { label: 'ชื่อจริง', value: item.first_name },
-                                                        { label: 'นามสกุล', value: item.last_name },
-                                                        { label: 'คณะ', value: { id: item.faculty_id, name: item.faculty_name } }, // ส่งทั้ง id และ name สำหรับคณะ
-                                                        { label: 'สาขา', value: { id: item.branch_id, name: item.branch_name, facultyId: item.faculty_id } },   // ส่งทั้ง id และ name สำหรับสาขา
-                                                        { label: 'รหัสนักศึกษา', value: item.code },
-                                                        { label: 'เบอร์โทรศัพท์', value: item.phone },
-                                                        { label: 'ชั้นปี', value: item.year },
-                                                    ], item.user_id)}
-                                                >
-                                                    <EditIcon
-                                                        sx={{
-                                                            color: '#32CD32',
-                                                            "&:hover": { color: 'green' },
-                                                        }}
-                                                    />
-                                                </button>
+                                                <div className='flex justify-center items-center' >
+                                                    <button
+                                                        onClick={() => openDialog([
+                                                            { label: 'คำนำหน้า', value: item.title_name },
+                                                            { label: 'ชื่อจริง', value: item.first_name },
+                                                            { label: 'นามสกุล', value: item.last_name },
+                                                            { label: 'คณะ', value: { id: item.faculty_id, name: item.faculty_name } }, // ส่งทั้ง id และ name สำหรับคณะ
+                                                            { label: 'สาขา', value: { id: item.branch_id, name: item.branch_name, facultyId: item.faculty_id } },   // ส่งทั้ง id และ name สำหรับสาขา
+                                                            { label: 'รหัสนักศึกษา', value: item.code },
+                                                            { label: 'เบอร์โทรศัพท์', value: item.phone },
+                                                            { label: 'ชั้นปี', value: item.year },
+                                                        ], item.user_id)}
+                                                    >
+                                                        <EditIcon
+                                                            sx={{
+                                                                color: '#32CD32',
+                                                                "&:hover": { color: 'green' },
+                                                            }}
+                                                        />
+                                                    </button>
+                                                </div>
+
                                             ) : (
                                                 column.valueGetter ? column.valueGetter({ data: item }) : item[column.field]
                                             )}

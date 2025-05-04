@@ -40,7 +40,7 @@ function Page() {
     }, [userRoleHash])
 
     useEffect(() => {
-        if (userRoleHash === 'teacher' || userRoleHash === 'student') {
+        if (userRoleHash === 'student') {
             router.push('/');
             return; // หยุดการทำงานต่อถ้าไม่ใช่ admin
         }

@@ -11,36 +11,53 @@ export default function Customselect({
   options = [],
   field = '',
   margin = 1,
-  readOnly = false // เพิ่ม props readOnly พร้อมค่าเริ่มต้นเป็น false
+  readOnly = false
 }) {
-  // handleChange ส่งค่า value ไปคืน props.onChange
   const handleChange = (event) => {
-    if (!readOnly) { // ถ้า readOnly เป็น true จะไม่เรียก onChange
+    if (!readOnly) {
       onChange(event.target.value);
     }
   };
 
   return (
-    <Box sx={{ height: high, width: width, margin: margin, background: 'white' }}>
+    <Box
+      sx={{
+        width: {
+          xs: '23ch', // เต็มจอบนมือถือ
+          sm: '23ch',
+          md: '23ch',
+          lg: width  // ใช้ค่าที่ส่งมาหรือ default
+        },
+        margin: margin,
+        background: 'white',
+      }}
+    >
       <FormControl fullWidth sx={{ background: 'white' }}>
-        <InputLabel sx={{ fontFamily: 'Kanit, sans-serif' }} id="custom-select-label">{label}</InputLabel>
+        <InputLabel
+          id="custom-select-label"
+          sx={{ fontFamily: 'Kanit, sans-serif' }}
+        >
+          {label}
+        </InputLabel>
         <Select
           labelId="custom-select-label"
           id="custom-select"
           value={value}
           label={label}
           onChange={handleChange}
-          sx={{ fontFamily: 'Kanit, sans-serif', height: high }}
-          disabled={readOnly} // ใช้ disabled เมื่อ readOnly เป็น true
+          disabled={readOnly}
+          sx={{
+            fontFamily: 'Kanit, sans-serif',
+          }}
         >
           {options.length > 0 ? (
             options.map((option, index) => (
               <MenuItem
-                sx={{ fontFamily: 'Kanit, sans-serif' }}
                 key={index}
-                value={option[field]} // ใช้ field เพื่อเข้าถึง property ที่ต้องการ
+                value={option[field]}
+                sx={{ fontFamily: 'Kanit, sans-serif' }}
               >
-                {option[field]} {/* แสดงค่าจาก field */}
+                {option[field]}
               </MenuItem>
             ))
           ) : (

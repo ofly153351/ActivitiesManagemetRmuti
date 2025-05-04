@@ -650,15 +650,21 @@ export const updatedStatusDonestudent = async (userID, payload) => {
 
 export const getAllStudentDonesEvidence = async (year, status, facultyID) => {
   try {
-    const response = await axios.get(`${API_BASE}/protected/admin/done?year=${year}&status=${status}&faculty_id=${facultyID}`, {
+    let url = `${API_BASE}/protected/admin/done?year=${year}&status=${status}`;
+
+    if (facultyID) {
+      url += `&faculty_id=${facultyID}`;
+    }
+
+    const response = await axios.get(url, {
       withCredentials: true
-    })
-    return response
+    });
+
+    return response;
   } catch (error) {
     console.log(error);
   }
-}
-
+};
 
 export const getNews = async () => {
   try {
@@ -694,7 +700,7 @@ export const readNews = async (newsID) => {
 }
 export const adminDashboard = async (year) => {
   try {
-    const response = await axios.get(`${API_BASE}/protected/admin/dashboard/${year}`, {
+    const response = await axios.get(`${API_BASE}/protected/teacher/dashboard/${year}`, {
       withCredentials: true
     })
     return response
@@ -706,7 +712,7 @@ export const adminDashboard = async (year) => {
 
 export const closedEvent = async () => {
   try {
-    const response = await axios.get(`${API_BASE}/protected/admin/event-7day`, {
+    const response = await axios.get(`${API_BASE}/protected/teacher/event-7day`, {
       withCredentials: true
     })
     return response

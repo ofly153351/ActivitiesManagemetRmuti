@@ -56,6 +56,10 @@ function page() {
         fetchData();
     }, [userRoleHash]);
 
+
+    console.log(myEvent);
+    
+
     const fields = [
         { name: 'event_name', label: 'ชื่อกิจกรรม', placeholder: 'กรุณากรอกชื่อกิจกรรม' },
         { name: 'start_date', label: 'วันที่เริ่มกิจกรรม', placeholder: 'กรุณากรอกวันที่เริ่มกิจกรรม' },
@@ -72,7 +76,7 @@ function page() {
         { headerName: 'จำนวนที่ว่าง (คน)', field: 'free_space' },
         { headerName: 'จำนวนที่รับ (คน)', field: 'limit' },
         {
-            headerName: 'สถานะ', field: 'status',
+            headerName: 'ปิด/เปิด รับสมัคร', field: 'status',
             renderCell: (params) => {
                 return String(params.value) ? <SwitchOnOff /> : 'ปิด';
             }

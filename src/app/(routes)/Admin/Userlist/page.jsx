@@ -14,7 +14,7 @@ function page() {
     const title = 'รายชื่อนักศึกษา'
     const [allUser, setAlluser] = useState([])
     const [loading, setLoading] = useState(true)
-    const { user } = useStore()
+    const { user, userRoleHash } = useStore()
     const [isOpen, setIsOpen] = useState('')
     const [selectedUser, setSelectedUser] = useState([])
     const [userId, setUserId] = useState('')
@@ -48,7 +48,11 @@ function page() {
         console.log("ข้อมูลไม่ครบถ้วนหรือว่างเปล่า");
     }
 
-    const columns = [
+
+    let columns = []
+
+
+    userRoleHash === 'admin' ? columns = [
         { headerName: 'รหัสนักศึกษา', field: 'code' },
         // {headerName : 'คำนำหน้า' , field: 'title_name'},
         { headerName: 'ชื่อจริง', field: 'first_name' },
@@ -61,7 +65,19 @@ function page() {
         { headerName: 'เบอร์โทรศัพท์', field: 'phone' },
         { headerName: 'แก้ไขข้อมูล', field: 'editInfomation' }
 
+    ] : columns = [
+        { headerName: 'รหัสนักศึกษา', field: 'code' },
+        // {headerName : 'คำนำหน้า' , field: 'title_name'},
+        { headerName: 'ชื่อจริง', field: 'first_name' },
+        { headerName: 'นามสกุล', field: 'last_name' },
+        {
+            headerName: 'คณะ',
+            field: 'faculty_name',
+        },
+        { headerName: 'สาขา', field: 'branch_name' },
+        { headerName: 'เบอร์โทรศัพท์', field: 'phone' },
     ]
+
 
     const sortedByCode = allUser.sort((a, b) => {
         if (a.code < b.code) return -1;

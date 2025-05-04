@@ -341,6 +341,8 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
                         rows={2}
                         required
                     />
+                    <label htmlFor="" className='text-red-500' >*เลือก ชั้นปี/สาขา ที่สามารถเข้าร่วมกิจกรรมได้(ถ้าว่างเท่ากับทุก ชั้นปี/สาขา สามารถลงได้)</label>
+
                     <div className='flex items-center gap-2 py-2'>
                         <span>ชั้นปีที่สามารถเข้าร่วมได้</span>
                         {years.map((item) => (
@@ -352,7 +354,6 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
                             />
                         ))}
                     </div>
-                    <label htmlFor="" className='text-red-500' >*เลือกสาขาที่สามารถเข้าร่วมกิจกรรมได้(ถ้าว่างเท่ากับทุกสาขาสามารถลงได้)</label>
                     <div className='grid' >
                         <div className='xs:grid lg:flex ' >
                             <Customselect

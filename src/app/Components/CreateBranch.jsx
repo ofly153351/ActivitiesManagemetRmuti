@@ -231,7 +231,7 @@ function CreatBranch({ openDialog, handleCloseDialog, facultiesList = [] }) {
                                 fontFamily: fontFamily.Kanit,
                             }}
                         >
-                            ตกลง
+                            ยืนยัน
                         </Button>
                     </DialogActions>
                 </Dialog>

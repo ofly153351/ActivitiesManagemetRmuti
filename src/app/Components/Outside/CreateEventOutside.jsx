@@ -149,7 +149,6 @@ function CreateEventOutside({ isOpen, isClose }) {
             try {
                 const fetchData = async () => {
                     const response = await CreateEventsOutSide(payload)
-                    console.log(response.data);
                     setErrors({
                         eventName: '',
                         intendent: '',
@@ -158,14 +157,16 @@ function CreateEventOutside({ isOpen, isClose }) {
                         location: '',
                         selectedDate: '',
                     })
+                    if (response.status === 200) {
+                        setIsAlert({ status: true, message: "สร้างกิจกรรมสำเร็จ" });
+                        router.push('/Information/MyEvent')
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 1000)
+                    }
                     return response
                 }
                 fetchData();
-                setIsAlert({ status: true, message: "สร้างกิจกรรมสำเร็จ" });
-                router.push('/Information/MyEvent')
-                setTimeout(() => {
-                    window.location.reload()
-                }, 1000)
             } catch (error) {
                 console.error(error);
                 setIsAlert({ status: false, message: "ไม่สามารถสร้างกิจกรรมได้" });
@@ -175,7 +176,6 @@ function CreateEventOutside({ isOpen, isClose }) {
         // ส่ง payload ไปยัง API หรือประมวลผลตามต้องการ
     };
 
-    console.log(isAlert);
 
 
     const date = new Date();

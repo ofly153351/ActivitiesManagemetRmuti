@@ -62,7 +62,7 @@ function Creatfaculty({ openDialog, handleCloseDialog, onSave = () => { }, showA
                 },
             }}
         >
-            <Box sx={{ px: 3, pt: 3, fontFamily: 'Kanit', fontSize: 24, textAlign: 'left' }}>
+            <Box sx={{ px: 3, pt: 3, fontFamily: 'Kanit', fontSize: 40, textAlign: 'left' }}>
                 เพิ่มรายชื่อคณะ
             </Box>
             <form onSubmit={handleSubmit}>
