@@ -158,7 +158,9 @@ function page() {
                         </div>
                     ) : myEvent?.dones !== null && myEvent?.dones?.status ? (
                         <div className='flex justify-end items-center px-4 py-2' >
-                            ผ่านการตวจสอบแล้ว
+                            <span className='w-fit bg-green-500 text-white font-kanit p-2 flex justify-center items-center' >
+                                ผ่านการตวจสอบแล้ว
+                            </span>
                         </div>
                     ) : (totalInsideWorkingHours >= 18 && totalInsideWorkingHours + totalOutsideWorkingHours >= 36) ? (
                         <div className='flex justify-end items-center px-4 py-2' >
