@@ -15,6 +15,10 @@ import { ErrorAlert, SuccessAlert } from '@/app/Components/AlertShow';
 import { blockNulluser } from '@/app/Utils/block';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { checkSessionTimeout } from '@/app/Utils/session';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+
 
 function Page() {
     // ใช้ useState สำหรับ client-side rendering
@@ -261,7 +265,7 @@ function Page() {
                             <div className="">
                                 <div className=" xs:grid md:grid-cols-3">
                                     <Customselect
-                                        width={'full'}
+                                        // width={'full'}
                                         label={label.title}
                                         field="label"
                                         value={selectedTitle}
@@ -275,7 +279,7 @@ function Page() {
                                             value={firstName}
                                             onChange={(e) => handleValidationThai(e.target.value, 'firstName', handleChange, setValidationMessage)}
                                             disabled={isOpenEdit}
-                                            width={'full'}
+                                            // width={'full'}
                                         />
                                         {validationMessage.firstName && (
                                             <span className="text-red-500 text-sm pl-3">{validationMessage.firstName}</span>
@@ -316,7 +320,7 @@ function Page() {
                                     </div>
                                     <Customselect
                                         readOnly={true}
-                                        width={width.md}
+                                        // width={width.md}
                                         label={label.branch}
                                         field="branch_name"
                                         value={branch}
@@ -344,7 +348,7 @@ function Page() {
                             <div className="">
                                 <div className="grid">
                                     <Customselect
-                                        width={width.md}
+                                        // width={width.md}
                                         label={label.title}
                                         field="label"
                                         value={selectedTitle}
@@ -404,15 +408,20 @@ function Page() {
                         ) : (
                             <Loading />
                         )}
-                        <div className="p-4 w-full flex justify-end items-center">
-                            <button onClick={handleOpenEdit} className='p-2'>
-                                <ModeEditIcon sx={{ fontSize: 30, color: colorsCode.blue }} />
-                            </button>
+                        <div className="p-4 w-full flex justify-end items-center gap-2 ">
                             <BasicButtons
                                 label="ยืนยันการแก้ไขข้อมูล"
-                                width={170}
+                                width={120}
                                 onClick={handleSubmit}
                             />
+                            <Tooltip title="แก้ไขข้อมูลส่วนบุคคล">
+                                <IconButton>
+                                    <button onClick={handleOpenEdit} className='p-2'>
+                                        <EditNoteIcon sx={{ fontSize: 40, color: colorsCode.blue }} />
+                                    </button>
+                                </IconButton>
+                            </Tooltip>
+
                         </div>
                     </div>
                 </div>
