@@ -109,10 +109,10 @@ function page() {
     }
   };
 
-  brancheslist?.sort((a, b) => b.branch_code.localeCompare(a.branch_code));
+  brancheslist?.sort((a, b) => a.branch_code.localeCompare(b.branch_code));
+
 
   return (
-
     <div className='min-h-screen bg-gray-50'>
       <Nav />
       {alertMessage && (
