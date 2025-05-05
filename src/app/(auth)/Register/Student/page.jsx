@@ -228,7 +228,7 @@ function Page() {
                   <FormControl sx={{ width: '138px' }} size="small" error={!!errors.year}>
                     <InputLabel>ชั้นปี</InputLabel>
                     <Select {...field} label="ชั้นปี">
-                      {[1, 2, 3, 4, 5].map(year => (
+                      {[1, 2, 3, 4].map(year => (
                         <MenuItem key={year} value={year}>
                           {year}
                         </MenuItem>
