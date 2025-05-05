@@ -44,8 +44,14 @@ export default function page({ searchParams }) {
         }
     }, [year, facultyId, status]);
 
-    console.log(data);
+    console.log("allDones", data);
 
+
+    const sortedData = data.slice().sort((a, b) => {
+        const facultyCompare = a.student.faculty_name.localeCompare(b.student.faculty_name, 'th');
+        if (facultyCompare !== 0) return facultyCompare;
+        return a.student.branch_name.localeCompare(b.student.branch_name, 'th');
+    });
 
     const columns = [
         { headerName: 'รหัสนักศึกษา', valueGetter: (params) => params.data.Student?.code || '-' },
@@ -79,7 +85,7 @@ export default function page({ searchParams }) {
                         </div>
                     ) : (
                         <CustomTable
-                            rows={data}
+                            rows={sortedData}
                             columns={columns}
                             entity="กิจกรรม"
                             setOpenEvidence={setOpen}
