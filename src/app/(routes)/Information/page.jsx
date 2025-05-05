@@ -228,9 +228,6 @@ function Page() {
         { key: '2', label: 2 },
         { key: '3', label: 3 },
         { key: '4', label: 4 },
-        { key: '5', label: 5 },
-        { key: '6', label: 6 },
-        { key: '7', label: 7 }
     ];
 
     const handleOpenEdit = () => {
@@ -279,7 +276,7 @@ function Page() {
                                             value={firstName}
                                             onChange={(e) => handleValidationThai(e.target.value, 'firstName', handleChange, setValidationMessage)}
                                             disabled={isOpenEdit}
-                                            // width={'full'}
+                                        // width={'full'}
                                         />
                                         {validationMessage.firstName && (
                                             <span className="text-red-500 text-sm pl-3">{validationMessage.firstName}</span>

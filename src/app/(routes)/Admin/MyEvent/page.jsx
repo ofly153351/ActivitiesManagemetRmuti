@@ -99,8 +99,8 @@ function page() {
     }
 
     myEvent.sort((a, b) => {
-        const dateA = parseThaiDate(a.start_date);
-        const dateB = parseThaiDate(b.start_date);
+        const dateA = parseThaiDate(b.start_date);
+        const dateB = parseThaiDate(a.start_date);
         return dateB - dateA;
     });
 

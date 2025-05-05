@@ -125,7 +125,7 @@ export default function EditPopup({ selectedEditItem, closeModal, onSave, fields
                     </div>
                     <div className="grid gap-4">
                         {fields.map((field) =>
-                            (field.name === 'start_date' || field.name === 'start_time') ? null : (
+                            (field.name === 'start_date' || field.name === 'start_time' || field.name === 'free_space') ? null : (
                                 <div key={field.name}>
                                     <label>{field.label}</label>
                                     <input
