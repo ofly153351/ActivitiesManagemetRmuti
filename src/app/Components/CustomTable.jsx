@@ -613,7 +613,6 @@ function CustomTable({
                             onChange={(e) => {
                                 // Only update if the input is a valid number
                                 setRowperpage(Number(e.target.value));
-
                             }}
                             inputMode="numeric"
                             pattern="[0-9]*"
@@ -626,7 +625,6 @@ function CustomTable({
                             onPageChange={handlePageChange}
                         />
                     </div>
-
                 </div>
             </div>
             {

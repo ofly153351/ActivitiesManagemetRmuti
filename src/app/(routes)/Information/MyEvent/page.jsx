@@ -148,15 +148,19 @@ function page() {
                             </div>
                         </>
                     )}
-                    {myEvent?.dones !== null ? (
+                    {myEvent?.dones !== null && !myEvent?.dones?.status ? (
                         <div className='flex justify-end items-center px-4 py-2' >
                             <BasicButtons
                                 diasble
                                 label={"รอตรวจสอบผลรวมกิจกรรม"}
-                                width={'20ch'}
+                                width={'14ch'}
                             />
                         </div>
-                    ) : totalInsideWorkingHours >= 18 && totalInsideWorkingHours + totalOutsideWorkingHours >= 36 ? (
+                    ) : myEvent?.dones !== null && myEvent?.dones?.status ? (
+                        <div className='flex justify-end items-center px-4 py-2' >
+                            ผ่านการตวจสอบแล้ว
+                        </div>
+                    ) : (totalInsideWorkingHours >= 18 && totalInsideWorkingHours + totalOutsideWorkingHours >= 36) ? (
                         <div className='flex justify-end items-center px-4 py-2' >
                             <BasicButtons
                                 label={"ส่งผลรวมกิจกรรม"}
@@ -164,7 +168,6 @@ function page() {
                                 width={'20ch'}
                             />
                         </div>
-
                     ) : (
                         <div className='flex justify-end items-center px-4 py-2' >
                             <BasicButtons
