@@ -213,7 +213,7 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
     if (!isMatchingReady) return <div className='my-20 w-full h-full justify-center items-center flex' ><Loading /></div>;
 
     if (loading) {
-        return <div className='flex justify-center items-center' >กำลังโหลด...</div>;
+        return <div className='h-12 flex justify-center items-center text-center min-h-screen' ><Loading /></div>;
     }
 
     return (
