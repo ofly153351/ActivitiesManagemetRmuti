@@ -148,7 +148,18 @@ function page() {
                             </div>
                         </>
                     )}
-                    {myEvent?.dones !== null && !myEvent?.dones?.status ? (
+                    {myEvent?.dones !== null && !myEvent?.dones?.status && myEvent?.dones?.comment !== '' ? (
+                        <div className='flex justify-center items-center' >
+                            <span>
+                                ไม่ผ่านการอยุมัตืเนื่องจาก : {myEvent?.dones?.comment}
+                            </span>
+                            <BasicButtons
+                                label={"ส่งผลรวมกิจกรรมอีกครั้ง"}
+                                onClick={() => handleSubmit()}
+                                width={'23ch'}
+                            />
+                        </div>
+                    ) : myEvent?.dones !== null && !myEvent?.dones?.status ? (
                         <div className='flex justify-end items-center px-4 py-2' >
                             <BasicButtons
                                 diasble
