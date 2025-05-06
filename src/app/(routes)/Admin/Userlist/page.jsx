@@ -9,6 +9,7 @@ import { all } from 'axios'
 import { blockNulluser } from '@/app/Utils/block'
 import EditDialog from '@/app/Components/EditInfomation/EditDialog'
 import { checkSessionTimeout } from '@/app/Utils/session'
+import Footer from '@/app/Components/Footer'
 
 function page() {
     const title = 'รายชื่อนักศึกษา'
@@ -103,7 +104,7 @@ function page() {
     return (
 
         <>
-            <div className='min-h-screen bg-gray-50' >
+            <div className='min-h-screen bg-gray-50 mt-20' >
                 <Nav />
                 <div className='h-screen flex justify-center items-center bg-gray-50'>
                     <div className="w-[80%] bg-white rounded-md mt-10 font-kanit shadow-md">
@@ -134,6 +135,7 @@ function page() {
                     />
                 )}
             </div >
+            <Footer />
         </>
     )
 }

@@ -14,6 +14,7 @@ import { colorsCode } from "@/app/Utils/color";
 import { useStore } from "@/store/useStore";
 import { checkUserAuth } from "@/app/Utils/block";
 import Nav from "@/app/Components/Nav";
+import Footer from "@/app/Components/Footer";
 
 
 function Page() {
@@ -185,6 +186,24 @@ function Page() {
 
             <div className="flex gap-2 mt-2">
               <Controller
+                name="year"
+                control={control}
+                rules={{ required: "กรุณาเลือกชั้นปี" }}
+                render={({ field }) => (
+                  <FormControl sx={{ width: '138px' }} size="small" error={!!errors.year}>
+                    <InputLabel>ชั้นปี</InputLabel>
+                    <Select {...field} label="ชั้นปี">
+                      {[1, 2, 3, 4].map(year => (
+                        <MenuItem key={year} value={year}>
+                          {year}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {errors.year && <p className="text-red-500 text-xs mt-1">{errors.year.message}</p>}
+                  </FormControl>
+                )}
+              />
+              <Controller
                 name="faculty"
                 control={control}
                 rules={{ required: "กรุณาเลือกคณะ" }}
@@ -209,7 +228,7 @@ function Page() {
                 render={({ field }) => (
                   <FormControl sx={{ width: '138px' }} size="small" error={!!errors.branch}>
                     <InputLabel>สาขา</InputLabel>
-                    <Select {...field} label="สาขา">
+                    <Select disabled={!selectedFacultyId} {...field} label="สาขา">
                       {filteredBranches.map(branch => (
                         <MenuItem key={branch.branch_id} value={branch.branch_id}>
                           {branch.branch_name}
@@ -220,24 +239,7 @@ function Page() {
                   </FormControl>
                 )}
               />
-              <Controller
-                name="year"
-                control={control}
-                rules={{ required: "กรุณาเลือกชั้นปี" }}
-                render={({ field }) => (
-                  <FormControl sx={{ width: '138px' }} size="small" error={!!errors.year}>
-                    <InputLabel>ชั้นปี</InputLabel>
-                    <Select {...field} label="ชั้นปี">
-                      {[1, 2, 3, 4].map(year => (
-                        <MenuItem key={year} value={year}>
-                          {year}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    {errors.year && <p className="text-red-500 text-xs mt-1">{errors.year.message}</p>}
-                  </FormControl>
-                )}
-              />
+
             </div>
 
             <input
@@ -309,6 +311,7 @@ function Page() {
           </form>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }

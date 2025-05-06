@@ -10,6 +10,7 @@ import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 import { useStore } from '@/store/useStore';
 import { checkUserAuth } from "@/app/Utils/block";
+import Footer from "@/app/Components/Footer";
 
 function Page() {
   const login = useStore((state) => state.login);
@@ -71,7 +72,7 @@ function Page() {
                   placeholder="Email Address"
                   variant="outlined"
                   type="email"
-                  
+
                   {...register('email', { required: 'Email is required' })}
                 />
               </Box>
@@ -121,6 +122,7 @@ function Page() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

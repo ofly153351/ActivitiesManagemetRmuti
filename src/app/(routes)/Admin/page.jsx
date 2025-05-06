@@ -13,6 +13,7 @@ import { adminDashboard, closedEvent } from '@/app/Utils/api';
 import { useStore } from '@/store/useStore';
 import { useRouter } from 'next/navigation';
 import { checkSessionTimeout } from '@/app/Utils/session';
+import Footer from '@/app/Components/Footer';
 
 function Page() {
     checkSessionTimeout()
@@ -99,7 +100,7 @@ function Page() {
     return (
         <div className='bg-slate-50' >
             <Nav />
-            <div className='bg-slate-50 min-h-screen' >
+            <div className='bg-slate-50 min-h-screen mt-20' >
                 <div className='h-screen bg-slate-50 '>
                     <div className='flex justify-start items-center p-4 
                     xs:h-10 sm:h-16 md:h-20   
@@ -154,7 +155,6 @@ function Page() {
                             <span className='px-3 text-xl'>กิจกรรมที่ไกล้ถึง</span>
                             <div className='p-2 grid gap-2 md:flex md:overflow-x-auto'>
                                 {closedEvents ? (
-
                                     closedEvents.map((item, idx) => (
                                         <CloseActivitiesCard
                                             key={idx}
@@ -170,7 +170,6 @@ function Page() {
                                 ) : ((!closedEvents || closedEvents === null) &&
                                     <div className='h-36 flex justify-center items-center w-full text-slate-600' >ไม่พบกิจกรรมที่ไกล้จะถึง</div>
                                 )}
-
                             </div>
                         </div>
                     </div>
@@ -178,7 +177,10 @@ function Page() {
 
                 </div>
             </div>
+            <div className='mt-20' >
 
+                <Footer />
+            </div>
         </div>
     );
 }

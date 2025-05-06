@@ -18,6 +18,7 @@ import { checkSessionTimeout } from '@/app/Utils/session';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import Footer from '@/app/Components/Footer';
 
 
 function Page() {
@@ -214,7 +215,7 @@ function Page() {
         phone: 'เบอร์โทร',
         branch: 'สาขา',
         faculties: 'คณะ',
-        year: 'ปี'
+        year: 'ชั้นปี'
     };
 
     const titles = [
@@ -327,7 +328,7 @@ function Page() {
                                 </div>
 
                                 <div className="flex">
-                                    <div className='xs:grid md:grid-cols-2'>
+                                    <div className='xs:grid '>
 
                                         <CustomTextfield
                                             label={label.phone}
@@ -432,6 +433,7 @@ function Page() {
                     </div>
                 )}
             </div>
+            <Footer />
         </div>
     );
 }

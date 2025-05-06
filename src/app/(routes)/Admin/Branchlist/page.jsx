@@ -3,6 +3,7 @@ import { ErrorAlert, SuccessAlert } from '@/app/Components/AlertShow';
 import CreatBranch from '@/app/Components/CreateBranch';
 import CustomTable from '@/app/Components/CustomTable';
 import EditPopup from '@/app/Components/editPopup';
+import Footer from '@/app/Components/Footer';
 import Nav from '@/app/Components/Nav'
 import { DeleteBranchbyID, getBranches, getFaculties } from '@/app/Utils/api';
 import { blockNulluser } from '@/app/Utils/block';
@@ -111,12 +112,11 @@ function page() {
 
   brancheslist?.sort((a, b) => a.branch_code.localeCompare(b.branch_code));
 
-
   return (
-    <div className='min-h-screen bg-gray-50'>
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <Nav />
       {alertMessage && (
-        <div className="fixed bottom-4 right-[142px]  z-50 w-[300px] duration-150">
+        <div className="fixed bottom-4 right-[142px] z-50 w-[300px] duration-150">
           {alertType === "success" ? (
             <SuccessAlert label={alertMessage} />
           ) : (
@@ -124,9 +124,9 @@ function page() {
           )}
         </div>
       )}
-      <div className='flex  justify-center items-center bg-gray-50 '>
-        <div className="w-[80%] bg-white rounded-md mt-10 font-kanit shadow-md">
-          <h1 className='text-[52px] text-shadow-md p-10'>{title}</h1>
+      <div className="flex-grow flex justify-center items-start mt-32">
+        <div className="w-[80%] bg-white rounded-md font-kanit shadow-md">
+          <h1 className="text-[52px] text-shadow-md p-10">{title}</h1>
           <CustomTable
             rows={brancheslist}
             columns={columns}
@@ -152,6 +152,8 @@ function page() {
           )}
         </div>
       </div>
+
+      <Footer />
     </div>
   )
 }

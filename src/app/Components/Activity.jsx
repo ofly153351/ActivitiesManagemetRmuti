@@ -178,7 +178,7 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
             throw error;
         }
     };
-    
+
 
     // ตรวจสอบกิจกรรมที่เข้าร่วมแล้ว
     const matchedEventIds = useMemo(() => {
@@ -213,14 +213,14 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
     if (!isMatchingReady) return <div className='my-20 w-full h-full justify-center items-center flex' ><Loading /></div>;
 
     if (loading) {
-        return <div>กำลังโหลด...</div>;
+        return <div className='flex justify-center items-center' >กำลังโหลด...</div>;
     }
 
     return (
         <div>
             {sortedActivities.length === 0 ? (
-                <div className="h-12 flex justify-center items-center text-center text-gray-500">
-                    <div>ยังไม่มีกิจกรรมที่เปิดลงทะเบียน</div>
+                <div className="h-12 flex justify-center items-center text-center text-gray-500 min-h-screen">
+                    <div>ไม่พบกิจกรรมที่เปิดให้ลงทะเบียนในช่วงเวลานี้</div>
                 </div>
             ) : (
                 sortedActivities.map((activity, index) => (

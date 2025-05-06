@@ -14,6 +14,7 @@ import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import { colorsCode } from "@/app/Utils/color";
 import { useStore } from "@/store/useStore";
 import { checkUserAuth } from "@/app/Utils/block";
+import Footer from "@/app/Components/Footer";
 
 function Page() {
     const router = useRouter();
@@ -212,6 +213,7 @@ function Page() {
                     </form>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 };

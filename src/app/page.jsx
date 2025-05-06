@@ -13,6 +13,7 @@ import { getMyEventStudent, getMyEventStudentWithOutYear } from "./Utils/api";
 import Loading from "./Components/Loading";
 import { useStore } from "@/store/useStore";
 import Activity from "./Components/Activity";
+import Footer from "./Components/Footer";
 
 
 function Page() {
@@ -64,7 +65,7 @@ function Page() {
             <div className='flex'>
                 <div className='w-full lg:mx-20 md:mx-10  mb-10'>
                     <div className="lg:px-0 md:px-0 xs:p-8 xs:pl-6 lg:py-16 lg:w-full xs:mt-20">
-                        <h1 className='font-kanit lg:text-[45px] md:text-[40px] text-shadow-sm border-b-[2px] xs:w-fit xs:text-[22px] lg:mx-4'>กิจกรรมที่สามารถลงทะเบียนได้</h1>
+                        <h1 className='font-kanit lg:text-[45px] md:text-[40px] text-shadow-sm border-b-[2px] xs:w-fit xs:text-[22px] lg:mx-4'>กิจกรรมจิตอาสาที่เปิดให้ลงทะเบียนในขณะนี้</h1>
                     </div>
                     <div className='xs:mx-2  border-b-2 lg:p-4 xs:p-3 flex justify-end  lg:items-end lg:mx-6'>
                         <form className="flex lg:justify-end lg:items-center  xs:mr-0 gap-3">
@@ -99,7 +100,7 @@ function Page() {
                     </div>
                 </div>
             </div>
-
+            <Footer />
         </>
     );
 }

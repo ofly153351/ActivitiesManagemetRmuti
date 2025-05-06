@@ -3,6 +3,7 @@ import ActivityAccordion from '@/app/Components/Acordion'
 import { ErrorAlert, SuccessAlert } from '@/app/Components/AlertShow'
 import BasicButtons from '@/app/Components/BasicButtons'
 import Customselect from '@/app/Components/Customselect'
+import Footer from '@/app/Components/Footer'
 import HorizontalCard from '@/app/Components/HorizontalCard'
 import Loading from '@/app/Components/Loading'
 import Nav from '@/app/Components/Nav'
@@ -13,7 +14,6 @@ import { checkSessionTimeout } from '@/app/Utils/session'
 import { useStore } from '@/store/useStore'
 import { Value } from '@radix-ui/react-select'
 import React, { use, useState, useEffect, useMemo } from 'react'
-
 
 
 function page() {
@@ -107,9 +107,9 @@ function page() {
 
 
     return (
-        <div className="">
+        <div className="bg-gray-50">
             <Nav />
-            <div className="bg-gray-50 min-h-screen flex justify-center items-center ">
+            <div className="bg-gray-50 min-h-screen flex justify-center items-center mt-20 ">
                 <div className="w-[80%] bg-white rounded-md mt-10 font-kanit shadow-md ">
                     <h1 className="text-[52px] text-shadow-md  p-10">{title}</h1>
                     <div className='flex justify-end items-center' >
@@ -151,7 +151,7 @@ function page() {
                     {myEvent?.dones !== null && !myEvent?.dones?.status && myEvent?.dones?.comment !== '' ? (
                         <div className='flex justify-center items-center' >
                             <span>
-                                ไม่ผ่านการอยุมัตืเนื่องจาก : {myEvent?.dones?.comment}
+                                ไม่ผ่านการอนุมัติเนื่องจาก : {myEvent?.dones?.comment}
                             </span>
                             <BasicButtons
                                 label={"ส่งผลรวมกิจกรรมอีกครั้ง"}
@@ -200,6 +200,10 @@ function page() {
                     )}
                 </div>
             )}
+            <div className='pt-8' >
+                <Footer />
+
+            </div>
         </div>
 
 

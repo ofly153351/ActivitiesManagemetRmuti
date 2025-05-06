@@ -8,6 +8,7 @@ import EditPopup from '@/app/Components/editPopup';
 import { useStore } from '@/store/useStore';
 import { blockNulluser } from '@/app/Utils/block';
 import { checkSessionTimeout } from '@/app/Utils/session';
+import Footer from '@/app/Components/Footer';
 
 function Page() {
     const title = 'รายชื่อกิจกรรม';
@@ -115,7 +116,7 @@ function Page() {
     return (
         <>
             <Nav />
-            <div className=" bg-gray-50 flex justify-center items-center">
+            <div className=" bg-gray-50 flex justify-center items-center mt-20">
 
                 <div className="w-screen min-h-screen flex justify-center items-center bg-gray-50">
                     <div className="w-[80%] bg-white rounded-md mt-10 font-kanit shadow-md">
@@ -148,6 +149,8 @@ function Page() {
                     />
                 )}
             </div>
+
+            <Footer/>
         </>
 
 

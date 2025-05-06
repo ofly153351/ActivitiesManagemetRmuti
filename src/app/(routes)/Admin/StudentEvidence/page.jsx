@@ -9,6 +9,7 @@ import { SuccessAlert } from '@/app/Components/AlertShow'
 import { blockNulluser } from '@/app/Utils/block'
 import { useStore } from '@/store/useStore'
 import { checkSessionTimeout } from '@/app/Utils/session'
+import Footer from '@/app/Components/Footer'
 
 function page() {
 
@@ -105,6 +106,7 @@ function page() {
                     <SuccessAlert label={openAlert.message} />
                 </div>
             )}
+            <Footer />
         </div>
     )
 }

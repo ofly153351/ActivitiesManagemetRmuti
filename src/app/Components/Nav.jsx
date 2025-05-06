@@ -80,15 +80,17 @@ function Nav() {
 
     return (
 
-        <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-between items-center px-5  z-10 top-0">
+        <div className="w-screen h-[80px] bg-white border-b-2 border-[#0067B3] shadow-md flex justify-between items-center px-5  z-10 top-0 fixed ">
             {(userRoleHash === 'teacher' || userRoleHash === 'admin' || userRoleHash === 'superadmin') && (
                 <div className='flex justify-between items-center  lg:mx-20 w-screen'>
                     <div className='flex justify-between items-center w-full'>
-                        <div className='flex justify-center items-center'>
+                        <div className='flex justify-center items-center '>
                             <Sidebar />
                             <Link href="/" className='hover:bg-stone-50 xs:hidden lg:block md:block'>
                                 <img className='w-14 rounded-full' src="/logolight.png" />
                             </Link>
+                            <span className='ml-10 xs:hidden md:flex xs:text-sm sm:text-md md:text-lg lg:text-2xl truncate ' >ระบบจัดการกิจกรรมจิตรอาสา กยศ. </span>
+
                         </div>
                     </div>
                     <div className="min-w-fit">
@@ -98,23 +100,35 @@ function Nav() {
             )}
 
             {!userRoleHash && (
-                <Link href="/" className=' xs:ml-2  justify-center items-center  xs:flex' >
-                    <img className='"w-14 h-14 object-cover rounded-full' src="/logolight.png" />
-                </Link>
+                <>
+                    <div className='flex justify-center items-center' >
+                        <Link href="/" className=' xs:ml-2  justify-center items-center  xs:flex' >
+                            <img className='"w-14 h-14 object-cover rounded-full' src="/logolight.png" />
+                        </Link>
+                        <span className='ml-10 xs:hidden md:flex xs:text-sm sm:text-md md:text-lg lg:text-2xl truncate ' >ระบบจัดการกิจกรรมจิตรอาสา กยศ. </span>
+
+                    </div>
+                </>
+
+
             )
             }
             {
                 userRoleHash === 'student' && (
-                    <Link href="/" className='xs:ml-2  justify-center items-center lg:flex ' >
-                        <img className='w-14 rounded-full' src="/logolight.png" />
-                    </Link>
+                    <>
+                        <div className='flex justify-center items-center' >
+                            <Link href="/" className=' xs:ml-2  justify-center items-center  xs:flex' >
+                                <img className='"w-14 h-14 object-cover rounded-full' src="/logolight.png" />
+                            </Link>
+                            <span className='ml-10 xs:hidden md:flex xs:text-sm sm:text-md md:text-lg lg:text-2xl truncate ' >ระบบจัดการกิจกรรมจิตรอาสา กยศ. </span>
+                        </div>
+                    </>
                 )
             }
 
             {
                 pathname === '/Login' && (
-                    <div className="xs:w-screen xs:flex  xs:justify-end xs:items-center xs:mr-2 lg:mr-10  md:justify-end">
-
+                    <div className=" xs:flex  xs:justify-end xs:items-center xs:mr-2 lg:mr-10  md:justify-end">
                         <div className='xs:grid xs:grid-cols-2 lg:flex justify-center items-center gap-5 xs:mr-5'>
                             <CustomMenu />
                             <BasicButtons

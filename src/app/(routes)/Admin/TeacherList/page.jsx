@@ -1,5 +1,6 @@
 'use client'
 import CustomTable from '@/app/Components/CustomTable'
+import Footer from '@/app/Components/Footer'
 import Loading from '@/app/Components/Loading'
 import Nav from '@/app/Components/Nav'
 import { getAllteacher } from '@/app/Utils/api'
@@ -99,6 +100,7 @@ function page() {
                     </div>
                 </div>
             </div >
+            <Footer />
         </>
     )
 }

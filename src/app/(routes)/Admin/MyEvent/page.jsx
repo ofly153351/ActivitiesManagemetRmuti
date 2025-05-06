@@ -9,6 +9,7 @@ import { blockNulluser } from '@/app/Utils/block';
 import { useStore } from '@/store/useStore';
 import React, { useEffect, useState } from 'react';
 import { checkSessionTimeout } from '@/app/Utils/session';
+import Footer from '@/app/Components/Footer';
 
 function page() {
     const [loading, setLoading] = useState(false);
@@ -58,7 +59,7 @@ function page() {
 
 
     console.log(myEvent);
-    
+
 
     const fields = [
         { name: 'event_name', label: 'ชื่อกิจกรรม', placeholder: 'กรุณากรอกชื่อกิจกรรม' },
@@ -111,7 +112,7 @@ function page() {
     return (
         <div className="bg-gray-50 h-screen">
             <Nav />
-            <div className="flex justify-center items-center bg-gray-50 min-h-screen">
+            <div className="flex justify-center items-center bg-gray-50 min-h-screen mt-20 ">
                 <div className="w-[80%] bg-white rounded-md mt-10 font-kanit shadow-md">
                     <h1 className="lg:text-[52px] xs:text-[36px] text-shadow-md p-10 ">{title}</h1>
                     {loading ? (
@@ -130,7 +131,6 @@ function page() {
                     )}
                 </div>
             </div>
-
             {EditPopupOpen && (
                 <EditPopup
                     closeModal={() => setEditPopupOpen(false)}
@@ -138,6 +138,7 @@ function page() {
                     selectedEditItem={selectedRow}
                 />
             )}
+            <Footer />
         </div>
     );
 }

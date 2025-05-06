@@ -1,6 +1,7 @@
 'use client'
 import CustomTable from '@/app/Components/CustomTable';
 import EvidancedDialog from '@/app/Components/Evidenced/EvidancedDialog';
+import Footer from '@/app/Components/Footer';
 import Loading from '@/app/Components/Loading';
 import Nav from '@/app/Components/Nav';
 import { getAllStudentDonesEvidence } from '@/app/Utils/api';
@@ -64,17 +65,13 @@ export default function page({ searchParams }) {
         // { headerName: 'หมายเหตุ', valueGetter: (params) => params.data.remark || '-' },
     ];
 
-    // let a = [1, 2, 3]
-    // let b = a
-    // b.push(4)
 
-    // console.log(a)
 
 
     return (
         <div className="bg-gray-50 h-screen">
             <Nav />
-            <div className="flex justify-center items-center bg-gray-50 min-h-screen">
+            <div className="flex justify-center items-center bg-gray-50 min-h-screen mt-20 ">
                 <div className="w-[80%] bg-white rounded-md mt-10 font-kanit shadow-md">
                     <h1 className="text-[52px] text-shadow-md p-10">{title}</h1>
                     {loading ? (
@@ -102,6 +99,7 @@ export default function page({ searchParams }) {
                 setOpen={setOpen}
                 years={year}
             />
+            <Footer />
         </div>
     );
 }
