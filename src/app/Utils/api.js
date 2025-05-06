@@ -736,7 +736,6 @@ export const viewFilepath = async (eventID, userID) => {
 
 export const editPersonalinfo = async (payload) => {
   if (!payload) return;
-
   try {
     const response = await axios.put(`${API_BASE}/protected/admin/studentinfo`, payload, {
       withCredentials: true,

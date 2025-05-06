@@ -167,7 +167,6 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
             const response = await joinEvent(Number(activityId));
             setSuccessMessage('ส่งคำขอเข้าร่วมกิจกรรมเรียบร้อยแล้ว');
             setTimeout(() => setSuccessMessage(false), 1000);
-
             setTimeout(() => {
                 window.location.reload()
             }, 1000);
@@ -179,6 +178,7 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
             throw error;
         }
     };
+    
 
     // ตรวจสอบกิจกรรมที่เข้าร่วมแล้ว
     const matchedEventIds = useMemo(() => {
