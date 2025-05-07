@@ -169,7 +169,7 @@ function page() {
                         </div>
                     ) : myEvent?.dones !== null && myEvent?.dones?.status ? (
                         <div className='flex justify-end items-center px-4 py-2' >
-                            <span className='w-fit bg-green-500 text-white font-kanit p-2 flex justify-center items-center' >
+                            <span className='w-fit bg-green-500 text-white font-kanit p-2 flex justify-center items-center rounded-sm ' >
                                 ผ่านการตวจสอบแล้ว
                             </span>
                         </div>
