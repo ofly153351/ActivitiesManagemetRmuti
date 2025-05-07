@@ -313,11 +313,17 @@ function CreatEventpopup({ openDialog, handleCloseDialog, facultiesList = [], br
                             inputProps={{ min: 1 }}
                             sx={{ width: isDesktop ? 200 : '100%' }}
                             onChange={(e) => {
-                                // กรองให้รับเฉพาะตัวเลข
-                                const value = e.target.value;
-                                const numericValue = value.replace(/[^0-9]/g, ''); // กรองเฉพาะตัวเลข
-                                e.target.value = numericValue;  // อัปเดตค่าที่ผู้ใช้กรอก
-                                setHour(numericValue ? Number(numericValue) : 0);  // เก็บค่าใน state และแปลงเป็นตัวเลข
+                                let value = e.target.value;
+                                let numericValue = value.replace(/[^0-9]/g, ''); // กรองเฉพาะตัวเลข
+
+                                // แปลงเป็นตัวเลขเพื่อตรวจสอบว่าไม่เกิน 7
+                                const number = Number(numericValue);
+                                if (number > 7) {
+                                    numericValue = '7'; // จำกัดค่าไม่ให้เกิน 7
+                                }
+
+                                e.target.value = numericValue;
+                                setHour(numericValue ? Number(numericValue) : 0);
                             }}
                             required
                         />

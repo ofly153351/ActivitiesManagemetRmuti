@@ -47,7 +47,7 @@ function Page() {
     <div className="flex flex-col min-h-screen">
       <Nav />
       {/* Centering Container */}
-      <div className="flex flex-grow items-center justify-center px-4">
+      <div className="flex flex-grow items-center justify-center px-4 mt-20">
         <div className="flex flex-col md:flex-row bg-blue-300 w-full max-w-3xl rounded-[12px] shadow-2xl">
           {/* Left Side (Logo) */}
           <div className="hidden md:flex items-center justify-center w-1/2">
