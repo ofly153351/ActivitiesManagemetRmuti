@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 function SelectedAllDones({ open, setOpen }) {
     let year = new Date().getFullYear();
     const years = [{ label: year + 542 }, { label: year + 543 }, { label: year + 544 }];
-    const [selectedYears, setSelectedYears] = useState(years[0].label);
+    const [selectedYears, setSelectedYears] = useState(years[1].label);
     const [faculties, setFaculties] = useState([]);
     const [selectedFaculty, setSelectedFaculty] = useState(null)
     const [facultyID, setFacultyID] = useState('');
