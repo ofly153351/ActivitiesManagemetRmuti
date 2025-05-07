@@ -149,14 +149,14 @@ function page() {
                         </>
                     )}
                     {myEvent?.dones !== null && !myEvent?.dones?.status && myEvent?.dones?.comment !== '' ? (
-                        <div className='flex justify-center items-center' >
-                            <span>
+                        <div className='flex justify-end gap-2 items-center' >
+                            <span className='text-orange-400' >
                                 ไม่ผ่านการอนุมัติเนื่องจาก : {myEvent?.dones?.comment}
                             </span>
                             <BasicButtons
                                 label={"ส่งผลรวมกิจกรรมอีกครั้ง"}
                                 onClick={() => handleSubmit()}
-                                width={'23ch'}
+                                width={'20ch'}
                             />
                         </div>
                     ) : myEvent?.dones !== null && !myEvent?.dones?.status ? (
