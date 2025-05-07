@@ -248,13 +248,14 @@ function Activity({ searchQuery, inEvent, selectedValue }) {
                                     วันที่เริ่มกิจกรรม: <span className="font-thin">{activity.start_date} , เวลา: {activity.start_time} น.</span>
                                 </div>
                                 <div className="w-full px-4 py-2 font-kanit">
+                                    ประจำปีการศึกษา: <span className="font-thin">{activity.school_year}</span>
+                                </div>
+                                <div className="w-full px-4 py-2 font-kanit">
                                     ชั้นปีที่เปิดรับ: <span className="font-thin">
                                         {activity.allow_all_year || activity.years === null ? 'สามารถเข้าร่วมได้ทุกชั้นปี' : `${activity.years.join(', ')}`}
                                     </span>
                                 </div>
-                                <div className="w-full px-4 py-2 font-kanit">
-                                    ประจำปีการศึกษา: <span className="font-thin">{activity.school_year}</span>
-                                </div>
+
                                 <div className="flex gap-2 justify-between items-center w-full px-4 py-2 font-kanit">
                                     <div>
                                         {activity.allow_all_branch || activity.branches === null ? (
