@@ -73,7 +73,6 @@ export default function CustomDialog({
                                     <CustomTextfield label={item.label} onChange={item.function} value={item.value} type="number" />
                                     {item.error && <p className='px-2' style={{ color: "red", fontSize: "14px" }}>{item.error}</p>}
                                 </>
-
                             ) : (item.label === 'ปีการศึกษา') ? (
                                 <>
                                     <Customselect

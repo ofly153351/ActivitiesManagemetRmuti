@@ -45,11 +45,15 @@ function CreateEventOutside({ isOpen, isClose }) {
     };
 
     const handleChangeWorkingHour = (e) => {
-        const value = Number(e.target.value);
-        if (isNaN(value)) {
-            setWorkingHour(1);
+        const rawValue = e.target.value;
+        const numericValue = rawValue.replace(/[^0-9]/g, ''); // กรองให้เหลือแต่ตัวเลข
+
+        if (!numericValue) {
+            setWorkingHour(''); // เคลียร์เมื่อไม่มีอะไรกรอก
         } else {
-            setWorkingHour(Math.min(value, 24));
+            const value = Number(numericValue);
+            const clamped = Math.min(value, 7); // จำกัดไม่ให้เกิน 7
+            setWorkingHour(clamped);
         }
     };
 
