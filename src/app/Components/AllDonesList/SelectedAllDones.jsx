@@ -56,7 +56,7 @@ function SelectedAllDones({ open, setOpen }) {
 
 
     const StatusList = [
-        { label: 'อนุมันติ', value: true },
+        { label: 'อนุมัติ', value: true },
         { label: 'ไม่อนุมัติ', value: false },
     ]
 
