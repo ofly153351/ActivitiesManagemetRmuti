@@ -113,8 +113,36 @@ function Page() {
         setSelectedEditEvent(item); // เลือกกิจกรรมที่ต้องการแก้ไข
     };
 
+    function parseThaiDate(thaiDateStr) {
+        const months = {
+            'มกราคม': 0, 'กุมภาพันธ์': 1, 'มีนาคม': 2, 'เมษายน': 3,
+            'พฤษภาคม': 4, 'มิถุนายน': 5, 'กรกฎาคม': 6, 'สิงหาคม': 7,
+            'กันยายน': 8, 'ตุลาคม': 9, 'พฤศจิกายน': 10, 'ธันวาคม': 11
+        };
+
+        const [day, monthThai, yearThai] = thaiDateStr.split(' ');
+        const year = parseInt(yearThai, 10) - 543; // แปลง พ.ศ. → ค.ศ.
+        const month = months[monthThai];
+        const date = parseInt(day, 10);
+
+        return new Date(year, month, date).getTime(); // ใช้ getTime() เพื่อเปรียบเทียบง่าย
+    }
+
+    selectedEvent.sort((a, b) => {
+        // เรียงให้ status true มาก่อน
+        if (a.status !== b.status) {
+            return b.status - a.status; // true (1) มาก่อน false (0)
+        }
+
+        // ถ้า status เท่ากัน ให้เรียงตามวันที่ (เก่า → ใหม่)
+        const dateA = parseThaiDate(a.start_date);
+        const dateB = parseThaiDate(b.start_date);
+        return dateA - dateB;
+    });
+
+
     return (
-        <>
+        <div className='bg-gray-50'>
             <Nav />
             <div className=" bg-gray-50 flex justify-center items-center mt-20">
 
@@ -149,9 +177,11 @@ function Page() {
                     />
                 )}
             </div>
+            <div className="mt-10">
+                <Footer />
 
-            <Footer/>
-        </>
+            </div>
+        </div>
 
 
     );

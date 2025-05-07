@@ -375,7 +375,7 @@ function CustomTable({
         <div className='' >
             <div className='xs:grid md:flex justify-end items-center  gap-4 p-2 overflow-auto'>
                 <div>
-                    {pathName === '/Admin/EventList' ? (
+                    {pathName === '/Admin/EventList' || pathName === '/Admin/Eventlist' ? (
                         <div className=' flex gap-2' >
                             <ToggleButtonGroup
                                 sx={{ fontFamily: 'Kanit, sans-serif', }}
