@@ -15,12 +15,7 @@ function Footer() {
                 <div className="w-full md:w-1/3">
                     <h3 className="font-semibold mb-2">ติดต่อเรา</h3>
                     <p>โทร: 093-212-3213</p>
-                    <p>Email: activities.ma@gmail.com</p>
-                    <Link href='https://www.facebook.com/StudentLoanRMUTI?locale=th_TH' target="_blank">
-                        <p className="hover:underline text-blue-600">
-                            Facebook: กองทุนกู้ยืมเพื่อการศึกษา มทร.อีสาน (นครราชสีมา)
-                        </p>
-                    </Link>
+                    <p>Email: phiraphat.kl@rmuti.ac.th && thanyathon.de@rmuti.ac.th</p>
                 </div>
                 <div className="w-full md:w-1/3">
                     <h3 className="font-semibold mb-2">เวลาทำการ</h3>
