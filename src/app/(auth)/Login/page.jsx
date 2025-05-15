@@ -26,19 +26,19 @@ function Page() {
 
   const onSubmit = async (data) => {
     try {
-      const responseUser = await login(data); // <- รับค่ากลับมา
+      const responseUser = await login(data);
 
       console.log('User:', responseUser);
 
       if (responseUser) {
-        setSuccessMessage('Login successful!');
+        setSuccessMessage('เข้าสู้ระบบเรียบร้อย');
         router.push('/')
       } else {
         throw new Error('No token received after login');
       }
     } catch (error) {
       console.error('Login error:', error);
-      setErrorMessage('Login failed. Please check your Email or Password');
+      setErrorMessage('เกิดข้อผิดพลาดในการเข้าสู่ระบบกรุณาตรวจสอบอีเมลหรือรหัสผ่าน');
       setTimeout(() => setErrorMessage(''), 5000);
     }
   };
@@ -73,7 +73,7 @@ function Page() {
                   variant="outlined"
                   type="email"
 
-                  {...register('email', { required: 'Email is required' })}
+                  {...register('email', { required: 'กรุณากรอกอีเมล' })}
                 />
               </Box>
               {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
@@ -86,7 +86,7 @@ function Page() {
                   variant="outlined"
                   type="password"
                   fullWidth
-                  {...register('password', { required: 'Password is required' })}
+                  {...register('password', { required: 'กรุณากรอกรหัสผ่าน' })}
                 />
               </Box>
               {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
