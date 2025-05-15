@@ -21,13 +21,16 @@ function Page() {
     const { register, handleSubmit, setValue, formState: { errors }, watch } = useForm();
     const [gender, setGender] = useState('');
     const { user } = useStore();
+    const [role, setRole] = useState('')
 
 
     useEffect(() => {
         checkUserAuth(user)
-
         register('nameTitle', {
             required: "กรุณาใส่คำนำหน้า",
+        });
+        register('role', {
+            required: "กรุณาเลือกระดับ",
         });
     }, [register]);
 
@@ -40,6 +43,7 @@ function Page() {
             email: data.email,
             password: data.password,
             code: data.code,
+            role: data.role
         };
 
 
@@ -60,6 +64,10 @@ function Page() {
         setValue('nameTitle', event.target.value);
     };
 
+    const handleChangeRole = (event) => {
+        setRole(event.target.value);
+        setValue('role', event.target.value);
+    };
 
     return (
         <div>
@@ -72,20 +80,35 @@ function Page() {
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mt-4">
-                            <FormControl fullWidth margin="normal" size="small">
-                                <InputLabel id="nameTitle-label" sx={{ fontSize: '0.9rem' }}>คำนำหน้า</InputLabel>
-                                <Select
-                                    labelId="nameTitle-label"
-                                    value={gender}
-                                    onChange={handleChangegender}
-                                    label="คำนำหน้า"
-                                >
-                                    <MenuItem value="นาย">นาย</MenuItem>
-                                    <MenuItem value="นาง">นาง</MenuItem>
-                                    <MenuItem value="นางสาว">นางสาว</MenuItem>
-                                </Select>
-                                {errors.nameTitle && <div className="text-red-500 text-xs mt-1">{errors.nameTitle.message}</div>}
-                            </FormControl>
+                            <div className="flex gap-2">
+                                <FormControl fullWidth margin="normal" size="small">
+                                    <InputLabel id="nameTitle-label" sx={{ fontSize: '0.9rem' }}>คำนำหน้า</InputLabel>
+                                    <Select
+                                        labelId="nameTitle-label"
+                                        value={gender}
+                                        onChange={handleChangegender}
+                                        label="คำนำหน้า"
+                                    >
+                                        <MenuItem value="นาย">นาย</MenuItem>
+                                        <MenuItem value="นาง">นาง</MenuItem>
+                                        <MenuItem value="นางสาว">นางสาว</MenuItem>
+                                    </Select>
+                                    {errors.nameTitle && <div className="text-red-500 text-xs mt-1">{errors.nameTitle.message}</div>}
+                                </FormControl>
+                                <FormControl fullWidth margin="normal" size="small">
+                                    <InputLabel id="role-label" sx={{ fontSize: '0.9rem' }}>ระดับ</InputLabel>
+                                    <Select
+                                        labelId="role-label"
+                                        value={role}
+                                        onChange={handleChangeRole}
+                                        label="ระดับ"
+                                    >
+                                        <MenuItem value="teacher">อาจารย์</MenuItem>
+                                        <MenuItem value="officer">เจ้าหน้าที่</MenuItem>
+                                    </Select>
+                                    {errors.role && <div className="text-red-500 text-xs mt-1">{errors.role.message}</div>}
+                                </FormControl>
+                            </div>
                             <div className="flex gap-2">
                                 <div className="w-full">
                                     <input

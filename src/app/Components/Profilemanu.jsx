@@ -113,22 +113,22 @@ function ProfileMenu() {
     const parseMessage = (msg) => {
         const newEventRegex = /กิจกรรม'(.*?)'\s+'(.*?)'\s+'(.*?)'/;
         const newMatch = msg.match(newEventRegex);
-    
+
         const deleteEventRegex = /กิจกรรม\s+'(.*?)'\s+ที่คุณเข้าร่วมถูกลบแล้ว/;
         const deleteMatch = msg.match(deleteEventRegex);
-    
+
         const editEventRegex = /กิจกรรม\s+'(.*?)'\s+ที่คุณเข้าร่วมมีการแก้ไขรายละเอียด./;
         const editMatch = msg.match(editEventRegex);
-    
+
         const checkEventRegex = /กิจกรรม\s+'(.*?)'\s+ที่คุณต้องตรวจสอบ./;
         const checkMatch = msg.match(checkEventRegex);
-    
+
         const failedReasonRegex = /เอกสารกิจกรรม\s+'(.*?)'\s+'(.*?)'\s+เนื่องจาก:\s+(.*)/;
         const failedReasonMatch = msg.match(failedReasonRegex);
-    
+
         const checkResultRegex = /เอกสารกิจกรรม\s+'(.*?)'\s+'(.*?)'/;
         const checkResultMatch = msg.match(checkResultRegex);
-    
+
         if (newMatch) {
             const [, name, date, time] = newMatch;
             return (
@@ -139,7 +139,7 @@ function ProfileMenu() {
                 </>
             );
         }
-    
+
         if (deleteMatch) {
             const [, name] = deleteMatch;
             return (
@@ -149,7 +149,7 @@ function ProfileMenu() {
                 </>
             );
         }
-    
+
         if (editMatch) {
             const [, name] = editMatch;
             return (
@@ -158,7 +158,7 @@ function ProfileMenu() {
                 </>
             );
         }
-    
+
         if (checkMatch) {
             const [, name] = checkMatch;
             return (
@@ -167,7 +167,7 @@ function ProfileMenu() {
                 </>
             );
         }
-    
+
         if (failedReasonMatch) {
             const [, name, status, reason] = failedReasonMatch;
             return (
@@ -178,7 +178,7 @@ function ProfileMenu() {
                 </>
             );
         }
-    
+
         if (checkResultMatch) {
             const [, name, status] = checkResultMatch;
             return (
@@ -188,7 +188,7 @@ function ProfileMenu() {
                 </>
             );
         }
-    
+
         return <>{msg}</>;
     };
 
@@ -263,7 +263,7 @@ function ProfileMenu() {
 
                 <div className="relative flex justify-center items-center rounded-full border border-gray px-2 py-1 sm:px-3 sm:py-1">
                     <span className="text-gray-500 text-sm sm:text-md font-kanit hover:underline px-1 sm:px-3">
-                        {user.first_name} {user.last_name}
+                        {user.first_name} {user.last_name} {'(' + user.role + ')'}
                     </span>
                     <div className="ml-1 rounded-full flex items-center justify-center">
                         <Button

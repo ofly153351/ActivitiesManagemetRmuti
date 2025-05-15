@@ -1,11 +1,20 @@
-import React from 'react'
+    // const handleSubmit = async (activityId) => {
+    //     try {
+    //         const response = await joinEvent(Number(activityId));
+    //         setSuccessMessage('ส่งคำขอเข้าร่วมกิจกรรมเรียบร้อยแล้ว');
+    //         setTimeout(() => setSuccessMessage(false), 1000);
+    //         setTimeout(() => {
+    //             window.location.reload()
+    //         }, 1000);
+    //         return response;
+    //     } catch (error) {
+    //         console.error('เกิดข้อผิดพลาดในการเข้าร่วมกิจกรรม:', error);
+    //         setErrorMessage('ไม่สามารถส่งคำขอเข้าร่วมกิจกรรมได้');
+    //         setTimeout(() => setErrorMessage(false), 3000);
+    //         throw error;
+    //     }
+    // };
 
-function Footter() {
-  return (
-    <div className="w-screen   h-20 bg-blue-500 flex justify-center items-center">
-      <div className='font-bold text-white text-[40px]' >Footter</div>
-    </div>
-  )
-}
 
-export default Footter
+
+

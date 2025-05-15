@@ -22,7 +22,7 @@ export async function middleware(req) {
     console.log("✅ JWT Verified:", payload)
 
     // เช็ก role ว่าไม่ใช่ 4 ตัวที่อนุญาต
-    if (!['admin', 'teacher', 'superadmin', 'student'].includes(payload.role)) {
+    if (!['admin', 'teacher', 'superadmin', 'student', 'officer'].includes(payload.role)) {
       console.log("❌ Unauthorized role:", payload.role)
       url.pathname = '/'
       return NextResponse.redirect(url)
