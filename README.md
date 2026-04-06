@@ -1,37 +1,127 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Activities Management Frontend
 
-## Getting Started
+ระบบจัดการกิจกรรม (ฝั่ง Frontend) พัฒนาด้วย Next.js 14 (App Router) และ React 18  
+รองรับบทบาทผู้ใช้งานหลัก เช่น `admin`, `teacher`, `student`, `officer`, `superadmin`
 
-First, run the development server:
+## 1) Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Next.js `14.2.x` (App Router)
+- React `18`
+- Tailwind CSS `3`
+- MUI (`@mui/material`, `@mui/x-data-grid`, `@mui/x-date-pickers`, `@mui/x-charts`)
+- Zustand (global state)
+- Axios (REST API client)
+- Jose / JWT (middleware ตรวจสอบ token)
+- Radix UI + shadcn-style components บางส่วน
+
+## 2) โครงสร้างโปรเจกต์
+
+```text
+.
+├── src/
+│   ├── app/
+│   │   ├── (auth)/                    # กลุ่มหน้า auth
+│   │   │   ├── Login/page.jsx
+│   │   │   └── Register/
+│   │   │       ├── Student/page.jsx
+│   │   │       └── Teacher/page.jsx
+│   │   ├── (routes)/                  # กลุ่มหน้าหลักหลัง login
+│   │   │   ├── Admin/
+│   │   │   │   ├── page.jsx
+│   │   │   │   ├── Eventlist/page.jsx
+│   │   │   │   ├── MyEvent/page.jsx
+│   │   │   │   ├── Userlist/page.jsx
+│   │   │   │   ├── TeacherList/page.jsx
+│   │   │   │   ├── Facultylist/page.jsx
+│   │   │   │   ├── Branchlist/page.jsx
+│   │   │   │   ├── StudentEvidence/page.jsx
+│   │   │   │   └── AllDonesEvidence/page.jsx
+│   │   │   └── Information/
+│   │   │       ├── page.jsx
+│   │   │       └── MyEvent/
+│   │   │           ├── page.jsx
+│   │   │           └── selectedEvent/[where]/[slug]/page.jsx
+│   │   ├── Components/                # shared components ของแอป
+│   │   ├── Utils/                     # helper / api / validation / hash
+│   │   ├── layout.js                  # root layout
+│   │   ├── page.jsx                   # landing / หน้าแรก
+│   │   └── globals.css
+│   ├── components/
+│   │   └── ui/                        # ui primitives (เช่น select, dialog)
+│   ├── lib/
+│   │   └── utils.js
+│   ├── middleware.js                  # route protection
+│   └── store/
+│       └── useStore.js                # global state (zustand)
+├── public/                            # static assets / logo / image
+├── next.config.mjs
+├── tailwind.config.js
+├── components.json                    # shadcn config
+├── package.json
+└── Dockerfile
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 3) โฟลเดอร์สำคัญที่ควรรู้
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- `src/app/Utils/api.js`  
+  รวม API functions เกือบทั้งหมดของระบบ (auth, event, faculty, branch, evidence, dashboard ฯลฯ)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- `src/store/useStore.js`  
+  จัดการ state กลาง เช่น user, role, loading, event list, faculties, branches
 
-## Learn More
+- `src/middleware.js`  
+  ตรวจ JWT จาก cookie `token` ก่อนเข้าเส้นทาง `/Admin/*` และ `/Information/*`
 
-To learn more about Next.js, take a look at the following resources:
+- `src/app/Components/`  
+  component ที่ใช้ซ้ำในหลายหน้า เช่น ตาราง, dialog, dashboard card, upload, evidence
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 4) Environment Variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+สร้างไฟล์ `.env.local`:
 
-## Deploy on Vercel
+```bash
+NEXT_PUBLIC_API_URL=http://localhost:8080
+NEXT_PUBLIC_JWT_SECRET=your_jwt_secret
+NEXT_PUBLIC_ENCODE_ENV=your_encode_secret
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+ความหมาย:
+- `NEXT_PUBLIC_API_URL` base URL ของ backend API
+- `NEXT_PUBLIC_JWT_SECRET` ใช้ใน middleware สำหรับ verify JWT
+- `NEXT_PUBLIC_ENCODE_ENV` ใช้ใน store/hash logic
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# Project101
+## 5) การติดตั้งและรัน
+
+```bash
+npm install
+npm run dev
+```
+
+เปิดที่ `http://localhost:3000`
+
+## 6) Scripts ที่มีในโปรเจกต์
+
+จาก `package.json`:
+
+- `npm run dev` รันโหมดพัฒนา
+- `npm run build` build production
+- `npm run lint` lint โค้ด
+- `npm run start` รัน `node server.js`
+
+## 7) หมายเหตุสำคัญใน repo ปัจจุบัน
+
+- `package.json` ตั้ง `start` เป็น `node server.js` แต่ยังไม่พบไฟล์ `server.js` ใน repository
+- `Dockerfile` บรรทัดแรกสะกดเป็น `ROM node:18-alpine` (ควรเป็น `FROM`)
+
+ถ้าต้องการรัน production แบบมาตรฐาน Next.js สามารถใช้คำสั่ง:
+
+```bash
+npm run build
+npx next start
+```
+
+## 8) แนวทางพัฒนาต่อ
+
+- แยก API layer ออกตาม domain (auth/event/admin/student) เพื่อลดขนาดไฟล์ `api.js`
+- เพิ่ม ESLint/Prettier workflow ให้สม่ำเสมอ
+- เพิ่ม test สำหรับ utility และ store ที่สำคัญ
